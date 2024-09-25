@@ -24,13 +24,13 @@ export default [
   },
   {
     path: '/dashboard',
-    name: 'Dashboard',
+    name: 'dashboard',
     icon: 'dashboard',
     component: './Dashboard',
     access: 'canAdmin',
   },
   {
-    name: 'Products',
+    name: 'products',
     icon: 'dashboard',
     path: '/products',
     key: 'products',
@@ -57,21 +57,21 @@ export default [
   },
   {
     path: '/users',
-    name: 'Users',
+    name: 'users',
     icon: 'user',
     access: 'canAdmin',
     component: './Customer',
   },
   {
     path: '/provider',
-    name: 'Vendor',
+    name: 'vendor',
     icon: 'user',
     access: 'canEditor',
     component: './Provider',
   },
   {
     path: '/locations',
-    name: 'Locations',
+    name: 'locations',
     icon: 'AimOutlined',
     access: 'canEditor',
     key: 'locations',
@@ -79,7 +79,7 @@ export default [
   },
   {
     path: '/list-product-card',
-    name: 'List Product Card',
+    name: 'list-product-card',
     icon: 'AimOutlined',
     key: 'card',
     routes: [

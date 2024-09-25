@@ -1,7 +1,7 @@
 import { listUser, toggleUserStatus } from '@/services/user';
-import { CheckOutlined, CloseOutlined, EditOutlined } from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { ActionType, ProTable } from '@ant-design/pro-components';
-import { Button, Space, Switch, Tooltip, message } from 'antd';
+import { Space, Switch, Tooltip, message } from 'antd';
 import dayjs from 'dayjs';
 import { useRef, useState } from 'react';
 import ModalAddUser from './ModalAddUser';
@@ -92,7 +92,11 @@ const Customer: React.FC = () => {
         return (
           <Space>
             <Tooltip title="Chỉnh sửa">
-              <Button type="primary" size="small" icon={<EditOutlined />} />
+              <ModalAddUser
+                type="edit"
+                initValue={record}
+                onLoad={() => actionRef.current?.reload()}
+              />
             </Tooltip>
             <Tooltip title="Khôi phục mật khẩu">
               <ModalResetPassword userId={record._id} />
@@ -113,7 +117,9 @@ const Customer: React.FC = () => {
         loading={loading}
         columns={columns}
         request={onRequestUser}
-        toolBarRender={() => [<ModalAddUser key="1" onLoad={() => actionRef.current?.reload()} />]}
+        toolBarRender={() => [
+          <ModalAddUser type="add" key="1" onLoad={() => actionRef.current?.reload()} />,
+        ]}
       />
     </div>
   );

@@ -39,3 +39,10 @@ export const registerUser = async (data: any) => {
     data,
   });
 };
+
+export const updateRoleUser = async (id: string, data: any) => {
+  return await request(`/api/v1/user/${id}/role/update`, {
+    method: 'PUT',
+    data,
+  });
+};

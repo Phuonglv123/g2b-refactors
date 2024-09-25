@@ -1,9 +1,16 @@
-import { registerUser } from '@/services/user';
+import { registerUser, updateRoleUser } from '@/services/user';
+import { EditOutlined } from '@ant-design/icons';
 import { ModalForm, ProFormSelect, ProFormText } from '@ant-design/pro-components';
 import { Button, Modal } from 'antd';
 import { useState } from 'react';
 
-const ModalAddUser = ({ onLoad }: any) => {
+type ModalAddUserProps = {
+  onLoad: any;
+  type: 'add' | 'edit';
+  initValue?: any;
+};
+
+const ModalAddUser = ({ onLoad, type, initValue }: ModalAddUserProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const handleFinish = async (values: any) => {
     setLoading(true);
@@ -31,24 +38,52 @@ const ModalAddUser = ({ onLoad }: any) => {
     }
   };
 
+  const handleUpdate = async (values: any) => {
+    setLoading(true);
+    try {
+      const payload = {
+        role: values.role,
+      };
+      const res = await updateRoleUser(initValue._id, payload);
+      console.log(res);
+      if (res.errorCode === 0) {
+        onLoad();
+        Modal.info({
+          title: 'Thông báo',
+          content: <div>Cập nhật người dùng thành công</div>,
+        });
+        return true;
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <ModalForm
-      title="Add User"
+      title={type === 'add' ? 'Add new user' : 'Update user'}
       width={400}
-      onFinish={handleFinish}
+      onFinish={type === 'edit' ? handleUpdate : handleFinish}
       loading={loading}
+      initialValues={initValue}
       trigger={
-        <Button key="3" type="primary">
-          Tạo mới
-        </Button>
+        type === 'add' ? (
+          <Button key="3" type="primary">
+            Tạo mới
+          </Button>
+        ) : (
+          <Button type="primary" size="small" icon={<EditOutlined />} />
+        )
       }
       modalProps={{
         destroyOnClose: true,
       }}
     >
-      <ProFormText name="email" label="Email" />
-      <ProFormText name="username" label="Tên đăng nhập" />
-      <ProFormText.Password name="password" label="Mật khẩu" />
+      <ProFormText name="email" label="Email" disabled={type === 'edit'} />
+      <ProFormText name="username" label="Tên đăng nhập" disabled={type === 'edit'} />
+      <ProFormText.Password name="password" label="Mật khẩu" hidden={type === 'edit'} />
       <ProFormSelect
         name="role"
         label="Quyền"
@@ -61,6 +96,7 @@ const ModalAddUser = ({ onLoad }: any) => {
         ]}
       />
       <ProFormSelect
+        hidden={type === 'edit'}
         name="status"
         label="Trạng thái"
         options={[
