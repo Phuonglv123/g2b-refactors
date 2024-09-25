@@ -73,8 +73,8 @@ export default defineConfig({
    */
   initialState: {},
   define: {
-    BASE_URL: 'https://g2badv.vn',
-    IMAGE_URL: 'https://g2badv.vn',
+    BASE_URL: 'https://api.g2badv.vn',
+    IMAGE_URL: 'https://api.g2badv.vn',
   },
   /**
    * @name layout 插件
