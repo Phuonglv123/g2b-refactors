@@ -338,7 +338,7 @@ const ListProductCard = () => {
                               code: item.product_code,
                               gps: '',
                               address: item?.location?.address || '',
-                              description: item?.description,
+                              description: item?.description || '',
                               name: item.product_name,
                             },
                             media: {
