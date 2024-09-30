@@ -1,4 +1,4 @@
-import { getDistrict, getLocations, getProvice, getWard } from '@/services/location';
+import { getLocations } from '@/services/location';
 import {
   ProFormCheckbox,
   ProFormDependency,
@@ -42,19 +42,19 @@ const InfoLocation = ({ form }: any) => {
             />
           ) : (
             <ProFormGroup>
-              <ProFormSelect
-                showSearch
-                onChange={(value) => {
-                  form.setFieldsValue({ district: undefined, ward: undefined });
-                }}
-                request={async () => {
-                  return await getProvice({ country: 'vietnam' }).then((res) => {
-                    return res.data.map((item: any) => ({
-                      value: item.value,
-                      label: item.label,
-                    }));
-                  });
-                }}
+              <ProFormText
+                // showSearch
+                // onChange={(value) => {
+                //   form.setFieldsValue({ district: undefined, ward: undefined });
+                // }}
+                // request={async () => {
+                //   return await getProvice({ country: 'vietnam' }).then((res) => {
+                //     return res.data.map((item: any) => ({
+                //       value: item.value,
+                //       label: item.label,
+                //     }));
+                //   });
+                // }}
                 width="md"
                 name="city"
                 label="City/Provice"
@@ -69,20 +69,20 @@ const InfoLocation = ({ form }: any) => {
                 {({ city }) => {
                   if (city) {
                     return (
-                      <ProFormSelect
-                        showSearch
+                      <ProFormText
+                        // showSearch
                         key={city}
-                        onChange={(value) => {
-                          form.setFieldsValue({ ward: undefined });
-                        }}
-                        request={async () => {
-                          return await getDistrict({ province: city }).then((res) => {
-                            return res.data.map((item: any) => ({
-                              value: item.value,
-                              label: item.label,
-                            }));
-                          });
-                        }}
+                        // onChange={(value) => {
+                        //   form.setFieldsValue({ ward: undefined });
+                        // }}
+                        // request={async () => {
+                        //   return await getDistrict({ province: city }).then((res) => {
+                        //     return res.data.map((item: any) => ({
+                        //       value: item.value,
+                        //       label: item.label,
+                        //     }));
+                        //   });
+                        // }}
                         width="md"
                         name="district"
                         label="District"
@@ -105,17 +105,17 @@ const InfoLocation = ({ form }: any) => {
                     return <ProFormText width="md" name="ward" label="Ward" />;
                   }
                   return (
-                    <ProFormSelect
-                      showSearch
-                      key={district}
-                      request={async () => {
-                        return await getWard({ district, province: city }).then((res) => {
-                          return res.data.map((item: any) => ({
-                            value: item.value,
-                            label: item.label,
-                          }));
-                        });
-                      }}
+                    <ProFormText
+                      // showSearch
+                      // key={district}
+                      // request={async () => {
+                      //   return await getWard({ district, province: city }).then((res) => {
+                      //     return res.data.map((item: any) => ({
+                      //       value: item.value,
+                      //       label: item.label,
+                      //     }));
+                      //   });
+                      // }}
                       width="md"
                       name="ward"
                       label="Ward"
