@@ -149,7 +149,7 @@ const InfoLocation = ({ form }: any) => {
               />
               <ProFormText
                 name="longitude"
-                label="Logitude"
+                label="Longitude"
                 width="md"
                 rules={[
                   {
