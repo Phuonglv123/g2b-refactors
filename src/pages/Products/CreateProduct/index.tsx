@@ -68,6 +68,7 @@ const CreateProduct: React.FC = () => {
       gps: values.gps,
     };
     if (values.international) {
+      setLoading(true);
       try {
         const result = await createProduct(payload);
         if (result.errorCode === 0) {
@@ -77,9 +78,12 @@ const CreateProduct: React.FC = () => {
       } catch (error) {
         console.log(error);
         message.error('error!');
+      } finally {
+        setLoading(false);
       }
     } else {
       try {
+        setLoading(true);
         await createLocation(payloadLocation).then(async (res) => {
           console.log(1);
           payload.location = res.data._id;
@@ -92,6 +96,8 @@ const CreateProduct: React.FC = () => {
       } catch (error) {
         console.log(error);
         message.error('error!');
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -216,7 +222,7 @@ const CreateProduct: React.FC = () => {
 
   return (
     <PageContainer title={'Create Product'}>
-      <ProCard loading={loading}>
+      <ProCard>
         <ProForm<IProduct & any>
           form={form}
           onFinish={onFinish}
@@ -228,6 +234,7 @@ const CreateProduct: React.FC = () => {
               </Row>
             ),
           }}
+          loading={loading}
           initialValues={{
             currency: 'USD',
           }}
