@@ -42,7 +42,7 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu, childre
    */
   const loginOut = async () => {
     localStorage.clear();
-    history.push('/login');
+    window.location.href = '/login';
   };
   const { styles } = useStyles();
   const { initialState, setInitialState } = useModel('@@initialState');
