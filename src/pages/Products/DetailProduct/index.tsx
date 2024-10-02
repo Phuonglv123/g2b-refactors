@@ -3,7 +3,7 @@ import { IProduct } from '@/types/product';
 import { getSrcImg } from '@/utils';
 import { ProDescriptions } from '@ant-design/pro-components';
 import { useParams } from '@umijs/max';
-import { Empty, Image } from 'antd';
+import { Empty, Image, Space } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 
 const DetailProduct: React.FC = () => {
@@ -89,7 +89,13 @@ const DetailProduct: React.FC = () => {
           label="Images"
           dataIndex="images"
           render={(_, record) => {
-            return record.images.map((item: any) => <Image src={getSrcImg(item)} width={200} />);
+            return (
+              <Space>
+                {record.images.map((item: any) => (
+                  <Image src={getSrcImg(item)} width={200} />
+                ))}
+              </Space>
+            );
           }}
         />
       </ProDescriptions>

@@ -192,14 +192,14 @@ const CreateProduct: React.FC = () => {
           shape: payload.shape,
           note: payload.note,
           add_side: payload.add_side,
-          location: payload.location,
         },
+        location: payload.locationId,
       };
 
       try {
         const location = await updateLocation(payload.locationId, payloadLocation);
         if (location.errorCode === 0) {
-          console.log(2);
+          console.log(payloadProduct);
           const data = await updateProduct(id, payloadProduct);
           console.log(data);
           if (data.errorCode === 0) {

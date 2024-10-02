@@ -62,7 +62,7 @@ export const updateProduct = async (id: string, payload: IProduct & any) => {
   const formData = new FormData();
   if (payload?.images) {
     payload.images.forEach((image: any) => {
-      if (image) {
+      if (!image.url) {
         formData.append('images', image.originFileObj);
       }
     });
