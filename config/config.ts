@@ -119,6 +119,12 @@ export default defineConfig({
         Link: {
           color: '#febd21',
         },
+        Chart: {
+          color: '#febd21',
+        },
+        Column: {
+          color: '#febd21',
+        },
       },
     },
   },

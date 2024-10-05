@@ -11,7 +11,7 @@ import { formatCurrency, formatNumberVietnamese, getSrcImg } from '@/utils';
 import { StarOutlined } from '@ant-design/icons';
 import { ProCard, ProDescriptions } from '@ant-design/pro-components';
 import { useModel, useParams } from '@umijs/max';
-import { Button, Row, Space, Tag, message } from 'antd';
+import { Button, Card, Row, Space, Tag, message } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import ImageGallery from 'react-image-gallery';
 import 'react-image-gallery/styles/scss/image-gallery.scss';
@@ -95,6 +95,10 @@ const DetailProductCard = () => {
               };
             })}
           />
+          <br />
+          <Card title="DESCRIPTION" size="small">
+            <span>{product?.description}</span>
+          </Card>
         </ProCard>
         <ProCard
           title={product?.product_name.toUpperCase()}
@@ -164,9 +168,15 @@ const DetailProductCard = () => {
             <ProDescriptions.Item label="BOOKING DURATION" span={1}>
               {product?.booking_duration}
             </ProDescriptions.Item>
-            <ProDescriptions.Item label="DESCRIPTION" span={1}>
-              {product?.description}
+            <ProDescriptions.Item label="NOTE" span={1}>
+              {product?.booking_duration}
             </ProDescriptions.Item>
+            <ProDescriptions.Item label="PRODUCTION COST" span={1}>
+              {product?.booking_duration}
+            </ProDescriptions.Item>
+            {/* <ProDescriptions.Item label="DESCRIPTION" span={1}>
+              {product?.description}
+            </ProDescriptions.Item> */}
 
             <ProDescriptions.Item label="COST" span={3}>
               <Row justify={'space-between'}>
@@ -212,7 +222,7 @@ const DetailProductCard = () => {
                           code: product.product_code,
                           gps: '',
                           address: product?.location?.address || '',
-                          description: product.attributes.note,
+                          description: product?.description,
                           name: product.product_name,
                         },
                         media: {
@@ -250,12 +260,12 @@ const DetailProductCard = () => {
                       {
                         base: {
                           code: product.product_code,
-                          gps: '',
                           address: product?.location?.address || '',
-                          description: product.attributes.note,
+                          description: product.description,
                           name: product.product_name,
                         },
                         media: {
+                          gps: product?.location?.gps,
                           type: product.type,
                           dimension: `${product.attributes.width}m x ${
                             product.attributes.height

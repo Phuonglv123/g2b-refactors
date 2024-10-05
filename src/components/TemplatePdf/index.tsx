@@ -39,12 +39,14 @@ interface Props {
 
 const QuotationExportPdf: React.FC<Props> = ({ data, showIcon = false }) => {
   const [loading, setLoading] = React.useState(false);
-  console.log(data);
+
   const generatePdf = async (watermark: boolean, showLogo: boolean) => {
     setLoading(true);
     const pdfDoc = await PDFDocument.create();
-    const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
-    const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+    const font = await pdfDoc.embedFont(StandardFonts.TimesRoman);
+    const boldFont = await pdfDoc.embedFont(StandardFonts.TimesRomanBold);
+    const cleanString = (str: string) => str.replace(/[^\x00-\x7F]/g, '');
+
     const fontSize = 12;
 
     // Helper function to embed image
@@ -61,7 +63,7 @@ const QuotationExportPdf: React.FC<Props> = ({ data, showIcon = false }) => {
 
     // Loop through each item in data and create a page for it
     for (const [index, item] of data.entries()) {
-      const page = pdfDoc.addPage([842, 595]); // A4 size in points
+      const page = pdfDoc.addPage([842, 595]);
       const { width, height } = page.getSize();
 
       // Add title
@@ -98,13 +100,13 @@ const QuotationExportPdf: React.FC<Props> = ({ data, showIcon = false }) => {
       const metaBaseInfo = [
         {
           label: 'Code',
-          value: item.base.code,
+          value: cleanString(item.base.code),
           icon: getSrcImg('/uploads/icon-01.png'),
         },
 
         {
           label: 'Address',
-          value: item.base.address,
+          value: cleanString(item.base.address),
           icon: getSrcImg('/uploads/icon-02.png'),
         },
         // { label: 'Description', value: item.base.description },
@@ -112,12 +114,12 @@ const QuotationExportPdf: React.FC<Props> = ({ data, showIcon = false }) => {
       const metaInfo = [
         {
           label: 'Type',
-          value: item.media.type,
+          value: cleanString(item.media.type),
           icon: getSrcImg('/uploads/icon-05.png'),
         },
         {
           label: 'Dimension (WxH)',
-          value: item.media.dimension,
+          value: cleanString(item.media.dimension),
           icon: getSrcImg('/uploads/icon-10.png'),
         },
         {
@@ -181,7 +183,7 @@ const QuotationExportPdf: React.FC<Props> = ({ data, showIcon = false }) => {
         },
         {
           label: 'Note',
-          value: item.media.note,
+          value: cleanString(item.media.note),
           icon: getSrcImg('/uploads/icon-09.png'),
         },
       ];
@@ -247,7 +249,7 @@ const QuotationExportPdf: React.FC<Props> = ({ data, showIcon = false }) => {
         font: boldFont,
         color: rgb(254 / 255, 189 / 255, 33 / 255),
       });
-      page.drawText(item.base.description, {
+      page.drawText(cleanString(item.base.description), {
         x: 60,
         y: 370,
         size: fontSize,
@@ -291,7 +293,7 @@ const QuotationExportPdf: React.FC<Props> = ({ data, showIcon = false }) => {
           size: fontSize,
           font: font,
           color: rgb(1, 1, 1),
-          maxWidth: columnWidth - 10,
+          maxWidth: columnWidth - 20,
           wordBreaks: [' '],
         });
       });
@@ -323,16 +325,16 @@ const QuotationExportPdf: React.FC<Props> = ({ data, showIcon = false }) => {
             width: maxImageWidth - 20,
             height: (scaledImage.height * maxImageWidth) / scaledImage.width,
           });
-          imageYPosition -= maxImageHeight + 155; // Move Y position down
+          imageYPosition -= maxImageHeight + 165; // Move Y position down
         } catch (error) {
           console.error(`Failed to embed image from ${imageUrl}:`, error);
         }
       }
 
-      // If more than one item, add a new page for the next one
-      if (index < data.length - 1) {
-        pdfDoc.addPage();
-      }
+      // // If more than one item, add a new page for the next one
+      // if (index < data.length - 1) {
+      //   pdfDoc.addPage();
+      // }
     }
 
     // Save the PDF

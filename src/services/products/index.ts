@@ -145,3 +145,10 @@ export const deleteSoftProduct = async (id: string) => {
     method: 'PUT',
   });
 };
+
+export const sortProductWhiteList = async (data: any) => {
+  console.log(data);
+  return await request(`/api/v1/product/sort/whitelist?ids=${data.ids.join()}`, {
+    method: 'GET',
+  });
+};

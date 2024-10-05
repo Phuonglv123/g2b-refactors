@@ -13,3 +13,10 @@ export const chartTypeProductByUser = async (params: any) => {
     params,
   });
 };
+
+export const chartFilterTypeProduct = async (params?: any) => {
+  return await request('/api/v1/dashboard/chart/productType', {
+    method: 'GET',
+    params,
+  });
+};

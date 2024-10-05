@@ -1,17 +1,19 @@
 import QuotationExport from '@/components/TemplateExcel';
 import QuotationExportPdf from '@/components/TemplatePdf';
 import QuationExportPPT from '@/components/TemplatePpt';
+import { getDistrict, getProvice } from '@/services/location';
 import {
   addWhitelistFromProduct,
   listProducts,
   removeWhitelistFromProduct,
+  sortProductWhiteList,
 } from '@/services/products';
 import { IProduct } from '@/types/product';
 import { formatCurrency, formatNumberVietnamese, getSrcImg } from '@/utils';
-import { PlusOutlined, StarOutlined } from '@ant-design/icons';
+import { StarFilled, StarOutlined } from '@ant-design/icons';
 import { ProCard, ProList } from '@ant-design/pro-components';
 import { Link, useModel } from '@umijs/max';
-import { Alert, Button, Card, List, Row, Space, Typography, message } from 'antd';
+import { Alert, Button, Card, Checkbox, Col, List, Row, Space, Typography, message } from 'antd';
 import { useCallback, useState } from 'react';
 
 const ListProductCard = () => {
@@ -20,6 +22,16 @@ const ListProductCard = () => {
   const { initialState, refresh } = useModel('@@initialState');
   const { currentUser } = initialState || {};
   const [multipleSelection, setMultipleSelection] = useState<any>([]);
+  const [city, setCity] = useState<any>(null);
+  const [district, setDistrict] = useState<any>(null);
+  const [whitelist, setWhitelist] = useState<any>([]);
+
+  const searchWhitelist = useCallback(async () => {
+    const data = await sortProductWhiteList({ ids: currentUser?.whitelist });
+    if (data?.data) {
+      setWhitelist(data.data);
+    }
+  }, []);
 
   const getListProductCard = useCallback(async (params: any) => {
     const { product_code, product_name, country, city, district, ward, status, type, areas } =
@@ -125,11 +137,7 @@ const ListProductCard = () => {
                         nameOfMedia: item.product_name,
                         city: item.location.city?.split('-')[1],
                         location: item?.location?.address || '',
-                        dimension: `${item.attributes.width}x${
-                          item.attributes.height
-                        } = ${formatNumberVietnamese(
-                          item.attributes.width * item.attributes.height,
-                        )} m2`,
+                        dimension: `${item.attributes.width}x${item.attributes.height}`,
                         frequency: formatNumberVietnamese(item.attributes.frequency),
                         videoDuration: item.attributes.video_duration,
                         operationTime: `${item.attributes.opera_time_from} - ${item.attributes.opera_time_to}`,
@@ -152,14 +160,14 @@ const ListProductCard = () => {
                       return {
                         base: {
                           code: item.product_code,
-                          gps: '',
                           address: item?.location?.address || '',
-                          description: item.attributes.note,
+                          description: item?.description || '',
                           name: item.product_name,
+                          gps: item?.location?.gps,
                         },
                         media: {
                           type: item.type,
-                          dimension: `${item.attributes.width}m x${
+                          dimension: `${item.attributes.width}m x ${
                             item.attributes.height
                           }m = ${formatNumberVietnamese(
                             item.attributes.width * item.attributes.height,
@@ -168,11 +176,7 @@ const ListProductCard = () => {
                           operationTime: `${item.attributes.opera_time_from} - ${item.attributes.opera_time_to}`,
                           frequency: `${formatNumberVietnamese(item.attributes.frequency)} spots`,
                           cost: item.cost,
-                          pixel: `${item.attributes.pixel_width}m x${
-                            item.attributes.pixel_height
-                          }m = ${formatNumberVietnamese(
-                            item.attributes.pixel_width * item.attributes.pixel_height,
-                          )} px`,
+                          pixel: `${item.attributes.pixel_width} x ${item.attributes.pixel_height}`,
                           note: item.attributes.note,
                           bookingDuration: item.booking_duration,
                           images: item.images,
@@ -230,7 +234,26 @@ const ListProductCard = () => {
           />
         )}
       </div>
-      <ProCard>
+      <ProCard
+        extra={
+          whitelist.length > 0 ? (
+            <Button
+              type="primary"
+              onClick={() => {
+                setWhitelist([]);
+                getListProductCard({});
+              }}
+              icon={<StarOutlined />}
+            >
+              Clear quick list
+            </Button>
+          ) : (
+            <Button onClick={() => searchWhitelist()} icon={<StarOutlined />}>
+              Find quick list
+            </Button>
+          )
+        }
+      >
         <ProList
           request={getListProductCard}
           rowKey="product_code" // Ensure each row has a unique key
@@ -251,53 +274,19 @@ const ListProductCard = () => {
               height: '100%',
             },
           }}
-          dataSource={products.data}
+          dataSource={whitelist.length > 0 ? whitelist : products.data}
           showActions="hover"
           itemLayout="vertical"
-          grid={{ gutter: 8, column: 3 }}
+          grid={{ gutter: 16, column: 3 }}
           renderItem={(item: any, index) => (
             <List.Item>
               <Card
                 hoverable
-                style={{ width: '100%', height: '100%' }}
+                style={{ width: '100%', height: '100%', backgroundColor: '#dba41f1f' }}
                 cover={<img alt="example" src={getSrcImg(item.images[0])} />}
+                bodyStyle={{ padding: '8px 4px' }}
+                bordered
                 actions={[
-                  <div>
-                    <Space>
-                      {currentUser?.whitelist?.includes(item._id) ? (
-                        <Button
-                          size="small"
-                          icon={<StarOutlined />}
-                          type="primary"
-                          onClick={() => item?._id && removeWhiteList(item._id)}
-                        />
-                      ) : (
-                        <Button
-                          size="small"
-                          icon={<StarOutlined />}
-                          onClick={() => item?._id && addWhiteList(item._id)}
-                        />
-                      )}
-                      {multipleSelection.includes(item) ? (
-                        <Button
-                          size="small"
-                          icon={<PlusOutlined />}
-                          type="primary"
-                          onClick={() => {
-                            setMultipleSelection((prev: any) =>
-                              prev.filter((item: any) => item._id !== item._id),
-                            );
-                          }}
-                        />
-                      ) : (
-                        <Button
-                          size="small"
-                          icon={<PlusOutlined />}
-                          onClick={() => setMultipleSelection((prev: any) => [...prev, item])}
-                        />
-                      )}
-                    </Space>
-                  </div>,
                   <div>
                     <Space>
                       <QuotationExport
@@ -336,10 +325,10 @@ const ListProductCard = () => {
                           {
                             base: {
                               code: item.product_code,
-                              gps: '',
                               address: item?.location?.address || '',
                               description: item?.description || '',
                               name: item.product_name,
+                              gps: item?.location?.gps,
                             },
                             media: {
                               type: item.type,
@@ -409,26 +398,112 @@ const ListProductCard = () => {
                       />
                     </Space>
                   </div>,
+                  <div></div>,
+                  <div></div>,
                 ]}
               >
                 <Card.Meta
                   title={
-                    <Link to={`/list-product-card/${item?._id}`} color="black">
-                      {item.product_name.toUpperCase()}
-                    </Link>
+                    <Row justify="space-between" align="top">
+                      <Col span={20}>
+                        <Link to={`/list-product-card/${item?._id}`} color="black">
+                          <div
+                            style={{
+                              color: '#febd21',
+                              fontWeight: 'bold',
+                              fontSize: 22,
+                              whiteSpace: 'wrap',
+                            }}
+                          >
+                            {item.product_name.toUpperCase()}
+                          </div>
+                        </Link>
+                      </Col>
+                      <Col span={4}>
+                        <Space>
+                          {currentUser?.whitelist?.includes(item._id) ? (
+                            <Button
+                              size="middle"
+                              icon={<StarFilled style={{ color: '#febd21' }} />}
+                              type="link"
+                              onClick={() => item?._id && removeWhiteList(item._id)}
+                            />
+                          ) : (
+                            <Button
+                              size="middle"
+                              type="link"
+                              icon={<StarFilled style={{ color: 'black' }} />}
+                              onClick={() => item?._id && addWhiteList(item._id)}
+                            />
+                          )}
+                          {multipleSelection.includes(item) ? (
+                            // <Button
+                            //   size="small"
+                            //   icon={<PlusOutlined />}
+                            //   type="primary"
+                            //   onClick={() => {
+                            //     setMultipleSelection((prev: any) =>
+                            //       prev.filter((item: any) => item._id !== item._id),
+                            //     );
+                            //   }}
+                            <Checkbox
+                              checked
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  setMultipleSelection((prev: any) => [...prev, item]);
+                                } else {
+                                  setMultipleSelection((prev: any) =>
+                                    prev.filter((item: any) => item._id !== item._id),
+                                  );
+                                }
+                              }}
+                            />
+                          ) : (
+                            // <Button
+                            //   size="small"
+                            //   icon={<PlusOutlined />}
+                            //   onClick={() => setMultipleSelection((prev: any) => [...prev, item])}
+                            // />
+                            <Checkbox
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  setMultipleSelection((prev: any) => [...prev, item]);
+                                } else {
+                                  setMultipleSelection((prev: any) =>
+                                    prev.filter((item: any) => item._id !== item._id),
+                                  );
+                                }
+                              }}
+                            />
+                          )}
+                        </Space>
+                      </Col>
+                    </Row>
                   }
                   description={
                     <div>
-                      <Space>
-                        <Typography.Text>Code:</Typography.Text>
-                        <Typography.Text>{item.product_code}</Typography.Text>
-                      </Space>
-                      <br />
-                      <Typography.Text>Address: {item.location.address}</Typography.Text>
-                      <br />
-                      <Typography.Text>
-                        Cost: {formatCurrency(item?.cost, item?.currency)} {item?.currency}
-                      </Typography.Text>
+                      <Row>
+                        <Col span={4}>
+                          <Typography.Text>CODE:</Typography.Text>
+                        </Col>
+                        <Col span={20}>
+                          <Typography.Text>{item.product_code}</Typography.Text>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col span={4}>
+                          <Typography.Text>ADDRESS:</Typography.Text>
+                        </Col>
+                        <Typography.Text> {item.location.address}</Typography.Text>
+                      </Row>
+                      <Row>
+                        <Col span={4}>
+                          <Typography.Text>COST:</Typography.Text>
+                        </Col>
+                        <Typography.Text>
+                          {formatCurrency(item?.cost, item?.currency)} {item?.currency}
+                        </Typography.Text>
+                      </Row>
                     </div>
                   }
                 />
@@ -460,22 +535,58 @@ const ListProductCard = () => {
             description: {
               title: 'Product Code',
               valueType: 'text',
-              key: 'product_name',
+              key: 'product_code',
             },
             country: {
               title: 'Country',
-              valueType: 'text',
               key: 'location.country',
+              valueType: 'select',
+              valueEnum: {
+                vietnam: { text: 'Vietnam' },
+                international: { text: 'International' },
+              },
+              fieldProps: {
+                onChange: (value: any) => {
+                  setCity(value);
+                },
+              },
             },
             city: {
               title: 'City',
-              valueType: 'text',
+              valueType: 'select',
+              request: async () => {
+                return await getProvice({ country: city }).then((res) => {
+                  return res.data.map((item: any) => {
+                    return {
+                      label: item.label,
+                      value: item.value,
+                    };
+                  });
+                });
+              },
+              search: city !== null,
               key: 'location.city',
+              fieldProps: {
+                onChange: (value: any) => {
+                  setDistrict(value);
+                },
+              },
             },
             district: {
               title: 'District',
               valueType: 'text',
               key: 'location.district',
+              search: district !== null,
+              request: async () => {
+                return await getDistrict({ province: district }).then((res) => {
+                  return res.data.map((item: any) => {
+                    return {
+                      label: item.label,
+                      value: item.label,
+                    };
+                  });
+                });
+              },
             },
             type: {
               title: 'Type',

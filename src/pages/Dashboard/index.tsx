@@ -1,4 +1,8 @@
-import { chartTypeProductByUser, staticProduct } from '@/services/dashboard';
+import {
+  chartFilterTypeProduct,
+  chartTypeProductByUser,
+  staticProduct,
+} from '@/services/dashboard';
 import { Column } from '@ant-design/plots';
 import {
   PageContainer,
@@ -10,7 +14,7 @@ import {
   ProFormSelect,
   StatisticCard,
 } from '@ant-design/pro-components';
-import { Row } from 'antd';
+import { Col, Row } from 'antd';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 
@@ -24,6 +28,7 @@ const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [statics, setStatics] = useState<any>([]);
   const [charts, setCharts] = useState<any>([]);
+  const [chartTypeProduct, setChartTypeProduct] = useState<any>([]);
 
   const onRequestGetStatics = async (values: any) => {
     try {
@@ -41,6 +46,8 @@ const Dashboard: React.FC = () => {
       setLoading(true);
       const res = await staticProduct(payload);
       const chart = await chartTypeProductByUser(payload);
+      const typeProduct = await chartFilterTypeProduct();
+      setChartTypeProduct(typeProduct);
       setCharts(chart.map((item: any) => ({ ...item, value: item.productCount })));
       console.log(res);
       setStatics(res);
@@ -57,10 +64,81 @@ const Dashboard: React.FC = () => {
   // }, [date]);
 
   const config = {
-    title: 'User Input Statistics',
+    title: "User's Input Static",
     data: charts,
     xField: 'username',
     yField: 'productCount',
+
+    meta: {
+      productCount: {
+        alias: 'Amount',
+      },
+    },
+    axis: {
+      label: {
+        fill: '#ffffff',
+        fontSize: 10,
+        style: {
+          fill: '#ffffff',
+          stroke: '#ffffff',
+        },
+      },
+      line: {
+        fill: '#ffffff',
+        style: {
+          stroke: '#ffffff',
+        },
+      },
+    },
+    onReady: ({ chart }: any) => {
+      try {
+        const { height } = chart._container.getBoundingClientRect();
+        const tooltipItem = charts[Math.floor(Math.random() * charts.length)];
+        chart.on(
+          'afterrender',
+          () => {
+            chart.emit('tooltip:show', {
+              data: {
+                data: tooltipItem,
+              },
+              offsetY: height / 2 - 60,
+            });
+          },
+          true,
+        );
+      } catch (e) {
+        console.error(e);
+      }
+    },
+  };
+
+  const configType = {
+    title: 'Type Product Static',
+    data: chartTypeProduct,
+    xField: '_id',
+    yField: 'count',
+
+    meta: {
+      count: {
+        alias: 'Amount',
+      },
+    },
+    axis: {
+      label: {
+        fill: '#ffffff',
+        fontSize: 10,
+        style: {
+          fill: '#ffffff',
+          stroke: '#ffffff',
+        },
+      },
+      line: {
+        fill: '#ffffff',
+        style: {
+          stroke: '#ffffff',
+        },
+      },
+    },
     onReady: ({ chart }: any) => {
       try {
         const { height } = chart._container.getBoundingClientRect();
@@ -196,12 +274,20 @@ const Dashboard: React.FC = () => {
             ),
           }}
         />
-       
       </StatisticCard.Group>
       <br />
-      <ProCard>
-        <Column {...config} />
-      </ProCard>
+      <Row gutter={16}>
+        <Col span={12}>
+          <ProCard title="User Input Static" style={{ backgroundColor: 'white' }}>
+            <Column {...config} colorField={'#febd21'} />
+          </ProCard>
+        </Col>
+        <Col span={12}>
+          <ProCard title="Type Product Static" style={{ backgroundColor: 'white' }}>
+            <Column {...configType} colorField={'#febd21'} />
+          </ProCard>
+        </Col>
+      </Row>
     </PageContainer>
   );
 };
