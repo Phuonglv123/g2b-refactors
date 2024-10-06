@@ -179,7 +179,7 @@ const CreateProduct: React.FC = () => {
         currency: payload.currency,
         production_cost: payload.production_cost,
         traffic: payload.traffic,
-        description: payload.description,
+        description: payload?.description,
         attributes: {
           width: payload.width,
           height: payload.height,
@@ -195,7 +195,7 @@ const CreateProduct: React.FC = () => {
         },
         location: payload.locationId,
       };
-
+      console.log(payloadProduct);
       try {
         const location = await updateLocation(payload.locationId, payloadLocation);
         if (location.errorCode === 0) {

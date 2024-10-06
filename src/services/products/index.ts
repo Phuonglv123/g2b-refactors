@@ -69,6 +69,7 @@ export const updateProduct = async (id: string, payload: IProduct & any) => {
   }
   formData.append('product_code', payload.product_code);
   formData.append('product_name', payload.product_name);
+  formData.append('description', payload.description);
   formData.append('type', payload.type);
   payload?.areas.forEach((area: any) => {
     formData.append('areas', area);
