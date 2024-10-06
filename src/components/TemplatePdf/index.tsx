@@ -256,7 +256,7 @@ const QuotationExportPdf: React.FC<Props> = ({ data, showIcon = false }) => {
         font: font,
         color: rgb(1, 1, 1),
         wordBreaks: [' '],
-        maxWidth: columnWidthBase - 10,
+        maxWidth: columnWidthBase - 250,
       });
 
       const columnCount = 3;

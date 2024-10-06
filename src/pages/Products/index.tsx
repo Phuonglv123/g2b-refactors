@@ -105,14 +105,14 @@ const Products: React.FC = () => {
                   return {
                     base: {
                       code: item.product_code,
-                      gps: '',
                       address: item?.location?.address || '',
-                      description: item.attributes.note,
+                      description: item?.description || '',
                       name: item.product_name,
+                      gps: item?.location?.gps,
                     },
                     media: {
                       type: item.type,
-                      dimension: `${item.attributes.width}m x${
+                      dimension: `${item.attributes.width}m x ${
                         item.attributes.height
                       }m = ${formatNumberVietnamese(
                         item.attributes.width * item.attributes.height,
@@ -121,11 +121,7 @@ const Products: React.FC = () => {
                       operationTime: `${item.attributes.opera_time_from} - ${item.attributes.opera_time_to}`,
                       frequency: `${formatNumberVietnamese(item.attributes.frequency)} spots`,
                       cost: item.cost,
-                      pixel: `${item.attributes.pixel_width}m x${
-                        item.attributes.pixel_height
-                      }m = ${formatNumberVietnamese(
-                        item.attributes.pixel_width * item.attributes.pixel_height,
-                      )} px`,
+                      pixel: `${item.attributes.pixel_width} x ${item.attributes.pixel_height}`,
                       note: item.attributes.note,
                       bookingDuration: item.booking_duration,
                       images: item.images,

@@ -32,7 +32,7 @@ interface GeneralData {
 }
 
 type QuotationData = {
-  data: GeneralData[];
+  data: any[];
   showIcon?: boolean;
 };
 
