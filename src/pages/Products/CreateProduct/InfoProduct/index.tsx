@@ -38,6 +38,10 @@ const InfoProduct = () => {
             required: true,
             message: 'Please input product name!',
           },
+          {
+            max: 48,
+            message: 'Product name must be less than 48 characters!',
+          },
         ]}
       />
       <ProFormSelect
@@ -280,7 +284,17 @@ const InfoProduct = () => {
         ]}
         width="md"
       />
-      <ProFormTextArea name="description" label="Description" width={1024} />
+      <ProFormTextArea
+        name="description"
+        label="Description"
+        width={1024}
+        rules={[
+          {
+            max: 386,
+            message: 'Description must be less than 386 characters!',
+          },
+        ]}
+      />
     </ProForm.Group>
   );
 };

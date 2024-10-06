@@ -275,7 +275,7 @@ const Products: React.FC = () => {
             },
           },
           {
-            title: 'Provider',
+            title: 'Vendor',
             key: 'provider',
             hideInSearch: true,
             render: (_, record: any) => {

@@ -256,13 +256,13 @@ const QuotationExportPdf: React.FC<Props> = ({ data, showIcon = false }) => {
         font: font,
         color: rgb(1, 1, 1),
         wordBreaks: [' '],
-        maxWidth: columnWidthBase - 250,
+        maxWidth: columnWidthBase - 280,
       });
 
       const columnCount = 3;
       const columnWidth = (width - 280) / columnCount; // Width for each column
       const rowHeight = 55; // Space between rows
-      let yPosition = yPositionBase - 220; // Start Y position for the first row
+      let yPosition = yPositionBase - 250; // Start Y position for the first row
 
       // Divide the metaInfo items into 3 columns and draw them
       metaInfo.forEach(async (info, index) => {

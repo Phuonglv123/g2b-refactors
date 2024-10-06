@@ -96,12 +96,22 @@ const DetailProductCard = () => {
             })}
           />
           <br />
-          <Card title="DESCRIPTION" size="small">
+          <Card
+            title={
+              <div style={{ color: '#febd21', fontWeight: 'bold', fontSize: 14 }}>DESCRIPTION</div>
+            }
+            size="small"
+            style={{ backgroundColor: '#dba41f1f' }}
+          >
             <span>{product?.description}</span>
           </Card>
         </ProCard>
         <ProCard
-          title={product?.product_name.toUpperCase()}
+          title={
+            <div style={{ color: '#febd21', fontWeight: 'bold', fontSize: 25 }}>
+              {product?.product_name.toUpperCase()}
+            </div>
+          }
           headerBordered
           extra={
             currentUser?.whitelist?.includes(product._id) ? (
@@ -124,7 +134,8 @@ const DetailProductCard = () => {
             dataSource={product}
             bordered
             layout="vertical"
-            labelStyle={{ fontWeight: 'bold' }}
+            labelStyle={{ fontWeight: 'bold', color: '#dba41f' }}
+            style={{ backgroundColor: '#dba41f1f' }}
           >
             <ProDescriptions.Item label="ADDRESS" span={2}>
               {product.location?.address}
@@ -168,21 +179,19 @@ const DetailProductCard = () => {
             <ProDescriptions.Item label="BOOKING DURATION" span={1}>
               {product?.booking_duration}
             </ProDescriptions.Item>
-            <ProDescriptions.Item label="NOTE" span={1}>
-              {product?.booking_duration}
-            </ProDescriptions.Item>
-            <ProDescriptions.Item label="PRODUCTION COST" span={1}>
-              {product?.booking_duration}
-            </ProDescriptions.Item>
-            {/* <ProDescriptions.Item label="DESCRIPTION" span={1}>
-              {product?.description}
-            </ProDescriptions.Item> */}
-
-            <ProDescriptions.Item label="COST" span={3}>
+            <ProDescriptions.Item label="COST" span={1}>
               <Row justify={'space-between'}>
                 <div>
                   {formatCurrency(product.cost, product?.currency)} {product.currency}
                 </div>
+              </Row>
+            </ProDescriptions.Item>
+            <ProDescriptions.Item label="NOTE" span={1}>
+              {product?.booking_duration}
+            </ProDescriptions.Item>
+            <ProDescriptions.Item label="PRODUCTION COST" span={1}>
+              <Row justify={'space-between'}>
+                <div>{product?.booking_duration}</div>
                 <Space>
                   <QuotationExport
                     data={[
@@ -298,6 +307,9 @@ const DetailProductCard = () => {
                 </Space>
               </Row>
             </ProDescriptions.Item>
+            {/* <ProDescriptions.Item label="DESCRIPTION" span={1}>
+              {product?.description}
+            </ProDescriptions.Item> */}
           </ProDescriptions>
         </ProCard>
       </ProCard>

@@ -33,62 +33,62 @@ const Locations: React.FC = () => {
     setLoading(true);
     try {
       await deleteLocation(id);
-      message.success('Xóa địa điểm thành công');
+      message.success('Delete location success');
       actionRef.current?.reload();
     } catch (error) {
-      message.error('Có lỗi xảy ra');
+      message.error('Delete location failed');
     } finally {
       setLoading(false);
     }
   };
   return (
-    <ProCard title="Danh sách địa điểm">
+    <ProCard title="List Locations">
       <ProTable
         actionRef={actionRef}
         columns={[
           {
-            title: 'Tên địa điểm',
+            title: 'Country',
             dataIndex: 'country',
             key: 'country',
           },
           {
-            title: 'Thành phố/Tỉnh',
+            title: 'City/Province',
             dataIndex: 'city',
             key: 'city',
             search: false,
           },
           {
-            title: 'Quận/Huyện',
+            title: 'District',
             dataIndex: 'district',
             key: 'district',
             search: false,
           },
           {
-            title: 'Phường/Xã',
+            title: 'Ward',
             dataIndex: 'ward',
             key: 'ward',
             search: false,
           },
           {
-            title: 'Địa chỉ',
+            title: 'Address',
             dataIndex: 'address',
             key: 'address',
             search: false,
           },
           {
-            title: 'Kinh độ',
+            title: 'Longitude',
             dataIndex: 'longitude',
             key: 'longitude',
             search: false,
           },
           {
-            title: 'Vĩ độ',
+            title: 'Latitude',
             dataIndex: 'latitude',
             key: 'latitude',
             search: false,
           },
           {
-            title: 'Trạng thái',
+            title: 'Status',
             dataIndex: 'status',
             key: 'status',
             search: false,
@@ -98,7 +98,7 @@ const Locations: React.FC = () => {
             ),
           },
           {
-            title: 'Thao tác',
+            title: 'Action',
             valueType: 'option',
             render: (_, record) => [
               <CreateLocation

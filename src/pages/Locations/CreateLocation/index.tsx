@@ -51,11 +51,11 @@ const CreateLocation = ({ initValues, type, onLoad, locationId }: ICreatLocation
         ...values,
         country: values.international ? values?.country : 'vietnam',
       });
-      message.success('Tạo địa điểm thành công');
+      message.success('Add location success');
       onLoad();
       return true;
     } catch (error) {
-      message.error('Có lỗi xảy ra');
+      message.error('Add location failed');
       return false;
     } finally {
       setLoading(false);
@@ -88,7 +88,7 @@ const CreateLocation = ({ initValues, type, onLoad, locationId }: ICreatLocation
           <Button type="primary" icon={<EditOutlined />} />
         ) : (
           <Button type="primary" size="middle">
-            Thêm địa điểm
+            Add location
           </Button>
         )
       }
@@ -99,11 +99,11 @@ const CreateLocation = ({ initValues, type, onLoad, locationId }: ICreatLocation
       form={form}
       modalProps={{
         destroyOnClose: true,
-        title: type === 'update' ? 'Cập nhật địa điểm' : 'Thêm địa điểm',
+        title: type === 'update' ? 'Update location' : 'Add location',
       }}
       loading={loading}
     >
-      <ProFormCheckbox name="international" label="Quốc tế" />
+      <ProFormCheckbox name="international" label="International" />
       <ProFormText name="code" label="Code" />
       <ProFormDependency name={['international']}>
         {({ international }) => {
@@ -111,19 +111,19 @@ const CreateLocation = ({ initValues, type, onLoad, locationId }: ICreatLocation
             international && (
               <>
                 <ProFormGroup>
-                  <ProFormText name="country" label="Quốc gia" width={360} />
-                  <ProFormText name="city" label="Thành phố/Tỉnh" width={360} />
+                  <ProFormText name="country" label="Country" width={360} />
+                  <ProFormText name="city" label="City/Provicen" width={360} />
                 </ProFormGroup>
                 <ProFormGroup>
-                  <ProFormText name="district" label="Quận/Huyện" width={360} />
-                  <ProFormText name="ward" label="Phường/Xã" width={360} />
+                  <ProFormText name="district" label="District" width={360} />
+                  <ProFormText name="ward" label="Ward" width={360} />
                 </ProFormGroup>
-                <ProFormText name="street" label="Tên đường" />
+                <ProFormText name="street" label="Street" />
                 <ProFormGroup>
-                  <ProFormText name="longitude" label="Kinh độ" width={360} />
-                  <ProFormText name="latitude" label="Vĩ độ" width={360} />
+                  <ProFormText name="longitude" label="Longtitude" width={360} />
+                  <ProFormText name="latitude" label="Latitude" width={360} />
                 </ProFormGroup>
-                <ProFormTextArea name="address" label="Địa chỉ" />
+                <ProFormTextArea name="address" label="Address" />
               </>
             )
           );
@@ -147,7 +147,7 @@ const CreateLocation = ({ initValues, type, onLoad, locationId }: ICreatLocation
                     }}
                     width={360}
                     name="city"
-                    label="Thành phố/Tỉnh"
+                    label="City/Province"
                     fieldProps={{
                       onChange: () => {
                         // Reset district and ward when city changes
@@ -172,7 +172,7 @@ const CreateLocation = ({ initValues, type, onLoad, locationId }: ICreatLocation
                             }}
                             width={360}
                             name="district"
-                            label="Quận/Huyện"
+                            label="District"
                             fieldProps={{
                               onChange: () => {
                                 // Reset district and ward when city changes
@@ -182,7 +182,7 @@ const CreateLocation = ({ initValues, type, onLoad, locationId }: ICreatLocation
                           />
                         );
                       } else {
-                        return <ProFormText width="md" name="district" label="Quận/Huyện" />;
+                        return <ProFormText width="md" name="district" label="District" />;
                       }
                     }}
                   </ProFormDependency>
@@ -191,7 +191,7 @@ const CreateLocation = ({ initValues, type, onLoad, locationId }: ICreatLocation
                   <ProFormDependency name={['district', 'city']}>
                     {({ district, city }) => {
                       if (!district || !city) {
-                        return <ProFormText width="md" name="ward" label="Phường/Xã" />;
+                        return <ProFormText width="md" name="ward" label="Ward" />;
                       }
                       return (
                         <ProFormSelect
@@ -207,19 +207,19 @@ const CreateLocation = ({ initValues, type, onLoad, locationId }: ICreatLocation
                           }}
                           width={360}
                           name="ward"
-                          label="Phường/Xã"
+                          label="Ward"
                         />
                       );
                     }}
                   </ProFormDependency>
                 </ProFormGroup>
-                <ProFormText name="street" label="Tên đường" />
+                <ProFormText name="street" label="Street" />
 
                 <ProFormGroup>
-                  <ProFormText name="longitude" label="Kinh độ" width={360} />
-                  <ProFormText name="latitude" label="Vĩ độ" width={360} />
+                  <ProFormText name="longitude" label="Longitude" width={360} />
+                  <ProFormText name="latitude" label="Latitude" width={360} />
                 </ProFormGroup>
-                <ProFormTextArea name="address" label="Địa chỉ" />
+                <ProFormTextArea name="address" label="Address" />
               </>
             )
           );
@@ -231,14 +231,14 @@ const CreateLocation = ({ initValues, type, onLoad, locationId }: ICreatLocation
         <ProFormSelect
           name="status"
           width={360}
-          label="Trạng thái"
+          label="Status"
           options={[
-            { label: 'Không hoạt động', value: 0 },
-            { label: 'Hoạt động', value: 1 },
+            { label: 'InActive', value: 0 },
+            { label: 'Active', value: 1 },
           ]}
         />
       </ProFormGroup>
-      <ProFormTextArea name="location_description" label="Mô tả vị trí" />
+      <ProFormTextArea name="location_description" label="Description" />
     </ModalForm>
   );
 };

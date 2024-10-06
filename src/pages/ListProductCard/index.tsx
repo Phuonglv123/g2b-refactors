@@ -262,6 +262,7 @@ const ListProductCard = () => {
             layout: 'vertical',
             defaultCollapsed: false,
             span: 3,
+            searchText: 'Search',
           }}
           pagination={{
             pageSize: 6,
@@ -282,9 +283,15 @@ const ListProductCard = () => {
             <List.Item>
               <Card
                 hoverable
-                style={{ width: '100%', height: '100%', backgroundColor: '#dba41f1f' }}
-                cover={<img alt="example" src={getSrcImg(item.images[0])} />}
-                bodyStyle={{ padding: '8px 4px' }}
+                style={{ width: '100%', backgroundColor: '#dba41f1f' }}
+                cover={
+                  <img
+                    alt="example"
+                    src={getSrcImg(item.images[0])}
+                    style={{ width: '100%', height: 300 }}
+                  />
+                }
+                bodyStyle={{ padding: '8px 4px', height: 200 }}
                 bordered
                 actions={[
                   <div>
@@ -490,12 +497,7 @@ const ListProductCard = () => {
                           <Typography.Text>{item.product_code}</Typography.Text>
                         </Col>
                       </Row>
-                      <Row>
-                        <Col span={4}>
-                          <Typography.Text>ADDRESS:</Typography.Text>
-                        </Col>
-                        <Typography.Text> {item.location.address}</Typography.Text>
-                      </Row>
+
                       <Row>
                         <Col span={4}>
                           <Typography.Text>COST:</Typography.Text>
@@ -503,6 +505,12 @@ const ListProductCard = () => {
                         <Typography.Text>
                           {formatCurrency(item?.cost, item?.currency)} {item?.currency}
                         </Typography.Text>
+                      </Row>
+                      <Row>
+                        <Col span={4}>
+                          <Typography.Text>ADDRESS:</Typography.Text>
+                        </Col>
+                        <Typography.Text> {item.location.address}</Typography.Text>
                       </Row>
                     </div>
                   }
