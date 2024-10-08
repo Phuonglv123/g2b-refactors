@@ -25,13 +25,19 @@ const ListProductCard = () => {
   const [city, setCity] = useState<any>(null);
   const [district, setDistrict] = useState<any>(null);
   const [whitelist, setWhitelist] = useState<any>([]);
-
   const searchWhitelist = useCallback(async () => {
+    if (currentUser?.whitelist.length === 0) {
+      setWhitelist([]);
+      message.error('Not found any product in whitelist');
+      return;
+    }
     const data = await sortProductWhiteList({ ids: currentUser?.whitelist });
     if (data?.data) {
       setWhitelist(data.data);
+    } else {
+      message.error('Not found any product in whitelist');
     }
-  }, []);
+  }, [currentUser]);
 
   const getListProductCard = useCallback(async (params: any) => {
     const { product_code, product_name, country, city, district, ward, status, type, areas } =

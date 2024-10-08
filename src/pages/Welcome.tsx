@@ -19,14 +19,7 @@ const Welcome: React.FC = () => {
         <Card
           style={{
             borderRadius: 8,
-          }}
-          styles={{
-            body: {
-              backgroundImage:
-                initialState?.settings?.navTheme === 'realDark'
-                  ? 'background-image: linear-gradient(75deg, #1A1B1F 0%, #191C1F 100%)'
-                  : 'background-image: linear-gradient(75deg, #FBFDFF 0%, #F5F7FF 100%)',
-            },
+            backgroundColor: '#1414148f',
           }}
         >
           <div
@@ -40,9 +33,11 @@ const Welcome: React.FC = () => {
           >
             <div
               style={{
-                fontSize: '20px',
+                fontSize: '30px',
                 //color: token.colorTextHeading,
                 color: '#febd21',
+                textAlign: 'center',
+                fontWeight: 500,
               }}
             >
               G2B Admin
@@ -55,7 +50,8 @@ const Welcome: React.FC = () => {
                 lineHeight: '22px',
                 marginTop: 16,
                 marginBottom: 32,
-                width: '65%',
+                width: '100%',
+                textAlign: 'center',
               }}
             >
               Welcome to G2B Admin, a world-class digital education platform for the Vietnamese
@@ -66,10 +62,7 @@ const Welcome: React.FC = () => {
               {' '}
               G2B MEDIA CORPORATION
             </Typography.Title>
-            <Typography.Text style={{ color: '#febd21' }}>
-              Address: Floor 3 - 98 Nguyen Thi Nhung, Khu Do Thị Van Phuc, Hiep Binh Phuoc Ward, Thu
-              Duc City, Ho Chi Minh City
-            </Typography.Text>
+
             <br />
             <Typography.Text style={{ color: '#febd21' }}>Phone: 0937 95 30 30</Typography.Text>
             <br />
@@ -80,6 +73,11 @@ const Welcome: React.FC = () => {
             </Typography.Text>
             <br />
             <Typography.Text style={{ color: '#febd21' }}>MST: 0316567204</Typography.Text>
+            <br />
+            <Typography.Text style={{ color: '#febd21' }}>
+              Address: Floor 3 - 98 Nguyen Thi Nhung, Khu Do Thị Van Phuc, Hiep Binh Phuoc Ward, Thu
+              Duc City, Ho Chi Minh City
+            </Typography.Text>
           </div>
         </Card>
       </div>
