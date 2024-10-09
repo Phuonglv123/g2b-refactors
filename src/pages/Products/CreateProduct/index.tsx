@@ -5,7 +5,7 @@ import { IProduct } from '@/types/product';
 import { getSrcImg } from '@/utils';
 import { PageContainer, ProCard, ProForm, ProFormUploadButton } from '@ant-design/pro-components';
 import { useParams } from '@umijs/max';
-import { Row, Space, message } from 'antd';
+import { Image, Row, Space, message } from 'antd';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import InfoAttribute from './InfoAttribute';
@@ -17,11 +17,19 @@ type IRes = {
   errorCode: number;
   message: string;
 };
-
+const getBase64 = (file: any): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
 const CreateProduct: React.FC = () => {
   const [form] = ProForm.useForm();
   const { id } = useParams();
   const [loading, setLoading] = useState<boolean>(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
 
   const onCreateProduct = async (values: any) => {
     console.log(values);
@@ -220,8 +228,28 @@ const CreateProduct: React.FC = () => {
     }
   };
 
+  const handlePreview = async (file: any) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj as any);
+    }
+
+    setPreviewImage(file.url || (file.preview as string));
+    setPreviewOpen(true);
+  };
+
   return (
     <PageContainer title={'Create Product'}>
+      {previewImage && (
+        <Image
+          wrapperStyle={{ display: 'none' }}
+          preview={{
+            visible: previewOpen,
+            onVisibleChange: (visible) => setPreviewOpen(visible),
+            afterOpenChange: (visible) => !visible && setPreviewImage(''),
+          }}
+          src={previewImage}
+        />
+      )}
       <ProCard>
         <ProForm<IProduct & any>
           form={form}
@@ -251,6 +279,7 @@ const CreateProduct: React.FC = () => {
               multiple: true,
               children: <div>Select images</div>,
               showUploadList: { showPreviewIcon: true, showRemoveIcon: true },
+              onPreview: handlePreview,
               onRemove: async (file) => {
                 if (id) {
                   await deleteImageProduct(id, file.uid);
