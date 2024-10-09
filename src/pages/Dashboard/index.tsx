@@ -45,7 +45,7 @@ const Dashboard: React.FC = () => {
       }
       setLoading(true);
       const res = await staticProduct(payload);
-      const chart = await chartTypeProductByUser(payload);
+      const chart = await chartTypeProductByUser({});
       const typeProduct = await chartFilterTypeProduct();
       setChartTypeProduct(typeProduct);
       setCharts(chart.map((item: any) => ({ ...item, value: item.productCount })));
