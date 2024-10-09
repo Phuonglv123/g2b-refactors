@@ -15,9 +15,9 @@ const InfoAttribute = () => {
         width="md"
         fieldProps={{
           suffix: 'm',
-          formatter: (value) =>
-            value ? new Intl.NumberFormat('vi-VN').format(Number(value)) : '0',
-          parser: (value: any) => value?.toString().replace(/\./g, '') || '0',
+          // formatter: (value) =>
+          //   value ? new Intl.NumberFormat('vi-VN').format(Number(value)) : '0',
+          // parser: (value: any) => value?.toString().replace(/\./g, '') || '0',
         }}
         rules={[
           {
@@ -32,9 +32,9 @@ const InfoAttribute = () => {
         width="md"
         fieldProps={{
           suffix: 'm',
-          formatter: (value) =>
-            value ? new Intl.NumberFormat('vi-VN').format(Number(value)) : '0',
-          parser: (value: any) => value?.toString().replace(/\./g, '') || '0',
+          // formatter: (value) =>
+          //   value ? new Intl.NumberFormat('vi-VN').format(Number(value)) : '0',
+          // parser: (value: any) => value?.toString().replace(/\./g, '') || '0',
         }}
         rules={[
           {
