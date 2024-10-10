@@ -7,7 +7,7 @@ WORKDIR /app
 COPY package.json yarn.lock ./
 
 # Install the project dependencies
-RUN yarn install --legacy-peer-deps
+RUN yarn install --frozen-lockfile
 
 # Copy the rest of the application code to the working directory
 COPY . .
