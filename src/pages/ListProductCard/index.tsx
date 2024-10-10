@@ -496,27 +496,31 @@ const ListProductCard = () => {
                   description={
                     <div>
                       <Row>
-                        <Col span={4}>
+                        <Col span={6}>
                           <Typography.Text>CODE:</Typography.Text>
                         </Col>
-                        <Col span={20}>
+                        <Col span={18}>
                           <Typography.Text>{item.product_code}</Typography.Text>
                         </Col>
                       </Row>
 
                       <Row>
-                        <Col span={4}>
+                        <Col span={6}>
                           <Typography.Text>COST:</Typography.Text>
                         </Col>
-                        <Typography.Text>
-                          {formatCurrency(item?.cost, item?.currency)} {item?.currency}
-                        </Typography.Text>
+                        <Col span={18}>
+                          <Typography.Text>
+                            {formatCurrency(item?.cost, item?.currency)} {item?.currency}
+                          </Typography.Text>
+                        </Col>
                       </Row>
                       <Row>
-                        <Col span={4}>
+                        <Col span={6}>
                           <Typography.Text>ADDRESS:</Typography.Text>
                         </Col>
-                        <Typography.Text> {item.location.address}</Typography.Text>
+                        <Col span={18}>
+                          <Typography.Text> {item.location.address}</Typography.Text>
+                        </Col>
                       </Row>
                     </div>
                   }

@@ -111,6 +111,7 @@ const AddProvider: React.FC<AddProviderProps> = ({ onLoad, type, initialValues }
           { label: 'Street banners', value: 'Street banners' },
           { label: 'Static Billboard ', value: 'Static Billboard ' },
           { label: 'Digital Billboard ', value: 'Digital Billboard ' },
+
           { label: 'Installation company ', value: 'Installation company ' },
           { label: 'Production', value: 'Production' },
           { label: 'Printing', value: 'Printing' },
@@ -135,6 +136,7 @@ const AddProvider: React.FC<AddProviderProps> = ({ onLoad, type, initialValues }
           { label: 'Street Furniture', value: 'Street Furniture' },
           { label: 'Airport Advertising', value: 'Airport Advertising' },
           { label: 'Shopping Mall Ad ', value: 'Shopping Mall Ad ' },
+          { label: 'OOH ', value: 'OOH' },
         ]}
       />
       <ProFormSelect
