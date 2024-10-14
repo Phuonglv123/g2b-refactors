@@ -4,6 +4,7 @@ import { Button, Popconfirm, Tooltip } from 'antd';
 import dayjs from 'dayjs';
 import saveAs from 'file-saver';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+
 import React from 'react';
 
 interface GeneralData {
@@ -157,33 +158,33 @@ const QuotationExportPdf: React.FC<Props> = ({ data, showIcon = false }) => {
 
         {
           label: 'Production Cost',
-          value: item.media.productionCost.toString() || '',
+          value: item?.media?.productionCost?.toString() || '',
           icon: getSrcImg('/uploads/icon-17.png'),
         },
         {
           label: 'Booking Duration',
-          value: item.media.bookingDuration,
+          value: item?.media?.bookingDuration,
           icon: getSrcImg('/uploads/icon-08.png'),
         },
         {
           label: 'Media Cost',
-          value: item.media.cost.toString(),
+          value: item?.media?.cost?.toString(),
           icon: getSrcImg('/uploads/icon-13.png'),
         },
 
         {
           label: 'Areas',
-          value: item.media.areas.join(', '),
+          value: item?.media?.areas?.join(', '),
           icon: getSrcImg('/uploads/icon-15.png'),
         },
         {
           label: 'GPS',
-          value: item.base.gps,
+          value: item?.base?.gps,
           icon: getSrcImg('/uploads/icon-04.png'),
         },
         {
           label: 'Note',
-          value: cleanString(item.media.note),
+          value: cleanString(item?.media?.note),
           icon: getSrcImg('/uploads/icon-09.png'),
         },
       ];
@@ -211,14 +212,14 @@ const QuotationExportPdf: React.FC<Props> = ({ data, showIcon = false }) => {
           height: 25,
         });
 
-        page.drawText(`${info.label}:`, {
+        page.drawText(`${info?.label}:`, {
           x: xPosition + 40,
           y: currentYPosition + 15,
           size: fontSize,
           font: boldFont,
           color: rgb(254 / 255, 189 / 255, 33 / 255),
         });
-        page.drawText(info.value, {
+        page.drawText(cleanString(info?.value), {
           x: xPosition + 40,
           y: currentYPositionValue + 15,
           size: fontSize,
@@ -287,7 +288,7 @@ const QuotationExportPdf: React.FC<Props> = ({ data, showIcon = false }) => {
           font: boldFont,
           color: rgb(254 / 255, 189 / 255, 33 / 255),
         });
-        page.drawText(info.value, {
+        page.drawText(cleanString(info.value), {
           x: xPosition + 40,
           y: currentYPositionValue + 15,
           size: fontSize,
