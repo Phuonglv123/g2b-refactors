@@ -12,7 +12,7 @@ import { IProduct } from '@/types/product';
 import { formatCurrency, formatNumberVietnamese, getSrcImg } from '@/utils';
 import { StarFilled, StarOutlined } from '@ant-design/icons';
 import { ProCard, ProList } from '@ant-design/pro-components';
-import { Link, history, useLocation, useModel } from '@umijs/max';
+import { Link, useLocation, useModel } from '@umijs/max';
 import { Alert, Button, Card, Checkbox, Col, List, Row, Space, Typography, message } from 'antd';
 import { useCallback, useState } from 'react';
 
@@ -43,18 +43,18 @@ const ListProductCard = () => {
 
   const getListProductCard = useCallback(
     async (params: any) => {
-      if (params.current > 1) {
-        history.push(`/list-product-card?page=${params.current}`);
-      } else {
-        history.push(`/list-product-card`);
-      }
+      // if (params.current > 1) {
+      //   history.push(`/list-product-card?page=${params.current}`);
+      // } else {
+      //   history.push(`/list-product-card`);
+      // }
 
       const { product_code, product_name, country, city, district, ward, status, type, areas } =
         params;
       console.log(location?.search?.split('=')[1]);
       const payload: any = {
         size: params.pageSize,
-        page: location?.search?.split('=')[1],
+        page: params.current,
         product_code,
         product_name,
         country,
@@ -283,7 +283,7 @@ const ListProductCard = () => {
             searchText: 'Search',
           }}
           pagination={{
-            pageSize: 1,
+            pageSize: 6,
             total: products.total,
             size: 'small',
           }}
