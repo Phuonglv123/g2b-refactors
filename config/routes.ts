@@ -96,6 +96,13 @@ export default [
     ],
   },
   {
+    path: 'maps',
+    component: './Maps',
+    key: 'maps',
+    name: 'Maps',
+    icon: 'GlobalOutlined',
+  },
+  {
     path: '/',
     layout: false,
     component: './Home',
