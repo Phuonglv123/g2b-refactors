@@ -15,6 +15,7 @@ const Products: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const onRequest = async (params: any, filter: any, sort: any) => {
+    console.log(params, filter, sort);
     const { product_code, product_name, country, city, district, ward } = params;
     const { status, type, areas } = sort;
     const payload: any = {
@@ -189,7 +190,7 @@ const Products: React.FC = () => {
           {
             title: 'Product Name',
             dataIndex: 'product_name',
-            key: 'title',
+            key: 'product_name',
           },
           {
             title: 'Country',
@@ -257,10 +258,8 @@ const Products: React.FC = () => {
               others: { text: 'Others' },
             },
             render: (_, record: any) => {
-              return record?.areas?.map((item: any) => (
-                <Tag color="success" key={item}>
-                  {item}
-                </Tag>
+              return record?.areas?.map((area: any) => (
+                <Tag color="success">{area.charAt(0).toUpperCase() + area.slice(1)}</Tag>
               ));
             },
           },

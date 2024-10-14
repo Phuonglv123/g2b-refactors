@@ -28,3 +28,17 @@ export const getSrcImg = (images: string) => {
 export const formatNumberVietnamese = (value: number) => {
   return new Intl.NumberFormat('vi-VN').format(value);
 };
+
+export function convertTo12HourFormat(time: any) {
+  // Split the time into hours, minutes, and seconds
+  let [hours, minutes, seconds] = time.split(':').map(Number);
+
+  // Determine the period (AM/PM)
+  const period = hours >= 12 ? 'PM' : 'AM';
+
+  // Convert hours from 24-hour to 12-hour format
+  hours = hours % 12 || 12;
+
+  // Return the formatted time string
+  return `${hours}:${minutes.toString().padStart(2, '0')} ${period}`;
+}

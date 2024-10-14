@@ -7,9 +7,9 @@ import {
   removeWhitelistFromProduct,
 } from '@/services/products';
 import { IProduct } from '@/types/product';
-import { formatCurrency, formatNumberVietnamese, getSrcImg } from '@/utils';
+import { convertTo12HourFormat, formatCurrency, formatNumberVietnamese, getSrcImg } from '@/utils';
 import { StarOutlined } from '@ant-design/icons';
-import { ProCard, ProDescriptions } from '@ant-design/pro-components';
+import { PageContainer, ProCard, ProDescriptions } from '@ant-design/pro-components';
 import { useModel, useParams } from '@umijs/max';
 import { Button, Card, Row, Space, Tag, message } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
@@ -81,7 +81,7 @@ const DetailProductCard = () => {
   if (!product) return null;
 
   return (
-    <div>
+    <PageContainer title="List Card Product">
       <ProCard split="vertical" loading={loading} gutter={16} bordered>
         <ProCard title="Images" colSpan={10} bodyStyle={{ padding: 0 }}>
           <ImageGallery
@@ -145,21 +145,22 @@ const DetailProductCard = () => {
             </ProDescriptions.Item>
             <ProDescriptions.Item label="DIMENSION (WxH)" span={2}>
               {product?.attributes?.width}m x {product?.attributes?.height}m ={' '}
-              {product?.attributes?.width * product?.attributes?.height}m2
+              {formatNumberVietnamese(product?.attributes?.width * product?.attributes?.height)}m2
             </ProDescriptions.Item>
             <ProDescriptions.Item label="AREAS" span={2}>
               {product?.areas.map((area: any) => (
-                <Tag color="success">{area}</Tag>
+                <Tag color="success">{area.charAt(0).toUpperCase() + area.slice(1)}</Tag>
               ))}
             </ProDescriptions.Item>
             <ProDescriptions.Item label="PIXEL (WxH)" span={1}>
-              {product.attributes?.pixel_width} x {product.attributes?.pixel_height}
+              {product.attributes?.pixel_width} x {product.attributes?.pixel_height} Pixel
             </ProDescriptions.Item>
             <ProDescriptions.Item label="VIDEO DURATION" span={1}>
               {product.attributes?.video_duration} s
             </ProDescriptions.Item>
             <ProDescriptions.Item label="OPERATION TIME" span={1}>
-              {product.attributes?.opera_time_from} - {product.attributes?.opera_time_to}
+              {convertTo12HourFormat(product?.attributes?.opera_time_from)} -{' '}
+              {convertTo12HourFormat(product.attributes?.opera_time_to)}
             </ProDescriptions.Item>
             <ProDescriptions.Item label="FREQUENCY" span={1}>
               {product.attributes?.frequency} spots
@@ -187,11 +188,11 @@ const DetailProductCard = () => {
               </Row>
             </ProDescriptions.Item>
             <ProDescriptions.Item label="NOTE" span={1}>
-              {product?.booking_duration}
+              {product?.attributes?.note}
             </ProDescriptions.Item>
             <ProDescriptions.Item label="PRODUCTION COST" span={1}>
               <Row justify={'space-between'}>
-                <div>{product?.booking_duration}</div>
+                <div>{product?.production_cost}</div>
                 <Space>
                   <QuotationExport
                     data={[
@@ -313,7 +314,7 @@ const DetailProductCard = () => {
           </ProDescriptions>
         </ProCard>
       </ProCard>
-    </div>
+    </PageContainer>
   );
 };
 

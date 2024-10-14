@@ -12,11 +12,13 @@ import { IProduct } from '@/types/product';
 import { formatCurrency, formatNumberVietnamese, getSrcImg } from '@/utils';
 import { StarFilled, StarOutlined } from '@ant-design/icons';
 import { ProCard, ProList } from '@ant-design/pro-components';
-import { Link, useModel } from '@umijs/max';
+import { Link, history, useLocation, useModel } from '@umijs/max';
 import { Alert, Button, Card, Checkbox, Col, List, Row, Space, Typography, message } from 'antd';
 import { useCallback, useState } from 'react';
 
 const ListProductCard = () => {
+  const location = useLocation();
+  console.log(location);
   const [loading, setLoading] = useState<boolean>(false);
   const [products, setProducts] = useState<any>([]);
   const { initialState, refresh } = useModel('@@initialState');
@@ -39,52 +41,62 @@ const ListProductCard = () => {
     }
   }, [currentUser]);
 
-  const getListProductCard = useCallback(async (params: any) => {
-    const { product_code, product_name, country, city, district, ward, status, type, areas } =
-      params;
-    const payload: any = {
-      size: params.pageSize,
-      page: params.current,
-      product_code,
-      product_name,
-      country,
-      city,
-      district,
-      ward,
-    };
+  const getListProductCard = useCallback(
+    async (params: any) => {
+      if (params.current > 1) {
+        history.push(`/list-product-card?page=${params.current}`);
+      } else {
+        history.push(`/list-product-card`);
+      }
 
-    if (type) {
-      payload.type = type.join(',');
-    }
-    if (areas) {
-      payload.areas = areas.join(',');
-    }
+      const { product_code, product_name, country, city, district, ward, status, type, areas } =
+        params;
+      console.log(location?.search?.split('=')[1]);
+      const payload: any = {
+        size: params.pageSize,
+        page: location?.search?.split('=')[1],
+        product_code,
+        product_name,
+        country,
+        city,
+        district,
+        ward,
+      };
 
-    try {
-      setLoading(true);
-      console.log(params);
-      const { data, pagination, errorCode }: any = await listProducts(payload);
-      console.log(data);
-      setProducts({
-        data: data || [],
-        total: pagination?.total || 0,
-        success: true,
-      });
-      return {
-        data: data || [],
-        total: pagination?.total || 0,
-        success: true,
-      };
-    } catch (error) {
-    } finally {
-      setLoading(false);
-      return {
-        data: [],
-        total: 0,
-        success: false,
-      };
-    }
-  }, []);
+      if (type) {
+        payload.type = type.join(',');
+      }
+      if (areas) {
+        payload.areas = areas.join(',');
+      }
+
+      try {
+        setLoading(true);
+        console.log(params);
+        const { data, pagination, errorCode }: any = await listProducts(payload);
+        console.log(data);
+        setProducts({
+          data: data || [],
+          total: pagination?.total || 0,
+          success: true,
+        });
+        return {
+          data: data || [],
+          total: pagination?.total || 0,
+          success: true,
+        };
+      } catch (error) {
+      } finally {
+        setLoading(false);
+        return {
+          data: [],
+          total: 0,
+          success: false,
+        };
+      }
+    },
+    [location],
+  );
   // useEffect(() => {
   //   getListProductCard();
   // }, []);
@@ -271,7 +283,7 @@ const ListProductCard = () => {
             searchText: 'Search',
           }}
           pagination={{
-            pageSize: 6,
+            pageSize: 1,
             total: products.total,
             size: 'small',
           }}

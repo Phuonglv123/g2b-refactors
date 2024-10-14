@@ -82,11 +82,13 @@ export default [
     name: 'list-product-card',
     icon: 'AimOutlined',
     key: 'card',
+    exact: true,
     routes: [
       {
         path: '/list-product-card',
         component: './ListProductCard',
         key: 'ListProductCard',
+        exact: true,
       },
       {
         path: '/list-product-card/:id',

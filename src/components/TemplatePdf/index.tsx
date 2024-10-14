@@ -177,15 +177,16 @@ const QuotationExportPdf: React.FC<Props> = ({ data, showIcon = false }) => {
           value: item?.media?.areas?.join(', '),
           icon: getSrcImg('/uploads/icon-15.png'),
         },
-        {
-          label: 'GPS',
-          value: item?.base?.gps,
-          icon: getSrcImg('/uploads/icon-04.png'),
-        },
+
         {
           label: 'Note',
           value: cleanString(item?.media?.note),
           icon: getSrcImg('/uploads/icon-09.png'),
+        },
+        {
+          label: 'GPS',
+          value: item?.base?.gps,
+          icon: getSrcImg('/uploads/icon-04.png'),
         },
       ];
 
@@ -272,8 +273,8 @@ const QuotationExportPdf: React.FC<Props> = ({ data, showIcon = false }) => {
 
         // Calculate the X and Y positions based on the column and row
         const xPosition = 20 + column * columnWidth;
-        const currentYPosition = yPosition - row * rowHeight + 30;
-        const currentYPositionValue = yPosition - row * rowHeight + 10;
+        const currentYPosition = yPosition - row * rowHeight + 40;
+        const currentYPositionValue = yPosition - row * rowHeight + 20;
         // Draw the label and value in the respective column
         page.drawImage(await embedImage(pdfDoc, info.icon), {
           x: xPosition,

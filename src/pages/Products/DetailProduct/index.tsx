@@ -1,9 +1,9 @@
 import { getProduct } from '@/services/products';
 import { IProduct } from '@/types/product';
-import { getSrcImg } from '@/utils';
-import { ProDescriptions } from '@ant-design/pro-components';
+import { formatNumberVietnamese, getSrcImg } from '@/utils';
+import { PageContainer, ProDescriptions } from '@ant-design/pro-components';
 import { useParams } from '@umijs/max';
-import { Empty, Image, Space } from 'antd';
+import { Empty, Image, Space, Tag } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 
 const DetailProduct: React.FC = () => {
@@ -13,7 +13,7 @@ const DetailProduct: React.FC = () => {
     product_code: '',
     product_name: '',
     type: '',
-    areas: '',
+    areas: [],
     status: 0,
     images: [],
     cost: 0,
@@ -62,7 +62,7 @@ const DetailProduct: React.FC = () => {
     onRequest();
   }, []);
   return (
-    <div>
+    <PageContainer>
       <ProDescriptions<IProduct>
         layout="vertical"
         bordered
@@ -72,7 +72,11 @@ const DetailProduct: React.FC = () => {
         <ProDescriptions.Item label="Product code" dataIndex="product_code" />
         <ProDescriptions.Item label="Product name" dataIndex="product_name" />
         <ProDescriptions.Item label="Product type" dataIndex="type" />
-        <ProDescriptions.Item label="Area" dataIndex="areas" />
+        <ProDescriptions.Item label="AREAS" span={2}>
+          {data?.areas?.map((area: any) => (
+            <Tag color="success">{area.charAt(0).toUpperCase() + area.slice(1)}</Tag>
+          ))}
+        </ProDescriptions.Item>
         <ProDescriptions.Item label="Cost" dataIndex="cost" />
         <ProDescriptions.Item label="Production cost" dataIndex="production_cost" />
         <ProDescriptions.Item
@@ -82,7 +86,10 @@ const DetailProduct: React.FC = () => {
         />
         <ProDescriptions.Item label="Booking duration" dataIndex="booking_duration" />
         <ProDescriptions.Item label="Currency" dataIndex="currency" />
-        <ProDescriptions.Item label="Tracffic" dataIndex="trafic" />
+        <ProDescriptions.Item label="Tracffic">
+          {formatNumberVietnamese(data.traffic)} vehicles/day
+        </ProDescriptions.Item>
+
         <ProDescriptions.Item label="Created At" dataIndex="createdAt" />
         <ProDescriptions.Item label="Status" dataIndex="status" />
         <ProDescriptions.Item
@@ -130,7 +137,7 @@ const DetailProduct: React.FC = () => {
         <ProDescriptions.Item label="Street" dataIndex={['location', 'street']} />
         <ProDescriptions.Item label="GPS" dataIndex={['location', 'gps']} />
       </ProDescriptions>
-    </div>
+    </PageContainer>
   );
 };
 

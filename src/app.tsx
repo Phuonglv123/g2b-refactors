@@ -91,6 +91,9 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     ],
     links: [],
     menuHeaderRender: undefined,
+    breadcrumbRender(routers) {
+      return routers;
+    },
     childrenRender: (children) => {
       if (initialState?.loading) return <PageLoading />;
 
