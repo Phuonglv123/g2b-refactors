@@ -8,9 +8,9 @@ import {
 } from '@/services/products';
 import { IProduct } from '@/types/product';
 import { convertTo12HourFormat, formatCurrency, formatNumberVietnamese, getSrcImg } from '@/utils';
-import { StarOutlined } from '@ant-design/icons';
-import { PageContainer, ProCard, ProDescriptions } from '@ant-design/pro-components';
-import { useModel, useParams } from '@umijs/max';
+import { BackwardOutlined, StarOutlined } from '@ant-design/icons';
+import { ProCard, ProDescriptions } from '@ant-design/pro-components';
+import { useLocation, useModel, useParams } from '@umijs/max';
 import { Button, Card, Row, Space, Tag, message } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import ImageGallery from 'react-image-gallery';
@@ -24,6 +24,7 @@ const DetailProductCard = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { initialState, refresh } = useModel('@@initialState');
   const { currentUser } = initialState || {};
+  const location = useLocation();
 
   const getProductDetailById = useCallback(async () => {
     try {
@@ -81,7 +82,17 @@ const DetailProductCard = () => {
   if (!product) return null;
 
   return (
-    <PageContainer title="List Card Product">
+    <div>
+      <Button
+        onClick={() => history.back()}
+        icon={<BackwardOutlined />}
+        type="primary"
+        size="small"
+      >
+        Back
+      </Button>
+      <br />
+      <br />
       <ProCard split="vertical" loading={loading} gutter={16} bordered>
         <ProCard title="Images" colSpan={10} bodyStyle={{ padding: 0 }}>
           <ImageGallery
@@ -314,7 +325,7 @@ const DetailProductCard = () => {
           </ProDescriptions>
         </ProCard>
       </ProCard>
-    </PageContainer>
+    </div>
   );
 };
 

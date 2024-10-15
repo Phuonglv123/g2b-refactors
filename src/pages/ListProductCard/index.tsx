@@ -12,7 +12,7 @@ import { IProduct } from '@/types/product';
 import { formatCurrency, formatNumberVietnamese, getSrcImg } from '@/utils';
 import { StarFilled, StarOutlined } from '@ant-design/icons';
 import { ProCard, ProList } from '@ant-design/pro-components';
-import { Link, useLocation, useModel } from '@umijs/max';
+import { history, useLocation, useModel } from '@umijs/max';
 import { Alert, Button, Card, Checkbox, Col, List, Row, Space, Typography, message } from 'antd';
 import { useCallback, useState } from 'react';
 
@@ -43,18 +43,11 @@ const ListProductCard = () => {
 
   const getListProductCard = useCallback(
     async (params: any) => {
-      // if (params.current > 1) {
-      //   history.push(`/list-product-card?page=${params.current}`);
-      // } else {
-      //   history.push(`/list-product-card`);
-      // }
-
       const { product_code, product_name, country, city, district, ward, status, type, areas } =
         params;
-      console.log(location?.search?.split('=')[1]);
       const payload: any = {
         size: params.pageSize,
-        page: params.current,
+        page: location?.search?.split('=')[1] || params.current,
         product_code,
         product_name,
         country,
@@ -286,6 +279,10 @@ const ListProductCard = () => {
             pageSize: 6,
             total: products.total,
             size: 'small',
+            current: parseInt(location?.search?.split('=')[1]) || 1,
+            onChange: (page: number, pageSize: number) => {
+              history.push(`/list-product-card?page=${page}`);
+            },
           }}
           loading={loading}
           itemCardProps={{
@@ -431,7 +428,7 @@ const ListProductCard = () => {
                   title={
                     <Row justify="space-between" align="top">
                       <Col span={20}>
-                        <Link to={`/list-product-card/${item?._id}`} color="black">
+                        <div onClick={() => history.push(`/list-product-card/${item?._id}`)}>
                           <div
                             style={{
                               color: '#febd21',
@@ -442,7 +439,7 @@ const ListProductCard = () => {
                           >
                             {item.product_name.toUpperCase()}
                           </div>
-                        </Link>
+                        </div>
                       </Col>
                       <Col span={4}>
                         <Space>
@@ -584,6 +581,7 @@ const ListProductCard = () => {
             city: {
               title: 'City',
               valueType: 'select',
+
               request: async () => {
                 return await getProvice({ country: city }).then((res) => {
                   return res.data.map((item: any) => {
@@ -597,6 +595,7 @@ const ListProductCard = () => {
               search: city !== null,
               key: 'location.city',
               fieldProps: {
+                showSearch: true,
                 onChange: (value: any) => {
                   setDistrict(value);
                 },
@@ -616,6 +615,9 @@ const ListProductCard = () => {
                     };
                   });
                 });
+              },
+              fieldProps: {
+                showSearch: true,
               },
             },
             type: {
@@ -646,6 +648,7 @@ const ListProductCard = () => {
                 mode: 'multiple',
                 search: true,
                 showCount: true,
+                showSearch: true,
               },
             },
             areas: {
@@ -655,6 +658,7 @@ const ListProductCard = () => {
                 mode: 'multiple',
                 search: true,
                 showCount: true,
+                showSearch: true,
               },
               key: 'areas',
               valueEnum: {
