@@ -281,8 +281,18 @@ const CreateProduct: React.FC = () => {
               showUploadList: { showPreviewIcon: true, showRemoveIcon: true },
               onPreview: handlePreview,
               onRemove: async (file) => {
+                console.log(file);
                 if (id) {
-                  await deleteImageProduct(id, file.uid);
+                  await deleteImageProduct(id, file.uid)
+                    .then((res) => {
+                      if (res.errorCode === 0) {
+                        message.success('Image deleted successfully');
+                      }
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                      message.error('error!');
+                    });
                 }
               },
             }}

@@ -2,22 +2,40 @@ import QuotationExport from '@/components/TemplateExcel';
 import QuotationExportPdf from '@/components/TemplatePdf';
 import QuationExportPPT from '@/components/TemplatePpt';
 import { deleteSoftProduct, listProducts, toggleProductStatus } from '@/services/products';
+import { getProviders } from '@/services/provider';
 import { formatCurrency, formatNumberVietnamese } from '@/utils';
 import { CheckOutlined, CloseOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { ActionType, PageContainer, ProTable } from '@ant-design/pro-components';
 import { Link, history } from '@umijs/max';
 import { Button, Space, Switch, Tag, message } from 'antd';
 import dayjs from 'dayjs';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const Products: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
+
+  const [providerOptions, setProviderOptions] = useState<{ [key: string]: { text: string } }>({});
+
+  useEffect(() => {
+    const fetchProviders = async () => {
+      const res = await getProviders({ pageSize: 1000 });
+      const data = res.data || [];
+      const options = data.reduce((acc: any, item: any) => {
+        acc[item._id] = { text: item.name };
+        return acc;
+      }, {});
+      setProviderOptions(options);
+    };
+
+    fetchProviders();
+  }, []);
+
   const onRequest = async (params: any, filter: any, sort: any) => {
     console.log(params, filter, sort);
     const { product_code, product_name, country, city, district, ward } = params;
-    const { status, type, areas } = sort;
+    const { status, type, areas, provider } = sort;
     const payload: any = {
       size: params.pageSize,
       page: params.current,
@@ -36,6 +54,10 @@ const Products: React.FC = () => {
     }
     if (areas) {
       payload.areas = areas.join(',');
+    }
+
+    if (provider) {
+      payload.provider = provider.join(',');
     }
 
     const data = await listProducts(payload);
@@ -280,6 +302,10 @@ const Products: React.FC = () => {
             render: (_, record: any) => {
               return record?.provider?.name;
             },
+            //filterMultiple: false,
+            filters: true,
+            valueType: 'checkbox',
+            valueEnum: providerOptions,
           },
           {
             title: 'Created At',

@@ -34,18 +34,19 @@ const Dashboard: React.FC = () => {
     try {
       const payload: any = {};
       if (values?.date === 'pick') {
-        const [fromDate, toDate] = values?.dateRange;
-        payload.formDate = fromDate;
+        const [fromDate, toDate] = values?.rangeDate;
+
+        payload.fromDate = fromDate;
         payload.toDate = toDate;
       } else {
-        payload.formDate = dayjs()
-          .subtract(Number(values?.date || 1), 'month')
+        payload.fromDate = dayjs()
+          .subtract(Number(values?.date || 1), 'week')
           .format('YYYY-MM-DD');
         payload.toDate = dayjs().format('YYYY-MM-DD');
       }
       setLoading(true);
       const res = await staticProduct(payload);
-      const chart = await chartTypeProductByUser({});
+      const chart = await chartTypeProductByUser(payload);
       const typeProduct = await chartFilterTypeProduct();
       setChartTypeProduct(typeProduct);
       setCharts(chart.map((item: any) => ({ ...item, value: item.productCount })));
@@ -187,21 +188,18 @@ const Dashboard: React.FC = () => {
                 name="date"
                 options={[
                   {
-                    label: '1 month',
+                    label: '1 week',
                     value: 1,
                   },
                   {
-                    label: '3 months',
+                    label: '3 weeks',
                     value: 3,
                   },
                   {
-                    label: '6 months',
-                    value: 6,
+                    label: '1 month',
+                    value: 4,
                   },
-                  {
-                    label: '12 months',
-                    value: 12,
-                  },
+
                   {
                     label: 'Pick a other date',
                     value: 'pick',
@@ -211,7 +209,7 @@ const Dashboard: React.FC = () => {
               <ProFormDependency name={['date']}>
                 {({ date }) => {
                   if (date === 'pick') {
-                    return <ProFormDateRangePicker label="Select date" />;
+                    return <ProFormDateRangePicker label="Select date" name="rangeDate" />;
                   }
                   return null;
                 }}
