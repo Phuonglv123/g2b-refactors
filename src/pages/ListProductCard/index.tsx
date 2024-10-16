@@ -12,7 +12,7 @@ import { IProduct } from '@/types/product';
 import { formatCurrency, formatNumberVietnamese, getSrcImg } from '@/utils';
 import { GlobalOutlined, StarFilled, StarOutlined } from '@ant-design/icons';
 import { ProCard, ProList } from '@ant-design/pro-components';
-import { history, useLocation, useModel } from '@umijs/max';
+import { Link, history, useLocation, useModel } from '@umijs/max';
 import { Alert, Button, Card, Checkbox, Col, List, Row, Space, Typography, message } from 'antd';
 import { useCallback, useState } from 'react';
 
