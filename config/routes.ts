@@ -98,6 +98,25 @@ export default [
     ],
   },
   {
+    path: '/maps',
+    key: 'maps',
+    name: 'Maps',
+    icon: 'GlobalOutlined',
+    routes: [
+      {
+        path: '/maps',
+        key: 'maps',
+        component: './Maps',
+      },
+      {
+        path: '/maps/:id',
+        key: 'maps-detail',
+        component: './Maps/MapsDetail',
+      },
+    ],
+  },
+
+  {
     path: '/',
     layout: false,
     component: './Home',
