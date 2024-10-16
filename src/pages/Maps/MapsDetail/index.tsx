@@ -48,6 +48,7 @@ const MapsDetail = () => {
       }).setHTML(`
           <div style="background-color: white; color: black; padding: 10px; border-radius: 5px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);">
             <h3 style="margin: 0;">${data.product_name}</h3>
+             <p style="margin: 0;"><strong>Code:</strong> ${data?.product_code}</p>
             <p style="margin: 0;"><strong>Type:</strong> ${data?.type}</p>
             <p style="margin: 0;"><strong>Cost:</strong> ${formatNumberVietnamese(data?.cost)} ${
         data?.currency
