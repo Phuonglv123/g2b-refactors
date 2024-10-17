@@ -14,11 +14,11 @@ import { GlobalOutlined, StarFilled, StarOutlined } from '@ant-design/icons';
 import { ProCard, ProList } from '@ant-design/pro-components';
 import { Link, history, useLocation, useModel } from '@umijs/max';
 import { Alert, Button, Card, Checkbox, Col, List, Row, Space, Typography, message } from 'antd';
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 const ListProductCard = () => {
   const location = useLocation();
-  console.log(location);
+  const formRef = useRef<any>();
   const [loading, setLoading] = useState<boolean>(false);
   const [products, setProducts] = useState<any>([]);
   const { initialState, refresh } = useModel('@@initialState');
@@ -27,6 +27,7 @@ const ListProductCard = () => {
   const [city, setCity] = useState<any>(null);
   const [district, setDistrict] = useState<any>(null);
   const [whitelist, setWhitelist] = useState<any>([]);
+
   const searchWhitelist = useCallback(async () => {
     if (currentUser?.whitelist.length === 0) {
       setWhitelist([]);
@@ -43,17 +44,18 @@ const ListProductCard = () => {
 
   const getListProductCard = useCallback(
     async (params: any) => {
-      const { product_code, product_name, country, city, district, ward, status, type, areas } =
-        params;
+      const { product_code, product_name, country, city, district, ward, type, areas } = params;
+      console.log(params);
       const payload: any = {
         size: params.pageSize,
         page: location?.search?.split('=')[1] || params.current,
         product_code,
         product_name,
-        country,
-        city,
+        country: country === 'vietnam' ? 'Việt nam' : country,
+        city: city,
         district,
         ward,
+        status: 1,
       };
 
       if (type) {
@@ -65,7 +67,7 @@ const ListProductCard = () => {
 
       try {
         setLoading(true);
-        console.log(params);
+        console.log(payload);
         const { data, pagination, errorCode }: any = await listProducts(payload);
         console.log(data);
         setProducts({
@@ -268,6 +270,7 @@ const ListProductCard = () => {
         <ProList
           request={getListProductCard}
           rowKey="product_code" // Ensure each row has a unique key
+          formRef={formRef}
           search={{
             searchGutter: 16,
             layout: 'vertical',
@@ -570,7 +573,7 @@ const ListProductCard = () => {
             },
             country: {
               title: 'Country',
-              key: 'location.country',
+              key: 'country',
               valueType: 'select',
               valueEnum: {
                 vietnam: { text: 'Vietnam' },
@@ -579,6 +582,8 @@ const ListProductCard = () => {
               fieldProps: {
                 onChange: (value: any) => {
                   setCity(value);
+                  formRef.current?.setFieldsValue({ city: undefined });
+                  formRef.current?.setFieldsValue({ district: undefined });
                 },
               },
             },
@@ -597,18 +602,19 @@ const ListProductCard = () => {
                 });
               },
               search: city !== null,
-              key: 'location.city',
+              key: 'city',
               fieldProps: {
                 showSearch: true,
                 onChange: (value: any) => {
                   setDistrict(value);
+                  formRef.current?.setFieldsValue({ district: undefined });
                 },
               },
             },
             district: {
               title: 'District',
               valueType: 'text',
-              key: 'location.district',
+              key: 'district',
               search: district !== null,
               request: async () => {
                 return await getDistrict({ province: district }).then((res) => {

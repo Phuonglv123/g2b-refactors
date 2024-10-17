@@ -1,6 +1,7 @@
 import QuotationExport from '@/components/TemplateExcel';
 import QuotationExportPdf from '@/components/TemplatePdf';
 import QuationExportPPT from '@/components/TemplatePpt';
+import { getDistrict, getProvice } from '@/services/location';
 import { deleteSoftProduct, listProducts, toggleProductStatus } from '@/services/products';
 import { getProviders } from '@/services/provider';
 import { formatCurrency, formatNumberVietnamese } from '@/utils';
@@ -9,12 +10,15 @@ import { ActionType, PageContainer, ProTable } from '@ant-design/pro-components'
 import { Link, history } from '@umijs/max';
 import { Button, Space, Switch, Tag, message } from 'antd';
 import dayjs from 'dayjs';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 const Products: React.FC = () => {
   const actionRef = useRef<ActionType>();
+  const formRef = useRef<any>();
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
+  const [city, setCity] = useState<any>(null);
+  const [district, setDistrict] = useState<any>(null);
 
   const [providerOptions, setProviderOptions] = useState<{ [key: string]: { text: string } }>({});
 
@@ -30,7 +34,21 @@ const Products: React.FC = () => {
     };
 
     fetchProviders();
-  }, []);
+    onGetDistrict();
+  }, [city]);
+
+  const onGetDistrict = useCallback(async () => {
+    if (!city) return;
+    const data = await getDistrict({ province: city }).then((res) => {
+      return res?.data.map((item: any) => {
+        return {
+          label: item.label,
+          value: item.label,
+        };
+      });
+    });
+    setDistrict(data);
+  }, [city]);
 
   const onRequest = async (params: any, filter: any, sort: any) => {
     console.log(params, filter, sort);
@@ -41,7 +59,7 @@ const Products: React.FC = () => {
       page: params.current,
       product_code,
       product_name,
-      country,
+      country: country === 'vietnam' ? 'Việt nam' : country,
       city,
       district,
       ward,
@@ -200,6 +218,7 @@ const Products: React.FC = () => {
           labelWidth: 'auto',
           layout: 'vertical',
         }}
+        formRef={formRef}
         columns={[
           {
             title: 'Product Code',
@@ -214,16 +233,69 @@ const Products: React.FC = () => {
             dataIndex: 'product_name',
             key: 'product_name',
           },
+          // {
+          //   title: 'Country',
+          //   dataIndex: 'country',
+          //   key: 'country',
+          //   render: (_, record: any) => record?.location?.country,
+          //   valueType: 'select',
+          //   valueEnum: {
+          //     vietnam: { text: 'Vietnamese' },
+          //     international: { text: 'International' },
+          //   },
+          //   fieldProps: {
+          //     onChange: (value: any) => {
+          //       setCity(value);
+          //     },
+          //   },
+          // },
           {
-            title: 'Country',
-            dataIndex: 'country',
-            key: 'country',
-            render: (_, record: any) => record?.location?.country,
+            title: 'City',
+            key: 'city',
+            hideInTable: true,
+            valueType: 'select',
+            request: async () => {
+              return await getProvice({ country: 'vietnam' }).then((res) => {
+                return res.data.map((item: any) => {
+                  return {
+                    label: item.label,
+                    value: item.value,
+                  };
+                });
+              });
+            },
+            fieldProps: {
+              showSearch: true,
+              onChange: (value: any) => {
+                setCity(value);
+                setDistrict(null);
+                formRef.current?.setFieldsValue({ district: undefined });
+              },
+            },
           },
           {
             title: 'District',
-            key: 'District',
             hideInTable: true,
+            valueType: 'text',
+            key: 'district',
+            search: district !== null,
+            // request: async () => {
+            //   return await getDistrict({ province: district }).then((res) => {
+            //     return res.data.map((item: any) => {
+            //       return {
+            //         label: item.label,
+            //         value: item.label,
+            //       };
+            //     });
+            //   });
+            // },
+            valueEnum: district?.reduce((acc: any, item: any) => {
+              acc[item.label] = { text: item.label };
+              return acc;
+            }, {}),
+            fieldProps: {
+              showSearch: true,
+            },
           },
           {
             title: 'Product Type',
