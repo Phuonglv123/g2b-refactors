@@ -5,6 +5,7 @@ import { PageContainer, ProDescriptions } from '@ant-design/pro-components';
 import { useParams } from '@umijs/max';
 import { Empty, Image, Space, Tag } from 'antd';
 import { arrayMoveImmutable } from 'array-move';
+import dayjs from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 
@@ -98,30 +99,37 @@ const DetailProduct: React.FC = () => {
         dataSource={data}
         title="Product Information"
       >
-        <ProDescriptions.Item label="Product code" dataIndex="product_code" />
-        <ProDescriptions.Item label="Product name" dataIndex="product_name" />
-        <ProDescriptions.Item label="Product type" dataIndex="type" />
-        <ProDescriptions.Item label="AREAS" span={2}>
+        <ProDescriptions.Item label="Product code" dataIndex="product_code" span={1} />
+        <ProDescriptions.Item label="Product name" dataIndex="product_name" span={1} />
+        <ProDescriptions.Item label="Product type" dataIndex="type" span={1} />
+        <ProDescriptions.Item label="AREAS" span={1}>
           {data?.areas?.map((area: any) => (
             <Tag color="success">{area.charAt(0).toUpperCase() + area.slice(1)}</Tag>
           ))}
         </ProDescriptions.Item>
-        <ProDescriptions.Item label="Cost" dataIndex="cost" />
-        <ProDescriptions.Item label="Production cost" dataIndex="production_cost" />
+        <ProDescriptions.Item label="Cost" dataIndex="cost" span={1} />
+        <ProDescriptions.Item label="Production cost" dataIndex="production_cost" span={1} />
         <ProDescriptions.Item
           label="Provider"
           // dataIndex="provider"
           render={(_, record: any) => record?.provider?.name}
+          span={1}
         />
-        <ProDescriptions.Item label="Booking duration" dataIndex="booking_duration" />
-        <ProDescriptions.Item label="Currency" dataIndex="currency" />
-        <ProDescriptions.Item label="Tracffic">
+        <ProDescriptions.Item label="Booking duration" dataIndex="booking_duration" span={1} />
+        <ProDescriptions.Item label="Currency" dataIndex="currency" span={1} />
+        <ProDescriptions.Item label="Tracffic" span={1}>
           {formatNumberVietnamese(data.traffic)} vehicles/day
         </ProDescriptions.Item>
 
-        <ProDescriptions.Item label="Created At" dataIndex="createdAt" />
+        <ProDescriptions.Item
+          label="Created At"
+          dataIndex="createdAt"
+          span={1}
+          render={(_, record) => dayjs(record?.createdAt).format('DD/MM/YYYY')}
+        />
         <ProDescriptions.Item
           label="Status"
+          span={1}
           dataIndex="status"
           render={(_, record) => {
             return record.status === 0 ? (
@@ -133,6 +141,7 @@ const DetailProduct: React.FC = () => {
         />
         {items.length > 0 && (
           <ProDescriptions.Item
+            span={3}
             label="Images"
             dataIndex="images"
             render={(_, record) => {
