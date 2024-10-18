@@ -153,3 +153,10 @@ export const sortProductWhiteList = async (data: any) => {
     method: 'GET',
   });
 };
+
+export const updateOrderImagesProduct = async (id: string, data: any) => {
+  return await request(`/api/v1/product/sort/${id}/images`, {
+    method: 'PUT',
+    data,
+  });
+};

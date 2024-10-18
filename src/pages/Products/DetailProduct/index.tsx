@@ -1,13 +1,29 @@
-import { getProduct } from '@/services/products';
+import { getProduct, updateOrderImagesProduct } from '@/services/products';
 import { IProduct } from '@/types/product';
 import { formatNumberVietnamese, getSrcImg } from '@/utils';
 import { PageContainer, ProDescriptions } from '@ant-design/pro-components';
 import { useParams } from '@umijs/max';
 import { Empty, Image, Space, Tag } from 'antd';
+import { arrayMoveImmutable } from 'array-move';
 import { useCallback, useEffect, useState } from 'react';
+import { SortableContainer, SortableElement } from 'react-sortable-hoc';
+
+const SortableItem = SortableElement(({ value }: any) => <Image src={getSrcImg(value)} />);
+
+const SortableList = SortableContainer(({ items }: any) => {
+  return (
+    <Space>
+      {items.map((value: any, index: any) => (
+        //@ts-ignore
+        <SortableItem axis="xy" key={`item-${value}`} index={index} value={value} />
+      ))}
+    </Space>
+  );
+});
 
 const DetailProduct: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+
   const [data, setData] = useState<any>({
     user_id: '',
     product_code: '',
@@ -53,9 +69,22 @@ const DetailProduct: React.FC = () => {
   if (!id) {
     return <Empty />;
   }
+
+  const [items, setItems] = useState([]);
+  console.log('items', items);
+
+  const onSortEnd = async ({ oldIndex, newIndex }: any) => {
+    setItems(arrayMoveImmutable(items, oldIndex, newIndex));
+    const itemsMove = arrayMoveImmutable(items, oldIndex, newIndex);
+    await updateOrderImagesProduct(id, { images: itemsMove }).then((res) => {
+      onRequest();
+    });
+  };
+
   const onRequest = useCallback(async () => {
     const data = await getProduct(id);
     setData(data.data);
+    setItems(data.data.images);
   }, [id]);
 
   useEffect(() => {
@@ -91,20 +120,27 @@ const DetailProduct: React.FC = () => {
         </ProDescriptions.Item>
 
         <ProDescriptions.Item label="Created At" dataIndex="createdAt" />
-        <ProDescriptions.Item label="Status" dataIndex="status" />
         <ProDescriptions.Item
-          label="Images"
-          dataIndex="images"
+          label="Status"
+          dataIndex="status"
           render={(_, record) => {
-            return (
-              <Space>
-                {record.images.map((item: any) => (
-                  <Image src={getSrcImg(item)} width={200} />
-                ))}
-              </Space>
+            return record.status === 0 ? (
+              <Tag color="dange">Inactive</Tag>
+            ) : (
+              <Tag color="success">Active</Tag>
             );
           }}
         />
+        {items.length > 0 && (
+          <ProDescriptions.Item
+            label="Images"
+            dataIndex="images"
+            render={(_, record) => {
+              //@ts-ignore
+              return <SortableList axis={'xy'} items={items} onSortEnd={onSortEnd} />;
+            }}
+          />
+        )}
       </ProDescriptions>
       <br />
       <ProDescriptions layout="vertical" bordered dataSource={data} title="Thuộc tính sản phẩm">

@@ -43,7 +43,7 @@ const Products: React.FC = () => {
       return res?.data.map((item: any) => {
         return {
           label: item.label,
-          value: item.label,
+          value: item.value,
         };
       });
     });
@@ -290,7 +290,7 @@ const Products: React.FC = () => {
             //   });
             // },
             valueEnum: district?.reduce((acc: any, item: any) => {
-              acc[item.label] = { text: item.label };
+              acc[item.value] = { text: item.label };
               return acc;
             }, {}),
             fieldProps: {
