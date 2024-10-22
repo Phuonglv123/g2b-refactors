@@ -2,7 +2,6 @@ import { addProvider, updateProvider } from '@/services/provider';
 import { EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { DrawerForm, ProFormSelect, ProFormText } from '@ant-design/pro-components';
 import { Button, message } from 'antd';
-import dayjs from 'dayjs';
 import React from 'react';
 import { FormattedMessage } from 'umi';
 
@@ -17,7 +16,6 @@ const AddProvider: React.FC<AddProviderProps> = ({ onLoad, type, initialValues }
     try {
       const payload = {
         ...values,
-        code: values.code || dayjs().unix(),
       };
       await addProvider(payload);
       message.success('Provider added successfully');
