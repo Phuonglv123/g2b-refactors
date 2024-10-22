@@ -2,6 +2,7 @@ import { addProvider, updateProvider } from '@/services/provider';
 import { EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { DrawerForm, ProFormSelect, ProFormText } from '@ant-design/pro-components';
 import { Button, message } from 'antd';
+import dayjs from 'dayjs';
 import React from 'react';
 import { FormattedMessage } from 'umi';
 
@@ -14,7 +15,11 @@ type AddProviderProps = {
 const AddProvider: React.FC<AddProviderProps> = ({ onLoad, type, initialValues }) => {
   const handleAdd = async (values: any) => {
     try {
-      await addProvider(values);
+      const payload = {
+        ...values,
+        code: values.code || dayjs().unix(),
+      };
+      await addProvider(payload);
       message.success('Provider added successfully');
       if (onLoad) onLoad();
       return true;
@@ -60,17 +65,6 @@ const AddProvider: React.FC<AddProviderProps> = ({ onLoad, type, initialValues }
       <ProFormText
         name="code"
         label={<FormattedMessage id="pages.provider.code" defaultMessage="Code" />}
-        rules={[
-          {
-            required: true,
-            message: (
-              <FormattedMessage
-                id="pages.provider.code.required"
-                defaultMessage="Provider code is required"
-              />
-            ),
-          },
-        ]}
       />
       <ProFormText
         name="name"
