@@ -11,7 +11,7 @@ import {
 const InfoProduct = () => {
   const onRequestProvier = async () => {
     try {
-      const res = await getProviders();
+      const res = await getProviders({ pageSize: 1000 });
       return res?.data?.map((provider: any) => ({
         label: provider.name,
         value: provider?._id,
