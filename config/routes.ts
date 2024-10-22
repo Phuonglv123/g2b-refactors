@@ -56,6 +56,13 @@ export default [
     ],
   },
   {
+    path: '/billing',
+    component: './Billing',
+    key: 'billing',
+    name: 'billing',
+    icon: 'dollar',
+  },
+  {
     path: '/users',
     name: 'users',
     icon: 'user',
