@@ -62,7 +62,7 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
         slide.addImage({
           path: getSrcImg('/uploads/watermark.png'), // Convert the image to base64
           x: 5,
-          y: 2,
+          y: 1.5,
           w: 0.8,
           h: 0.5, // Fixed height
         });
@@ -70,7 +70,7 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
       // Add title
       slide.addText(item.base.name, {
         x: 1,
-        y: 0.1,
+        y: 0.06,
         fontSize: 18,
         color: 'febd21',
         w: 6,
@@ -107,14 +107,14 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
       slide.addImage({
         path: getSrcImg('/uploads/icon-02.png'), // Convert the image to base64
         x: 0.23,
-        y: 1.42,
+        y: 1.3,
         w: 0.23,
         h: 0.2,
       });
 
       slide.addText('Address:', {
         x: 0.4,
-        y: 1.42,
+        y: 1.3,
         fontSize: 12,
         fontWeight: 'bold',
         color: 'febd21',
@@ -124,24 +124,24 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
 
       slide.addText(item.base.address, {
         x: 0.4,
-        y: 1.62,
+        y: 1.5,
         fontSize: 10,
         color: 'ffffff',
-        w: 2,
+        w: 6,
         h: 0.2,
       });
 
       slide.addImage({
         path: getSrcImg('/uploads/icon-03.png'), // Convert the image to base64
         x: 0.23,
-        y: 1.91,
+        y: 1.8,
         w: 0.23,
         h: 0.2,
       });
 
       slide.addText('Description:', {
         x: 0.4,
-        y: 1.91,
+        y: 1.8,
         fontSize: 12,
         fontWeight: 'bold',
         color: 'febd21',
@@ -151,11 +151,11 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
 
       slide.addText(item.base.description, {
         x: 0.4,
-        y: 2.11,
+        y: 1.9,
         fontSize: 10,
         color: 'ffffff',
-        w: 2,
-        h: 0.2,
+        w: 6,
+        h: 0.6,
       });
 
       slide.addImage({
@@ -486,40 +486,13 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
 
       slide.addImage({
         path: getSrcImg('/uploads/icon-04.png'),
-        x: 0.23,
-        y: 4.96,
-        w: 0.23,
-        h: 0.2,
-      });
-
-      slide.addText('GPS:', {
-        x: 0.4,
-        y: 3.96,
-        fontSize: 12,
-        fontWeight: 'bold',
-        color: 'febd21',
-        w: 1.79,
-        h: 0.22,
-      });
-
-      slide.addText(item.media.gps, {
-        x: 0.48,
-        y: 5.16,
-        fontSize: 10,
-        color: 'ffffff',
-        w: 2,
-        h: 0.2,
-      });
-
-      slide.addImage({
-        path: getSrcImg('/uploads/icon-09.png'),
         x: 1.92,
         y: 4.98,
         w: 0.23,
         h: 0.2,
       });
 
-      slide.addText('Note:', {
+      slide.addText('GPS:', {
         x: 2.09,
         y: 4.98,
         fontSize: 12,
@@ -529,14 +502,42 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
         h: 0.22,
       });
 
-      slide.addText(item.media.note, {
+      slide.addText(item.media.gps, {
         x: 2.18,
-        y: 5.18,
+        y: 5.2,
         fontSize: 10,
         color: 'ffffff',
         w: 2,
         h: 0.2,
       });
+
+      slide.addImage({
+        path: getSrcImg('/uploads/icon-09.png'),
+        x: 0.23,
+        y: 4.98,
+        w: 0.23,
+        h: 0.2,
+      });
+
+      slide.addText('Note:', {
+        x: 0.4,
+        y: 4.98,
+        fontSize: 12,
+        fontWeight: 'bold',
+        color: 'febd21',
+        w: 1.79,
+        h: 0.22,
+      });
+
+      slide.addText(item.media.note, {
+        x: 0.48,
+        y: 5.2,
+        fontSize: 10,
+        color: 'ffffff',
+        w: 2,
+        h: 0.2,
+      });
+
       // Images aligned vertically on the left
       const imgXPos = 6.5; // Keep images aligned to the left
       let imgYPos = 0.3; // Initial Y position for the first image
