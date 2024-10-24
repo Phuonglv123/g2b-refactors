@@ -20,3 +20,17 @@ export const chartFilterTypeProduct = async (params?: any) => {
     params,
   });
 };
+
+export const chartProductByProvice = async (params?: any) => {
+  return await request('/api/v1/dashboard/chart/product/province', {
+    method: 'GET',
+    params,
+  });
+};
+
+export const chartProductByCountry = async (params?: any) => {
+  return await request('/api/v1/dashboard/chart/product/country', {
+    method: 'GET',
+    params,
+  });
+};
