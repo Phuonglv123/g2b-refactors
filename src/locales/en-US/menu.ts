@@ -48,6 +48,7 @@ export default {
   'menu.editor.koni': 'Koni Editor',
 
   'menu.products': 'Products',
+  'menu.billing': 'Billing',
   'menu.products.create': 'Create Product',
   'menu.products.update': 'Update Product',
   'menu.products.detail': 'Detail Product',
