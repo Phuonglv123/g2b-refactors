@@ -155,6 +155,15 @@ const ProviderList: React.FC = () => {
     },
   ];
 
+  const listProvider = async (params: any) => {
+    const response = await getProviders(params);
+    return {
+      data: response.data,
+      success: true,
+      total: response.pagination.total,
+    };
+  };
+
   return (
     <PageContainer>
       <ProTable<ProviderItem>
@@ -171,7 +180,7 @@ const ProviderList: React.FC = () => {
         toolBarRender={() => [
           <AddProvider type="create" onLoad={() => actionRef.current?.reload()} />,
         ]}
-        request={getProviders}
+        request={listProvider}
         columns={columns}
         rowSelection={{
           onChange: (_, selectedRows) => {

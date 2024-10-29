@@ -48,6 +48,7 @@ const InfoLocation = ({ form }: any) => {
                 onChange={(value) => {
                   form.setFieldsValue({ district: undefined, ward: undefined });
                 }}
+                allowClear
                 request={async () => {
                   return await getProvice({ country: 'vietnam' })
                     .then((res) => {
