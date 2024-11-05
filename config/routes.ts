@@ -57,10 +57,21 @@ export default [
   },
   {
     path: '/billing',
-    component: './Billing',
     key: 'billing',
     name: 'billing',
     icon: 'dollar',
+    routes: [
+      {
+        path: '/billing',
+        component: './Billing',
+        key: 'billing-list',
+      },
+      {
+        path: '/billing/create',
+        component: './Billing/CreateBilling',
+        key: 'billing-create',
+      },
+    ],
   },
   {
     path: '/users',

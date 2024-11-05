@@ -1,6 +1,6 @@
-import ModalCreateBilling from '@/components/Billing/ModalCreateBilling';
 import { PageContainer, ProCard } from '@ant-design/pro-components';
-import { Col, Row } from 'antd';
+import { history } from '@umijs/max';
+import { Button, Col, Row } from 'antd';
 import { useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
@@ -67,7 +67,14 @@ const Billing = () => {
   };
 
   return (
-    <PageContainer title="Billing" extra={<ModalCreateBilling />}>
+    <PageContainer
+      title="Billing"
+      extra={
+        <Button type="primary" onClick={() => history.push('/billing/create')}>
+          New Bill
+        </Button>
+      }
+    >
       <DragDropContext onDragEnd={onDragEnd}>
         <Row gutter={16}>
           <Col span={8}>
