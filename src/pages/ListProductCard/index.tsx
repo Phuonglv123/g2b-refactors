@@ -52,7 +52,7 @@ const ListProductCard = () => {
         product_code,
         product_name,
         country: country === 'vietnam' ? 'Việt nam' : country,
-        city: city,
+        city: city?.replace('Thành phố ', '').replace('Tỉnh ', ''),
         district,
         ward,
         status: 1,
