@@ -475,7 +475,7 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
         h: 0.22,
       });
 
-      slide.addText(item.media.areas, {
+      slide.addText(item?.media?.areas.join(', '), {
         x: 3.84,
         y: 4.58,
         fontSize: 10,
