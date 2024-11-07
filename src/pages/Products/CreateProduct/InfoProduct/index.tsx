@@ -69,6 +69,7 @@ const InfoProduct = () => {
           { value: 'TRAIN_STATION', label: 'TRAIN_STATION' },
           { value: 'STREET_FURNITURE', label: 'STREET FURNITURE' },
           { value: 'CINEMA', label: 'CINEMA' },
+          { value: 'MARKET BILLBOARD', label: 'MARKET BILLBOARD' },
           { value: 'OTHERS', label: 'OTHERS' },
         ]}
         name="type"

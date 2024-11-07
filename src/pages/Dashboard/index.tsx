@@ -32,6 +32,7 @@ const Dashboard: React.FC = () => {
   const [statics, setStatics] = useState<any>([]);
   const [charts, setCharts] = useState<any>([]);
   const [chartTypeProduct, setChartTypeProduct] = useState<any>([]);
+
   const [chartProductByCountrys, setChartProductByCountrys] = useState<any>([]);
   const [chartProductByProvices, setChartProductByProvices] = useState<any>([]);
 
@@ -366,7 +367,7 @@ const Dashboard: React.FC = () => {
         <StatisticCard
           statistic={{
             title: 'Total Billboard',
-            value: statics?.totalProductTypeBill || 0,
+            value: statics?.totalProductTypeBILL || 0,
             icon: (
               <img
                 style={imgStyle}
