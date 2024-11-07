@@ -6,22 +6,22 @@ export const getCountry = async () => {
   });
 };
 
-export const getProvice = async (params: { country: string }) => {
-  return await request('/api/v1/location', {
+export const getProvice = async (params: { name?: string }) => {
+  return await request('/api/v1/provinces/p', {
     method: 'GET',
     params,
   });
 };
 
-export const getDistrict = async (params: { province: string }) => {
-  return await request('/api/v1/location/district', {
+export const getDistrict = async (params: { province_code: string; name?: string }) => {
+  return await request('/api/v1/provinces/d', {
     method: 'GET',
     params,
   });
 };
 
-export const getWard = async (params: { district: string; province: string }) => {
-  return await request('/api/v1/location/ward', {
+export const getWard = async (params: { district_code?: string; name?: string }) => {
+  return await request('/api/v1/provinces/w', {
     method: 'GET',
     params,
   });

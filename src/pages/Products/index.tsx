@@ -39,11 +39,11 @@ const Products: React.FC = () => {
 
   const onGetDistrict = useCallback(async () => {
     if (!city) return;
-    const data = await getDistrict({ province: city }).then((res) => {
+    const data = await getDistrict({ province_code: city.split('-')[0] }).then((res) => {
       return res?.data.map((item: any) => {
         return {
-          label: item.label,
-          value: item.value,
+          label: item.name,
+          value: `${item.code}-${item.name}`,
         };
       });
     });
@@ -254,12 +254,12 @@ const Products: React.FC = () => {
             key: 'city',
             hideInTable: true,
             valueType: 'select',
-            request: async () => {
-              return await getProvice({ country: 'vietnam' }).then((res) => {
+            request: async (params: any) => {
+              return await getProvice({ name: params?.keyWords || '' }).then((res) => {
                 return res.data.map((item: any) => {
                   return {
-                    label: item.label,
-                    value: item.value,
+                    label: item.name,
+                    value: `${item.code}-${item.name}`,
                   };
                 });
               });

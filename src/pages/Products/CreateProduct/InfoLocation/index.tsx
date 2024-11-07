@@ -49,13 +49,13 @@ const InfoLocation = ({ form }: any) => {
                   form.setFieldsValue({ district: undefined, ward: undefined });
                 }}
                 allowClear
-                request={async () => {
-                  return await getProvice({ country: 'vietnam' })
+                request={async (params: any) => {
+                  return await getProvice({ name: params.keyWords || '' })
                     .then((res) => {
                       console.log(res);
                       return res.data.map((item: any) => ({
-                        value: item.value,
-                        label: item.label,
+                        value: `${item.code}-${item.name}`,
+                        label: item.name,
                       }));
                     })
                     .catch((error) => {
@@ -76,6 +76,7 @@ const InfoLocation = ({ form }: any) => {
               <ProFormDependency name={['city']}>
                 {({ city }) => {
                   if (city) {
+                    console.log(city);
                     return (
                       <ProFormSelect
                         showSearch
@@ -83,11 +84,14 @@ const InfoLocation = ({ form }: any) => {
                         onChange={(value) => {
                           form.setFieldsValue({ ward: undefined });
                         }}
-                        request={async () => {
-                          return await getDistrict({ province: city.split('-')[0] }).then((res) => {
+                        request={async (params: any) => {
+                          return await getDistrict({
+                            province_code: city.split('-')[0],
+                            name: params?.keyWords || '',
+                          }).then((res) => {
                             return res.data.map((item: any) => ({
-                              value: item.value,
-                              label: item.label,
+                              value: `${item.code}-${item.name}`,
+                              label: item.name,
                             }));
                           });
                         }}
@@ -116,11 +120,14 @@ const InfoLocation = ({ form }: any) => {
                     <ProFormSelect
                       showSearch
                       key={district}
-                      request={async () => {
-                        return await getWard({ district, province: city }).then((res) => {
+                      request={async (params: any) => {
+                        return await getWard({
+                          district_code: district.split('-')[0],
+                          name: params?.keyWords || '',
+                        }).then((res) => {
                           return res.data.map((item: any) => ({
-                            value: item.value,
-                            label: item.label,
+                            value: item.name,
+                            label: item.name,
                           }));
                         });
                       }}

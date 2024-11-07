@@ -591,12 +591,12 @@ const ListProductCard = () => {
               title: 'City',
               valueType: 'select',
 
-              request: async () => {
-                return await getProvice({ country: city }).then((res) => {
+              request: async (params: any) => {
+                return await getProvice({ name: params?.keyWords || '' }).then((res) => {
                   return res.data.map((item: any) => {
                     return {
-                      label: item.label,
-                      value: item.value,
+                      label: item.name,
+                      value: `${item.code}-${item.name}`,
                     };
                   });
                 });
@@ -616,12 +616,15 @@ const ListProductCard = () => {
               valueType: 'text',
               key: 'district',
               search: district !== null,
-              request: async () => {
-                return await getDistrict({ province: district }).then((res) => {
+              request: async (params: any) => {
+                return await getDistrict({
+                  province_code: district.split('-')[0],
+                  name: params?.keyWords || '',
+                }).then((res) => {
                   return res.data.map((item: any) => {
                     return {
-                      label: item.label,
-                      value: item.label,
+                      label: item.name,
+                      value: `${item.code}-${item.name}`,
                     };
                   });
                 });
