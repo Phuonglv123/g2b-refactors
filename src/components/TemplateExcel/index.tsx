@@ -200,8 +200,8 @@ const QuotationExport: React.FC<Props> = ({ data, showIcon = false }) => {
       '',
       '',
       '',
-      '',
       'Total Cost:',
+      '',
       '',
     ]);
     const taxAppliedRow = worksheet.addRow([
@@ -218,8 +218,8 @@ const QuotationExport: React.FC<Props> = ({ data, showIcon = false }) => {
       '',
       '',
       '',
-      '',
       'Tax Applied:',
+      '',
       '',
     ]);
     const totalPaymentRow = worksheet.addRow([
@@ -236,8 +236,8 @@ const QuotationExport: React.FC<Props> = ({ data, showIcon = false }) => {
       '',
       '',
       '',
-      '',
       'Total Payment:',
+      '',
       '',
     ]);
     worksheet.mergeCells(`A${totalCostRow.number}:N${totalCostRow.number}`);
