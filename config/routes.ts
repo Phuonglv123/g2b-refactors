@@ -30,6 +30,12 @@ export default [
     access: 'canAdmin',
   },
   {
+    path: '/tasks',
+    name: 'tasks',
+    icon: 'dashboard',
+    component: './Tasks',
+  },
+  {
     name: 'products',
     icon: 'dashboard',
     path: '/products',
@@ -77,6 +83,14 @@ export default [
     key: 'locations',
     component: './Locations',
   },
+  {
+    path: '/business',
+    name: 'business',
+    icon: 'AimOutlined',
+    key: 'business',
+    component: './Business',
+  },
+
   {
     path: '/list-product-card',
     name: 'list-product-card',
