@@ -11,10 +11,10 @@ import {
 const InfoLocation = ({ form }: any) => {
   const onRequsetLocation = async () => {
     try {
-      const res = await getLocations({ international: true });
+      const res = await getLocations({ international: true, page: 0, size: 1000 });
       console.log(res);
       return res?.data?.data.map((location: any) => ({
-        label: `${location?.city} - ${location?.district}`,
+        label: `${location?.country} - ${location?.address}`,
         value: location._id,
       }));
     } catch (error) {
@@ -32,7 +32,8 @@ const InfoLocation = ({ form }: any) => {
             <ProFormSelect
               name="location"
               label="Chọn địa điểm"
-              width={'lg'}
+              width={1000}
+              showSearch
               request={onRequsetLocation}
               rules={[
                 {
