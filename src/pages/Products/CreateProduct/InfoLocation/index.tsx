@@ -14,7 +14,7 @@ const InfoLocation = ({ form }: any) => {
       const res = await getLocations({ international: true, page: 0, size: 1000 });
       console.log(res);
       return res?.data?.data.map((location: any) => ({
-        label: `${location?.country} - ${location?.address}`,
+        label: `${location?.country.name} - ${location?.address}`,
         value: location._id,
       }));
     } catch (error) {
