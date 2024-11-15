@@ -50,6 +50,7 @@ const Locations: React.FC = () => {
             title: 'Country',
             dataIndex: 'country',
             key: 'country',
+            render: (country: any) => country.name,
           },
           {
             title: 'City/Province',

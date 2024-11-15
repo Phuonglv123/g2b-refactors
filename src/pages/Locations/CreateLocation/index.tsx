@@ -3,6 +3,7 @@ import {
   getDistrict,
   getProvice,
   getWard,
+  listCountries,
   updateLocation,
 } from '@/services/location';
 import { EditOutlined } from '@ant-design/icons';
@@ -80,6 +81,15 @@ const CreateLocation = ({ initValues, type, onLoad, locationId }: ICreatLocation
     }
   };
 
+  const listAllCountries = async () => {
+    return await listCountries().then((res) => {
+      return res.data.map((item: any) => ({
+        value: item._id,
+        label: item.name,
+      }));
+    });
+  };
+
   return (
     <ModalForm<ILocation>
       onFinish={type === 'create' ? onFinished : onUpdate}
@@ -111,7 +121,13 @@ const CreateLocation = ({ initValues, type, onLoad, locationId }: ICreatLocation
             international && (
               <>
                 <ProFormGroup>
-                  <ProFormText name="country" label="Country" width={360} />
+                  <ProFormSelect
+                    name="country"
+                    label="Country"
+                    request={listAllCountries}
+                    width={360}
+                    showSearch
+                  />
                   <ProFormText name="city" label="City/Provicen" width={360} />
                 </ProFormGroup>
                 <ProFormGroup>
@@ -138,7 +154,7 @@ const CreateLocation = ({ initValues, type, onLoad, locationId }: ICreatLocation
                   <ProFormSelect
                     showSearch
                     request={async () => {
-                      return await getProvice({ country: 'vietnam' }).then((res) => {
+                      return await getProvice({ name: 'vietnam' }).then((res) => {
                         return res.data.map((item: any) => ({
                           value: item.value,
                           label: item.label,
@@ -163,7 +179,7 @@ const CreateLocation = ({ initValues, type, onLoad, locationId }: ICreatLocation
                             showSearch
                             key={city}
                             request={async () => {
-                              return await getDistrict({ province: city }).then((res) => {
+                              return await getDistrict({ province_code: city }).then((res) => {
                                 return res.data.map((item: any) => ({
                                   value: item.value,
                                   label: item.label,
@@ -198,7 +214,7 @@ const CreateLocation = ({ initValues, type, onLoad, locationId }: ICreatLocation
                           key={district}
                           showSearch
                           request={async () => {
-                            return await getWard({ district, province: city }).then((res) => {
+                            return await getWard({}).then((res) => {
                               return res.data.map((item: any) => ({
                                 value: item.value,
                                 label: item.label,
