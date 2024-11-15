@@ -188,7 +188,7 @@ const ListProductCard = () => {
                           adSides: item.attributes.add_side,
                           operationTime: `${item.attributes.opera_time_from} - ${item.attributes.opera_time_to}`,
                           frequency: `${formatNumberVietnamese(item.attributes.frequency)} spots`,
-                          cost: item.cost,
+                          cost: `${formatNumberVietnamese(item?.cost).toString()} ${item.currency}`,
                           pixel: `${item.attributes.pixel_width} x ${item.attributes.pixel_height}`,
                           note: item.attributes.note,
                           bookingDuration: item.booking_duration,
@@ -222,7 +222,7 @@ const ListProductCard = () => {
                           adSides: item.attributes.add_side,
                           operationTime: `${item.attributes.opera_time_from} - ${item.attributes.opera_time_to}`,
                           frequency: `${formatNumberVietnamese(item.attributes.frequency)} spots`,
-                          cost: item.cost,
+                          cost: `${formatNumberVietnamese(item?.cost).toString()}` + item.currency,
                           pixel: `${item.attributes.pixel_width}m x${
                             item.attributes.pixel_height
                           }m = ${formatNumberVietnamese(
@@ -232,7 +232,9 @@ const ListProductCard = () => {
                           bookingDuration: item.booking_duration,
                           images: item.images,
                           videoDuration: `${item.attributes.video_duration} s`,
-                          productionCost: `${item?.production_cost}`,
+                          productionCost: item?.production_cost
+                            ? item?.production_cost.toString()
+                            : '',
                           traffic: `${formatNumberVietnamese(item.traffic)} vehicles/day`,
                           areas: item.areas || [''],
                         },
@@ -367,7 +369,10 @@ const ListProductCard = () => {
                               frequency: `${formatNumberVietnamese(
                                 item.attributes.frequency,
                               )} spots`,
-                              cost: item.cost,
+                              cost: `${formatNumberVietnamese(item?.cost).toString()} ${
+                                item.currency
+                              }`,
+
                               pixel: `${item.attributes.pixel_width} x ${item.attributes.pixel_height}`,
                               note: item.attributes.note,
                               bookingDuration: item.booking_duration,

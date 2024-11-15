@@ -40,13 +40,16 @@ interface Props {
 
 const QuotationExportPdf: React.FC<Props> = ({ data, showIcon = false }) => {
   const [loading, setLoading] = React.useState(false);
-
+  console.log(data);
   const generatePdf = async (watermark: boolean, showLogo: boolean) => {
     setLoading(true);
     const pdfDoc = await PDFDocument.create();
     const font = await pdfDoc.embedFont(StandardFonts.TimesRoman);
     const boldFont = await pdfDoc.embedFont(StandardFonts.TimesRomanBold);
-    const cleanString = (str: string) => str.replace(/[^\x00-\x7F]/g, '');
+    const cleanString = (str: string) => {
+      if (!str) return '';
+      return str?.toString().replace(/[^\x00-\x7F]/g, '');
+    };
 
     const fontSize = 12;
 
@@ -101,13 +104,13 @@ const QuotationExportPdf: React.FC<Props> = ({ data, showIcon = false }) => {
       const metaBaseInfo = [
         {
           label: 'Code',
-          value: cleanString(item.base.code),
+          value: cleanString(item?.base?.code),
           icon: getSrcImg('/uploads/icon-01.png'),
         },
 
         {
           label: 'Address',
-          value: cleanString(item.base.address),
+          value: cleanString(item?.base?.address),
           icon: getSrcImg('/uploads/icon-02.png'),
         },
         // { label: 'Description', value: item.base.description },
@@ -115,12 +118,12 @@ const QuotationExportPdf: React.FC<Props> = ({ data, showIcon = false }) => {
       const metaInfo = [
         {
           label: 'Type',
-          value: cleanString(item.media.type),
+          value: cleanString(item?.media?.type),
           icon: getSrcImg('/uploads/icon-05.png'),
         },
         {
           label: 'Dimension (WxH)',
-          value: cleanString(item.media.dimension),
+          value: cleanString(item?.media?.dimension),
           icon: getSrcImg('/uploads/icon-10.png'),
         },
         {
@@ -168,7 +171,7 @@ const QuotationExportPdf: React.FC<Props> = ({ data, showIcon = false }) => {
         },
         {
           label: 'Media Cost',
-          value: item?.media?.cost?.toString(),
+          value: item?.media?.cost || '',
           icon: getSrcImg('/uploads/icon-13.png'),
         },
 
@@ -251,7 +254,7 @@ const QuotationExportPdf: React.FC<Props> = ({ data, showIcon = false }) => {
         font: boldFont,
         color: rgb(254 / 255, 189 / 255, 33 / 255),
       });
-      page.drawText(cleanString(item.base.description), {
+      page.drawText(cleanString(item?.base?.description), {
         x: 60,
         y: 370,
         size: fontSize,
@@ -264,7 +267,7 @@ const QuotationExportPdf: React.FC<Props> = ({ data, showIcon = false }) => {
       const columnCount = 3;
       const columnWidth = (width - 280) / columnCount; // Width for each column
       const rowHeight = 55; // Space between rows
-      let yPosition = yPositionBase - 250; // Start Y position for the first row
+      let yPosition = yPositionBase - 230; // Start Y position for the first row
 
       // Divide the metaInfo items into 3 columns and draw them
       metaInfo.forEach(async (info, index) => {
@@ -289,13 +292,13 @@ const QuotationExportPdf: React.FC<Props> = ({ data, showIcon = false }) => {
           font: boldFont,
           color: rgb(254 / 255, 189 / 255, 33 / 255),
         });
-        page.drawText(cleanString(info.value), {
+        page.drawText(cleanString(info?.value), {
           x: xPosition + 40,
           y: currentYPositionValue + 15,
           size: fontSize,
           font: font,
           color: rgb(1, 1, 1),
-          maxWidth: columnWidth - 20,
+          maxWidth: columnWidth - 40,
           wordBreaks: [' '],
         });
       });

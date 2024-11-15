@@ -161,7 +161,7 @@ const Products: React.FC = () => {
                       adSides: item.attributes.add_side,
                       operationTime: `${item.attributes.opera_time_from} - ${item.attributes.opera_time_to}`,
                       frequency: `${formatNumberVietnamese(item.attributes.frequency)} spots`,
-                      cost: item.cost,
+                      cost: `${formatNumberVietnamese(item?.cost).toString()} ${item.currency}`,
                       pixel: `${item.attributes.pixel_width} x ${item.attributes.pixel_height}`,
                       note: item.attributes.note,
                       bookingDuration: item.booking_duration,
