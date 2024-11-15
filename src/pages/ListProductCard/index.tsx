@@ -1,7 +1,7 @@
 import QuotationExport from '@/components/TemplateExcel';
 import QuotationExportPdf from '@/components/TemplatePdf';
 import QuationExportPPT from '@/components/TemplatePpt';
-import { getDistrict, getProvice } from '@/services/location';
+import { getDistrict, getProvice, listCountries } from '@/services/location';
 import {
   addWhitelistFromProduct,
   listProducts,
@@ -51,7 +51,7 @@ const ListProductCard = () => {
         page: location?.search?.split('=')[1] || params.current,
         product_code,
         product_name,
-        country: country === 'vietnam' ? 'Việt nam' : country,
+        country: country,
         city: city?.replace('Thành phố ', '').replace('Tỉnh ', ''),
         district,
         ward,
@@ -580,10 +580,26 @@ const ListProductCard = () => {
               title: 'Country',
               key: 'country',
               valueType: 'select',
-              valueEnum: {
-                vietnam: { text: 'Vietnam' },
-                international: { text: 'International' },
+              // valueEnum: {
+              //   vietnam: { text: 'Vietnam' },
+              //   international: { text: 'International' },
+              // },
+              request: async (params: any) => {
+                return await listCountries()
+                  .then((res) => {
+                    return res.data.map((item: any) => {
+                      return {
+                        label: item.name,
+                        value: item._id,
+                      };
+                    });
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                    return [];
+                  });
               },
+
               fieldProps: {
                 onChange: (value: any) => {
                   setCity(value);
@@ -595,7 +611,6 @@ const ListProductCard = () => {
             city: {
               title: 'City',
               valueType: 'select',
-
               request: async (params: any) => {
                 return await getProvice({ name: params?.keyWords || '' }).then((res) => {
                   return res.data.map((item: any) => {
@@ -606,7 +621,7 @@ const ListProductCard = () => {
                   });
                 });
               },
-              search: city !== null,
+              search: city === '66c9d09c55dfd5c6f23c96d6',
               key: 'city',
               fieldProps: {
                 showSearch: true,

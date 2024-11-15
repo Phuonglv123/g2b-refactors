@@ -64,7 +64,7 @@ const CreateProduct: React.FC = () => {
     };
     const payloadLocation: ILocation = {
       international: values.international ? true : false,
-      country: values.international ? values?.country : 'Việt nam',
+      country: values.international ? values?.country : '66c9d09c55dfd5c6f23c96d6',
       city: values?.city?.replace('Thành phố', '')?.replace('Tỉnh', '')?.replace('- ', '-'),
       ward: values.ward,
       district: values.district,

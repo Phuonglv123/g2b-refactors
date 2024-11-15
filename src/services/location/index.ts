@@ -59,3 +59,9 @@ export const getLocations = async (params?: any) => {
     params,
   });
 };
+
+export const listCountries = async () => {
+  return await request('/api/v1/location/country', {
+    method: 'GET',
+  });
+};
