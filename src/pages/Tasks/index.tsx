@@ -1,11 +1,18 @@
-import { getTasks } from '@/services/task';
+import DetailTask from '@/components/task/DetailTask';
+import ModalCreateTask from '@/components/task/ModalCreateTask';
+import PriorityTask from '@/components/task/PriorityTask';
+import StatusTask from '@/components/task/StatusTask';
+import { getTasks, updateStateTask } from '@/services/task';
+import { CommentOutlined, UserOutlined } from '@ant-design/icons';
 import { PageContainer, ProCard } from '@ant-design/pro-components';
-import { Button, Col, Row } from 'antd';
+import { Avatar, Col, Row, Space, Tooltip } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { history } from 'umi';
 
 const TaskPage: React.FC = () => {
   const [tasks, setTasks] = useState([]);
+  const [visible, setVisible] = useState(false);
 
   const listingTask = async () => {
     try {
@@ -16,22 +23,75 @@ const TaskPage: React.FC = () => {
 
   useEffect(() => {
     listingTask();
-  }, []);
+  }, [visible]);
+
+  const onDragEnd = async (result: any) => {
+    const { destination, source, draggableId } = result;
+    if (!destination) {
+      return;
+    }
+    try {
+      const res = await updateStateTask(draggableId, destination.droppableId);
+      console.log(res);
+      listingTask();
+    } catch (error) {}
+  };
 
   return (
-    <PageContainer title="Manager Tasks" extra={<Button type="primary">Create</Button>}>
-      <DragDropContext onDragEnd={() => console.log(1)}>
+    <PageContainer title="Manager Tasks" extra={<ModalCreateTask />}>
+      <DragDropContext onDragEnd={onDragEnd}>
         <Row gutter={8}>
           <Col span={4}>
-            <ProCard title="requset_customer">
-              <Droppable droppableId="requset_customer">
+            <ProCard title="Todo">
+              <Droppable droppableId="todo">
                 {(provided) => (
                   <div ref={provided.innerRef} {...provided.droppableProps}>
-                    {tasks.map((task: any, index: number) => (
-                      <ProCard key={task._id} title={task.title} extra={task.status}>
-                        {task.content}
-                      </ProCard>
-                    ))}
+                    {tasks
+                      .filter((task: any) => task.state === 'todo')
+                      .map((task: any, index: number) => (
+                        <Draggable key={task._id} draggableId={task._id} index={index}>
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              <ProCard
+                                key={task._id}
+                                bordered
+                                size="small"
+                                onClick={() => {
+                                  history.push(`/tasks?id=${task._id}`);
+                                  setVisible(true);
+                                }}
+                              >
+                                <Row justify={'space-between'}>
+                                  <Col>
+                                    <div>{task.name?.toString().toUpperCase()}</div>
+                                  </Col>
+                                  <Col>
+                                    <Tooltip title={task.assigned_to?.username}>
+                                      <Avatar icon={<UserOutlined />} />
+                                    </Tooltip>
+                                  </Col>
+                                </Row>
+                                <div>{task?.description}</div>
+                                <br />
+                                <div>
+                                  <Space>
+                                    <PriorityTask value={task.priority} />
+                                    <StatusTask value={task.status} />
+                                    <div style={{ display: 'flex', gap: 4 }}>
+                                      {task.comments?.length} <CommentOutlined />
+                                    </div>
+                                  </Space>
+                                </div>
+                              </ProCard>
+                              <br />
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
                     {provided.placeholder}
                   </div>
                 )}
@@ -39,15 +99,55 @@ const TaskPage: React.FC = () => {
             </ProCard>
           </Col>
           <Col span={4}>
-            <ProCard title="quote">
-              <Droppable droppableId="quote">
+            <ProCard title="In Processing">
+              <Droppable droppableId="in_progress">
                 {(provided) => (
                   <div ref={provided.innerRef} {...provided.droppableProps}>
-                    {tasks.map((task: any, index: number) => (
-                      <ProCard key={task._id} title={task.title} extra={task.status}>
-                        {task.content}
-                      </ProCard>
-                    ))}
+                    {tasks
+                      ?.filter((task: any) => task.state === 'in_progress')
+                      .map((task: any, index: number) => (
+                        <Draggable key={task._id} draggableId={task._id} index={index}>
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              <ProCard
+                                key={task._id}
+                                bordered
+                                size="small"
+                                onClick={() => {
+                                  setVisible(true);
+                                  task;
+                                }}
+                              >
+                                <Row justify={'space-between'}>
+                                  <Col>
+                                    <div>{task.name?.toString().toUpperCase()}</div>
+                                  </Col>
+                                  <Col>
+                                    <Tooltip title={task.assigned_to?.username}>
+                                      <Avatar icon={<UserOutlined />} />
+                                    </Tooltip>
+                                  </Col>
+                                </Row>
+                                <div>{task?.description}</div>
+                                <br />
+                                <div>
+                                  <Space>
+                                    <PriorityTask value={task.priority} />
+                                    <StatusTask value={task.status} />
+                                    <div style={{ display: 'flex', gap: 4 }}>
+                                      {task.comments?.length} <CommentOutlined />
+                                    </div>
+                                  </Space>
+                                </div>
+                              </ProCard>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
                     {provided.placeholder}
                   </div>
                 )}
@@ -55,15 +155,111 @@ const TaskPage: React.FC = () => {
             </ProCard>
           </Col>
           <Col span={4}>
-            <ProCard title="negotiation">
-              <Droppable droppableId="negotiation">
+            <ProCard title="Approve">
+              <Droppable droppableId="approve">
                 {(provided) => (
                   <div ref={provided.innerRef} {...provided.droppableProps}>
-                    {tasks.map((task: any, index: number) => (
-                      <ProCard key={task._id} title={task.title} extra={task.status}>
-                        {task.content}
-                      </ProCard>
-                    ))}
+                    {tasks
+                      ?.filter((task: any) => task.state === 'approve')
+                      .map((task: any, index: number) => (
+                        <Draggable key={task._id} draggableId={task._id} index={index}>
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              <ProCard
+                                key={task._id}
+                                bordered
+                                size="small"
+                                onClick={() => {
+                                  setVisible(true);
+                                  task;
+                                }}
+                              >
+                                <Row justify={'space-between'}>
+                                  <Col>
+                                    <div>{task.name?.toString().toUpperCase()}</div>
+                                  </Col>
+                                  <Col>
+                                    <Tooltip title={task.assigned_to?.username}>
+                                      <Avatar icon={<UserOutlined />} />
+                                    </Tooltip>
+                                  </Col>
+                                </Row>
+                                <div>{task?.description}</div>
+                                <br />
+                                <div>
+                                  <Space>
+                                    <PriorityTask value={task.priority} />
+                                    <StatusTask value={task.status} />
+                                    <div style={{ display: 'flex', gap: 4 }}>
+                                      {task.comments?.length} <CommentOutlined />
+                                    </div>
+                                  </Space>
+                                </div>
+                              </ProCard>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </ProCard>
+          </Col>
+          <Col span={4}>
+            <ProCard title="Follow">
+              <Droppable droppableId="follow">
+                {(provided) => (
+                  <div ref={provided.innerRef} {...provided.droppableProps}>
+                    {tasks
+                      ?.filter((task: any) => task.state === 'follow')
+                      .map((task: any, index: number) => (
+                        <Draggable key={task._id} draggableId={task._id} index={index}>
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              <ProCard
+                                key={task._id}
+                                bordered
+                                size="small"
+                                onClick={() => {
+                                  setVisible(true);
+                                  task;
+                                }}
+                              >
+                                <Row justify={'space-between'}>
+                                  <Col>
+                                    <div>{task.name?.toString().toUpperCase()}</div>
+                                  </Col>
+                                  <Col>
+                                    <Tooltip title={task.assigned_to?.username}>
+                                      <Avatar icon={<UserOutlined />} />
+                                    </Tooltip>
+                                  </Col>
+                                </Row>
+                                <div>{task?.description}</div>
+                                <br />
+                                <div>
+                                  <Space>
+                                    <PriorityTask value={task.priority} />
+                                    <StatusTask value={task.status} />
+                                    <div style={{ display: 'flex', gap: 4 }}>
+                                      {task.comments?.length} <CommentOutlined />
+                                    </div>
+                                  </Space>
+                                </div>
+                              </ProCard>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
                     {provided.placeholder}
                   </div>
                 )}
@@ -75,11 +271,51 @@ const TaskPage: React.FC = () => {
               <Droppable droppableId="won">
                 {(provided) => (
                   <div ref={provided.innerRef} {...provided.droppableProps}>
-                    {tasks.map((task: any, index: number) => (
-                      <ProCard key={task._id} title={task.title} extra={task.status}>
-                        {task.content}
-                      </ProCard>
-                    ))}
+                    {tasks
+                      ?.filter((task: any) => task.state === 'won')
+                      .map((task: any, index: number) => (
+                        <Draggable key={task._id} draggableId={task._id} index={index}>
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              <ProCard
+                                key={task._id}
+                                bordered
+                                size="small"
+                                onClick={() => {
+                                  setVisible(true);
+                                  task;
+                                }}
+                              >
+                                <Row justify={'space-between'}>
+                                  <Col>
+                                    <div>{task.name?.toString().toUpperCase()}</div>
+                                  </Col>
+                                  <Col>
+                                    <Tooltip title={task.assigned_to?.username}>
+                                      <Avatar icon={<UserOutlined />} />
+                                    </Tooltip>
+                                  </Col>
+                                </Row>
+                                <div>{task?.description}</div>
+                                <br />
+                                <div>
+                                  <Space>
+                                    <PriorityTask value={task.priority} />
+                                    <StatusTask value={task.status} />
+                                    <div style={{ display: 'flex', gap: 4 }}>
+                                      {task.comments?.length} <CommentOutlined />
+                                    </div>
+                                  </Space>
+                                </div>
+                              </ProCard>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
                     {provided.placeholder}
                   </div>
                 )}
@@ -88,31 +324,55 @@ const TaskPage: React.FC = () => {
           </Col>
 
           <Col span={4}>
-            <ProCard title="pending">
-              <Droppable droppableId="pending">
-                {(provided) => (
-                  <div ref={provided.innerRef} {...provided.droppableProps}>
-                    {tasks.map((task: any, index: number) => (
-                      <ProCard key={task._id} title={task.title} extra={task.status}>
-                        {task.content}
-                      </ProCard>
-                    ))}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </ProCard>
-          </Col>
-          <Col span={4}>
-            <ProCard title="completed">
+            <ProCard title="Completed">
               <Droppable droppableId="completed">
                 {(provided) => (
                   <div ref={provided.innerRef} {...provided.droppableProps}>
-                    {tasks.map((task: any, index: number) => (
-                      <ProCard key={task._id} title={task.title} extra={task.status}>
-                        {task.content}
-                      </ProCard>
-                    ))}
+                    {tasks
+                      ?.filter((task: any) => task.state === 'completed')
+                      .map((task: any, index: number) => (
+                        <Draggable key={task._id} draggableId={task._id} index={index}>
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              <ProCard
+                                key={task._id}
+                                bordered
+                                size="small"
+                                onClick={() => {
+                                  setVisible(true);
+                                  task;
+                                }}
+                              >
+                                <Row justify={'space-between'}>
+                                  <Col>
+                                    <div>{task.name?.toString().toUpperCase()}</div>
+                                  </Col>
+                                  <Col>
+                                    <Tooltip title={task.assigned_to?.username}>
+                                      <Avatar icon={<UserOutlined />} />
+                                    </Tooltip>
+                                  </Col>
+                                </Row>
+                                <div>{task?.description}</div>
+                                <br />
+                                <div>
+                                  <Space>
+                                    <PriorityTask value={task.priority} />
+                                    <StatusTask value={task.status} />
+                                    <div style={{ display: 'flex', gap: 4 }}>
+                                      {task.comments?.length} <CommentOutlined />
+                                    </div>
+                                  </Space>
+                                </div>
+                              </ProCard>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
                     {provided.placeholder}
                   </div>
                 )}
@@ -121,6 +381,14 @@ const TaskPage: React.FC = () => {
           </Col>
         </Row>
       </DragDropContext>
+      <DetailTask
+        visible={visible}
+        onClose={() => {
+          history.push('/tasks');
+          getTasks({});
+          setVisible(false);
+        }}
+      />
     </PageContainer>
   );
 };

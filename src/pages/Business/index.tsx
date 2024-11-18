@@ -52,6 +52,11 @@ const Business: React.FC = () => {
             deleteBusinessId(record._id);
           }}
         />,
+        <DrawCreateBusiness
+          type="update"
+          data={record}
+          onLoad={() => actionRef.current?.reload()}
+        />,
       ],
     },
   ];
@@ -98,7 +103,7 @@ const Business: React.FC = () => {
         actionRef={actionRef}
         request={onRequest}
         columns={columns}
-        toolBarRender={() => [<DrawCreateBusiness />]}
+        toolBarRender={() => [<DrawCreateBusiness type="create" />]}
       />
     </PageContainer>
   );

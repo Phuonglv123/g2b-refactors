@@ -22,9 +22,8 @@ export const updatedBusiness = async (id: string, params: any) => {
   });
 };
 
-export const deleteBusiness = async (params: any) => {
-  return await request('/api/v1/business/delete', {
+export const deleteBusiness = async (id: string) => {
+  return await request(`/api/v1/business/delete/${id}`, {
     method: 'DELETE',
-    data: params,
   });
 };

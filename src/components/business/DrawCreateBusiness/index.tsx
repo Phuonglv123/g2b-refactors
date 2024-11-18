@@ -1,9 +1,15 @@
-import { createBusiness } from '@/services/business';
+import { createBusiness, updatedBusiness } from '@/services/business';
 import { IBusiness } from '@/types/business';
+import { EditOutlined } from '@ant-design/icons';
 import { DrawerForm, ProFormSelect, ProFormText } from '@ant-design/pro-components';
 import { Button, message } from 'antd';
+type DrawCreateBusinessProps = {
+  type: 'create' | 'update';
+  data?: IBusiness;
+  onLoad?: any;
+};
 
-const DrawCreateBusiness = () => {
+const DrawCreateBusiness = ({ type, data, onLoad }: DrawCreateBusinessProps) => {
   const onFinish = async (values: IBusiness) => {
     try {
       await createBusiness(values);
@@ -16,11 +22,33 @@ const DrawCreateBusiness = () => {
       return false;
     }
   };
+
+  const onUpdate = async (values: IBusiness) => {
+    if (!data?._id) return;
+    try {
+      await updatedBusiness(data?._id, values);
+      message.success('Update business successfully');
+      onLoad();
+      return true;
+    } catch (error: any) {
+      const errorCode = error.data.errorCode;
+      const messages = error.data.message;
+      message.error(`Error code: ${errorCode}, ${messages}`);
+      return false;
+    }
+  };
   return (
     <DrawerForm<IBusiness>
       title="Create Company"
-      trigger={<Button type="primary">Create</Button>}
-      onFinish={onFinish}
+      trigger={
+        type === 'create' ? (
+          <Button type="primary">Create</Button>
+        ) : (
+          <Button icon={<EditOutlined />} />
+        )
+      }
+      onFinish={type === 'create' ? onFinish : onUpdate}
+      initialValues={data}
     >
       <ProFormText name={'name'} label={'Name Company'} />
       <ProFormSelect
