@@ -1,8 +1,9 @@
 import { commentTask, getTask } from '@/services/task';
 import { formatDate } from '@/utils';
+import { CommentOutlined, UserOutlined } from '@ant-design/icons';
 import { ProForm, ProFormTextArea } from '@ant-design/pro-components';
 import { history } from '@umijs/max';
-import { Button, Col, Collapse, Divider, Drawer, Flex, Row } from 'antd';
+import { Avatar, Button, Col, Collapse, Divider, Drawer, Flex, Row } from 'antd';
 import { useEffect, useState } from 'react';
 import PriorityTask from '../PriorityTask';
 import StatusTask from '../StatusTask';
@@ -100,25 +101,58 @@ const DetailTask = ({ visible, onClose }: DetailTaskProps) => {
           </Row>
         </Collapse.Panel>
       </Collapse>
-
-      <Divider plain orientation="left">
-        <strong>Comments</strong>
-      </Divider>
-      {task?.comments.map((comment: any) => (
-        <div key={comment._id}>
-          <strong>{comment?.user_id?.username}</strong>
-          <div>{comment.content}</div>
-          <Divider style={{ margin: '5px 0' }} />
-        </div>
-      ))}
+      <div style={{ height: 480, maxHeight: 480, overflow: 'auto' }}>
+        <Divider plain orientation="left">
+          <strong>Comments</strong>
+        </Divider>
+        {task?.comments.map((comment: any) => (
+          <div key={comment._id}>
+            <Flex align="center" justify="space-between">
+              <Flex gap={4} align="center">
+                <Avatar icon={<UserOutlined />} size="small" />
+                <div>
+                  <strong>{comment?.user_id?.username}</strong>
+                </div>
+              </Flex>
+              <div style={{ fontSize: 10 }}>
+                <strong>{formatDate(comment.createdAt)}</strong>
+              </div>
+            </Flex>
+            <div style={{ marginTop: 3 }}>{comment.content}</div>
+            <Divider style={{ margin: '5px 0' }} />
+          </div>
+        ))}
+      </div>
 
       <ProForm
         onFinish={async (values: any) => {
           await commentTask(taskId, values.content);
           getTaskDetail();
         }}
+        submitter={{
+          resetButtonProps: {
+            disabled: true,
+            hidden: true,
+          },
+          render: (props, dom) => {
+            return (
+              <Button type="primary" icon={<CommentOutlined />} onClick={props.submit}>
+                Add Comment
+              </Button>
+            );
+          },
+        }}
       >
-        <ProFormTextArea name="content" label="Comment" />
+        <ProFormTextArea
+          name="content"
+          label="Comment"
+          rules={[
+            {
+              required: true,
+              message: 'Please input your comment!',
+            },
+          ]}
+        />
       </ProForm>
       {/* <Button type="default" icon={<CommentOutlined />}>
         Add Comment
