@@ -197,7 +197,7 @@ const QuotationExportPdf: React.FC<Props> = ({ data, showIcon = false }) => {
       const columnCountBase = 1;
       const columnWidthBase = (width - 80) / columnCountBase; // Width for each column
       const rowHeightBase = 55; // Space between rows
-      let yPositionBase = height - 120; // Start Y position for the first row
+      let yPositionBase = height - 100; // Start Y position for the first row
 
       // Divide the metaBaseInfo items into 2 columns and draw them
       metaBaseInfo.forEach(async (info, index) => {
@@ -249,14 +249,14 @@ const QuotationExportPdf: React.FC<Props> = ({ data, showIcon = false }) => {
       });
       page.drawText(`Description:`, {
         x: 60,
-        y: 390,
+        y: 410,
         size: fontSize,
         font: boldFont,
         color: rgb(254 / 255, 189 / 255, 33 / 255),
       });
       page.drawText(cleanString(item?.base?.description), {
         x: 60,
-        y: 370,
+        y: 390,
         size: fontSize,
         font: font,
         color: rgb(1, 1, 1),
@@ -267,7 +267,7 @@ const QuotationExportPdf: React.FC<Props> = ({ data, showIcon = false }) => {
       const columnCount = 3;
       const columnWidth = (width - 280) / columnCount; // Width for each column
       const rowHeight = 55; // Space between rows
-      let yPosition = yPositionBase - 230; // Start Y position for the first row
+      let yPosition = yPositionBase - 250; // Start Y position for the first row
 
       // Divide the metaInfo items into 3 columns and draw them
       metaInfo.forEach(async (info, index) => {

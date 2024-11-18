@@ -4,6 +4,7 @@ import QuationExportPPT from '@/components/TemplatePpt';
 import { getDistrict, getProvice } from '@/services/location';
 import { deleteSoftProduct, listProducts, toggleProductStatus } from '@/services/products';
 import { getProviders } from '@/services/provider';
+import { listUser } from '@/services/user';
 import { formatCurrency, formatNumberVietnamese } from '@/utils';
 import { CheckOutlined, CloseOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { ActionType, PageContainer, ProTable } from '@ant-design/pro-components';
@@ -21,6 +22,7 @@ const Products: React.FC = () => {
   const [district, setDistrict] = useState<any>(null);
 
   const [providerOptions, setProviderOptions] = useState<{ [key: string]: { text: string } }>({});
+  const [userOption, setUserOption] = useState<{ [key: string]: { text: string } }>({});
 
   useEffect(() => {
     const fetchProviders = async () => {
@@ -33,6 +35,16 @@ const Products: React.FC = () => {
       setProviderOptions(options);
     };
 
+    const fetchUser = async () => {
+      const res = await listUser({ size: 1000 });
+      const data = res.data || [];
+      const options = data.reduce((acc: any, item: any) => {
+        acc[item._id] = { text: item.username };
+        return acc;
+      }, {});
+      setUserOption(options);
+    };
+    fetchUser();
     fetchProviders();
     onGetDistrict();
   }, [city]);
@@ -53,7 +65,7 @@ const Products: React.FC = () => {
   const onRequest = async (params: any, filter: any, sort: any) => {
     console.log(params, filter, sort);
     const { product_code, product_name, country, city, district, ward } = params;
-    const { status, type, areas, provider } = sort;
+    const { status, type, areas, provider, createdBy } = sort;
     const payload: any = {
       size: params.pageSize,
       page: params.current,
@@ -76,6 +88,10 @@ const Products: React.FC = () => {
 
     if (provider) {
       payload.provider = provider.join(',');
+    }
+
+    if (createdBy) {
+      payload.user_id = createdBy.join(',');
     }
 
     const data = await listProducts(payload);
@@ -408,6 +424,18 @@ const Products: React.FC = () => {
                 onChange={() => toggleStatus(record._id)}
               />
             ),
+          },
+          {
+            title: 'Created By',
+            dataIndex: 'createdBy',
+            key: 'createdBy',
+            hideInSearch: true,
+            filters: true,
+            filterMultiple: true,
+            valueEnum: userOption,
+            render: (_, record: any) => {
+              return record?.user_id?.username;
+            },
           },
           {
             title: 'Action',

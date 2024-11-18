@@ -80,24 +80,24 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
       slide.addImage({
         path: getSrcImg('/uploads/icon-01.png'), // Convert the image to base64
         x: 0.23,
-        y: 0.8,
+        y: 0.6,
         w: 0.23,
         h: 0.2,
       });
 
       slide.addText('Product Code:', {
         x: 0.4,
-        y: 0.8,
+        y: 0.55,
         fontSize: 12,
         fontWeight: 'bold',
         color: 'febd21',
         w: 1.19,
-        h: 0.22,
+        h: 0.2,
       });
 
       slide.addText(item.base.code, {
         x: 0.4,
-        y: 1,
+        y: 0.8,
         fontSize: 10,
         color: 'ffffff',
         w: 2,
@@ -107,78 +107,78 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
       slide.addImage({
         path: getSrcImg('/uploads/icon-02.png'), // Convert the image to base64
         x: 0.23,
-        y: 1.3,
+        y: 1.2,
         w: 0.23,
         h: 0.2,
       });
 
       slide.addText('Address:', {
         x: 0.4,
-        y: 1.3,
+        y: 1.15,
         fontSize: 12,
         fontWeight: 'bold',
         color: 'febd21',
         w: 1.19,
-        h: 0.22,
+        h: 0.2,
       });
 
       slide.addText(item.base.address, {
         x: 0.4,
-        y: 1.5,
+        y: 1.3,
         fontSize: 10,
         color: 'ffffff',
         w: 6,
-        h: 0.2,
+        h: 0.4,
       });
 
       slide.addImage({
         path: getSrcImg('/uploads/icon-03.png'), // Convert the image to base64
         x: 0.23,
-        y: 1.8,
+        y: 1.7,
         w: 0.23,
         h: 0.2,
       });
 
       slide.addText('Description:', {
         x: 0.4,
-        y: 1.8,
+        y: 1.65,
         fontSize: 12,
         fontWeight: 'bold',
         color: 'febd21',
         w: 1.19,
-        h: 0.22,
+        h: 0.2,
       });
 
       slide.addText(item.base.description, {
         x: 0.4,
-        y: 1.9,
+        y: 1.7,
         fontSize: 10,
         color: 'ffffff',
         w: 6,
-        h: 0.6,
+        h: 0.8,
       });
 
       slide.addImage({
         path: getSrcImg('/uploads/icon-05.png'),
         x: 0.23,
-        y: 2.42,
+        y: 2.5,
         w: 0.23,
         h: 0.2,
       });
 
       slide.addText('Type:', {
         x: 0.4,
-        y: 2.42,
+        y: 2.45,
         fontSize: 12,
         fontWeight: 'bold',
         color: 'febd21',
         w: 1.19,
-        h: 0.22,
+        h: 0.2,
       });
 
       slide.addText(item.media.type, {
         x: 0.4,
-        y: 2.62,
+        y: 2.65,
         fontSize: 10,
         color: 'ffffff',
         w: 2,
@@ -188,7 +188,7 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
       slide.addImage({
         path: getSrcImg('/uploads/icon-10.png'),
         x: 1.92,
-        y: 2.45,
+        y: 2.5,
         w: 0.23,
         h: 0.2,
       });
@@ -200,7 +200,7 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
         fontWeight: 'bold',
         color: 'febd21',
         w: 1.79,
-        h: 0.22,
+        h: 0.2,
       });
 
       slide.addText(item.media.dimension, {
@@ -215,7 +215,7 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
       slide.addImage({
         path: getSrcImg('/uploads/icon-14.png'),
         x: 3.59,
-        y: 2.45,
+        y: 2.5,
         w: 0.23,
         h: 0.2,
       });
@@ -227,7 +227,7 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
         fontWeight: 'bold',
         color: 'febd21',
         w: 1.79,
-        h: 0.22,
+        h: 0.2,
       });
 
       slide.addText(item.media.pixel, {
@@ -242,24 +242,24 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
       slide.addImage({
         path: getSrcImg('/uploads/icon-06.png'),
         x: 0.23,
-        y: 3.1,
+        y: 3,
         w: 0.23,
         h: 0.2,
       });
 
       slide.addText('Ad Sides:', {
         x: 0.4,
-        y: 3.1,
+        y: 2.95,
         fontSize: 12,
         fontWeight: 'bold',
         color: 'febd21',
         w: 1.79,
-        h: 0.22,
+        h: 0.2,
       });
 
       slide.addText(item.media.adSides, {
         x: 0.4,
-        y: 3.3,
+        y: 3.15,
         fontSize: 10,
         color: 'ffffff',
         w: 2,
@@ -269,24 +269,24 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
       slide.addImage({
         path: getSrcImg('/uploads/icon-11.png'),
         x: 1.92,
-        y: 3.13,
+        y: 3,
         w: 0.23,
         h: 0.2,
       });
 
       slide.addText('Traffic:', {
         x: 2.09,
-        y: 3.13,
+        y: 2.95,
         fontSize: 12,
         fontWeight: 'bold',
         color: 'febd21',
         w: 1.79,
-        h: 0.22,
+        h: 0.2,
       });
 
       slide.addText(item.media.traffic, {
         x: 2.09,
-        y: 3.33,
+        y: 3.15,
         fontSize: 10,
         color: 'ffffff',
         w: 2,
@@ -296,24 +296,24 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
       slide.addImage({
         path: getSrcImg('/uploads/icon-16.png'),
         x: 3.59,
-        y: 3.77,
+        y: 3,
         w: 0.23,
         h: 0.2,
       });
 
       slide.addText('Operation Time:', {
         x: 3.76,
-        y: 3.13,
+        y: 2.95,
         fontSize: 12,
         fontWeight: 'bold',
         color: 'febd21',
         w: 1.79,
-        h: 0.22,
+        h: 0.2,
       });
 
       slide.addText(item.media.operationTime, {
         x: 3.76,
-        y: 3.33,
+        y: 3.15,
         fontSize: 10,
         color: 'ffffff',
         w: 2,
@@ -325,24 +325,24 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
       slide.addImage({
         path: getSrcImg('/uploads/icon-07.png'),
         x: 0.23,
-        y: 3.7,
+        y: 3.5,
         w: 0.23,
         h: 0.2,
       });
 
       slide.addText('Video Duration:', {
         x: 0.4,
-        y: 3.7,
+        y: 3.45,
         fontSize: 12,
         fontWeight: 'bold',
         color: 'febd21',
         w: 1.79,
-        h: 0.22,
+        h: 0.2,
       });
 
       slide.addText(item.media.videoDuration, {
         x: 0.48,
-        y: 3.9,
+        y: 3.65,
         fontSize: 10,
         color: 'ffffff',
         w: 2,
@@ -352,24 +352,24 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
       slide.addImage({
         path: getSrcImg('/uploads/icon-12.png'),
         x: 1.92,
-        y: 3.73,
+        y: 3.5,
         w: 0.23,
         h: 0.2,
       });
 
       slide.addText('Frequency:', {
         x: 2.09,
-        y: 3.73,
+        y: 3.45,
         fontSize: 12,
         fontWeight: 'bold',
         color: 'febd21',
         w: 1.79,
-        h: 0.22,
+        h: 0.2,
       });
 
       slide.addText(item.media.frequency, {
         x: 2.18,
-        y: 3.93,
+        y: 3.65,
         fontSize: 10,
         color: 'ffffff',
         w: 2,
@@ -379,24 +379,24 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
       slide.addImage({
         path: getSrcImg('/uploads/icon-17.png'),
         x: 3.59,
-        y: 3.73,
+        y: 3.5,
         w: 0.23,
         h: 0.2,
       });
 
       slide.addText('Production Cost:', {
         x: 3.76,
-        y: 3.73,
+        y: 3.45,
         fontSize: 12,
         fontWeight: 'bold',
         color: 'febd21',
         w: 1.79,
-        h: 0.22,
+        h: 0.2,
       });
 
       slide.addText(item.media.productionCost, {
         x: 3.84,
-        y: 3.93,
+        y: 3.65,
         fontSize: 10,
         color: 'ffffff',
         w: 2,
@@ -406,24 +406,24 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
       slide.addImage({
         path: getSrcImg('/uploads/icon-08.png'),
         x: 0.23,
-        y: 4.3,
+        y: 4,
         w: 0.23,
         h: 0.2,
       });
 
       slide.addText('Booking Duration:', {
         x: 0.4,
-        y: 4.3,
+        y: 3.95,
         fontSize: 12,
         fontWeight: 'bold',
         color: 'febd21',
         w: 1.79,
-        h: 0.22,
+        h: 0.2,
       });
 
       slide.addText(item.media.bookingDuration, {
         x: 0.48,
-        y: 4.5,
+        y: 4.15,
         fontSize: 10,
         color: 'ffffff',
         w: 2,
@@ -433,24 +433,24 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
       slide.addImage({
         path: getSrcImg('/uploads/icon-13.png'),
         x: 1.92,
-        y: 4.32,
+        y: 4,
         w: 0.23,
         h: 0.2,
       });
 
       slide.addText('Media Cost:', {
         x: 2.09,
-        y: 4.32,
+        y: 3.95,
         fontSize: 12,
         fontWeight: 'bold',
         color: 'febd21',
         w: 1.79,
-        h: 0.22,
+        h: 0.2,
       });
 
       slide.addText(item.media.cost, {
         x: 2.18,
-        y: 4.52,
+        y: 4.15,
         fontSize: 10,
         color: 'ffffff',
         w: 2,
@@ -460,24 +460,24 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
       slide.addImage({
         path: getSrcImg('/uploads/icon-15.png'),
         x: 3.59,
-        y: 4.32,
+        y: 4,
         w: 0.23,
         h: 0.2,
       });
 
       slide.addText('Areas:', {
         x: 3.76,
-        y: 4.32,
+        y: 3.95,
         fontSize: 12,
         fontWeight: 'bold',
         color: 'febd21',
         w: 1.79,
-        h: 0.22,
+        h: 0.2,
       });
 
-      slide.addText(item?.media?.areas.join(', '), {
+      slide.addText(item?.media?.areas, {
         x: 3.84,
-        y: 4.58,
+        y: 4.15,
         fontSize: 10,
         color: 'ffffff',
         w: 2,
@@ -487,51 +487,51 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
       slide.addImage({
         path: getSrcImg('/uploads/icon-04.png'),
         x: 1.92,
-        y: 4.98,
+        y: 4.5,
         w: 0.23,
         h: 0.2,
       });
 
       slide.addText('GPS:', {
         x: 2.09,
-        y: 4.98,
+        y: 4.45,
         fontSize: 12,
         fontWeight: 'bold',
         color: 'febd21',
         w: 1.79,
-        h: 0.22,
+        h: 0.2,
       });
 
       slide.addText(item.media.gps, {
         x: 2.18,
-        y: 5.2,
+        y: 4.65,
         fontSize: 10,
         color: 'ffffff',
         w: 2,
-        h: 0.2,
+        h: 0.4,
       });
 
       slide.addImage({
         path: getSrcImg('/uploads/icon-09.png'),
         x: 0.23,
-        y: 4.98,
+        y: 4.5,
         w: 0.23,
         h: 0.2,
       });
 
       slide.addText('Note:', {
         x: 0.4,
-        y: 4.98,
+        y: 4.45,
         fontSize: 12,
         fontWeight: 'bold',
         color: 'febd21',
         w: 1.79,
-        h: 0.22,
+        h: 0.2,
       });
 
       slide.addText(item.media.note, {
         x: 0.48,
-        y: 5.2,
+        y: 4.65,
         fontSize: 10,
         color: 'ffffff',
         w: 2,

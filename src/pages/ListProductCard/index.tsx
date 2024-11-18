@@ -398,22 +398,14 @@ const ListProductCard = () => {
                             media: {
                               gps: item?.location?.gps,
                               type: item.type,
-                              dimension: `${item.attributes.width}m x${
-                                item.attributes.height
-                              }m = ${formatNumberVietnamese(
-                                item.attributes.width * item.attributes.height,
-                              )} m2`,
+                              dimension: `${item.attributes.width}m x${item.attributes.height}m`,
                               adSides: item.attributes.add_side,
                               operationTime: `${item.attributes.opera_time_from} - ${item.attributes.opera_time_to}`,
                               frequency: `${formatNumberVietnamese(
                                 item.attributes.frequency,
                               )} spots`,
                               cost: item.cost,
-                              pixel: `${item.attributes.pixel_width}m x${
-                                item.attributes.pixel_height
-                              }m = ${formatNumberVietnamese(
-                                item.attributes.pixel_width * item.attributes.pixel_height,
-                              )} px`,
+                              pixel: `${item.attributes.pixel_width}px x ${item.attributes.pixel_height}px`,
                               note: item.attributes.note,
                               bookingDuration: item.booking_duration,
                               images: item.images,
@@ -580,6 +572,7 @@ const ListProductCard = () => {
               title: 'Country',
               key: 'country',
               valueType: 'select',
+
               // valueEnum: {
               //   vietnam: { text: 'Vietnam' },
               //   international: { text: 'International' },
@@ -601,6 +594,7 @@ const ListProductCard = () => {
               },
 
               fieldProps: {
+                showSearch: true,
                 onChange: (value: any) => {
                   setCity(value);
                   formRef.current?.setFieldsValue({ city: undefined });
@@ -675,6 +669,7 @@ const ListProductCard = () => {
                 TRAIN_STATION: { text: 'TRAIN STATION' },
                 STREET_FURNITURE: { text: 'STREET FURNITURE' },
                 CINEMA: { text: 'CINEMA' },
+                'MARKET BILLBOARD': { text: 'MARKET BILLBOARD' },
                 OTHERS: { text: 'OTHERS' },
               },
               fieldProps: {

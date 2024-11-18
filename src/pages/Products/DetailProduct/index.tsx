@@ -9,7 +9,9 @@ import dayjs from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 
-const SortableItem = SortableElement(({ value }: any) => <Image src={getSrcImg(value)} />);
+const SortableItem = SortableElement(({ value }: any) => {
+  return <Image src={getSrcImg(value)} />;
+});
 
 const SortableList = SortableContainer(({ items }: any) => {
   return (
@@ -54,7 +56,7 @@ const DetailProduct: React.FC = () => {
     },
     location: {
       international: false,
-      country: '',
+      country: {},
       city: '',
       user_id: '',
       ward: '',
@@ -171,14 +173,27 @@ const DetailProduct: React.FC = () => {
       <br />
       <ProDescriptions layout="vertical" bordered dataSource={data} title="Thông tin vị trí">
         <ProDescriptions.Item label="International" dataIndex={['location', 'international']} />
-        <ProDescriptions.Item label="Country" dataIndex={['location', 'country']} />
+        <ProDescriptions.Item
+          label="Country"
+          render={(_, record) => record?.location?.country?.name}
+        />
         <ProDescriptions.Item label="City" dataIndex={['location', 'city']} />
         <ProDescriptions.Item label="Ward" dataIndex={['location', 'ward']} />
         <ProDescriptions.Item label="District" dataIndex={['location', 'district']} />
         <ProDescriptions.Item label="Address" dataIndex={['location', 'address']} />
         <ProDescriptions.Item label="Longitude" dataIndex={['location', 'longitude']} />
         <ProDescriptions.Item label="Latitude" dataIndex={['location', 'latitude']} />
-        <ProDescriptions.Item label="Status" dataIndex={['location', 'status']} />
+        <ProDescriptions.Item
+          label="Status"
+          dataIndex={['location', 'status']}
+          render={(_, record) => {
+            return record.location.status === 0 ? (
+              <Tag color="dange">Inactive</Tag>
+            ) : (
+              <Tag color="success">Active</Tag>
+            );
+          }}
+        />
         <ProDescriptions.Item label="Street" dataIndex={['location', 'street']} />
         <ProDescriptions.Item label="GPS" dataIndex={['location', 'gps']} />
       </ProDescriptions>
