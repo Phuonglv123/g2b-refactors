@@ -162,7 +162,7 @@ const CreateProduct: React.FC = () => {
     if (id) {
       const payloadLocation: ILocation = {
         international: payload.international ? true : false,
-        country: payload.international ? payload?.country : 'Việt nam',
+        country: payload.international ? payload?.country : '66c9d09c55dfd5c6f23c96d6',
         city: payload.city,
         ward: payload.ward,
         district: payload.district,
