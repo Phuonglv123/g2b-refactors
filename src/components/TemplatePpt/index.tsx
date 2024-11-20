@@ -62,7 +62,7 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
         slide.addImage({
           path: getSrcImg('/uploads/watermark.png'), // Convert the image to base64
           x: 5,
-          y: 1.5,
+          y: 1.1,
           w: 0.8,
           h: 0.5, // Fixed height
         });
@@ -73,7 +73,7 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
         y: 0.06,
         fontSize: 18,
         color: 'febd21',
-        w: 6,
+        w: 9,
         h: 0.5,
       });
 
@@ -97,7 +97,7 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
 
       slide.addText(item.base.code, {
         x: 0.4,
-        y: 0.8,
+        y: 0.7,
         fontSize: 10,
         color: 'ffffff',
         w: 2,
@@ -107,14 +107,14 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
       slide.addImage({
         path: getSrcImg('/uploads/icon-02.png'), // Convert the image to base64
         x: 0.23,
-        y: 1.2,
+        y: 1.1,
         w: 0.23,
         h: 0.2,
       });
 
       slide.addText('Address:', {
         x: 0.4,
-        y: 1.15,
+        y: 0.95,
         fontSize: 12,
         fontWeight: 'bold',
         color: 'febd21',
@@ -124,7 +124,7 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
 
       slide.addText(item.base.address, {
         x: 0.4,
-        y: 1.3,
+        y: 1,
         fontSize: 10,
         color: 'ffffff',
         w: 6,
@@ -134,14 +134,14 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
       slide.addImage({
         path: getSrcImg('/uploads/icon-03.png'), // Convert the image to base64
         x: 0.23,
-        y: 1.7,
+        y: 1.1,
         w: 0.23,
         h: 0.2,
       });
 
       slide.addText('Description:', {
         x: 0.4,
-        y: 1.65,
+        y: 1.45,
         fontSize: 12,
         fontWeight: 'bold',
         color: 'febd21',
@@ -151,7 +151,7 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
 
       slide.addText(item.base.description, {
         x: 0.4,
-        y: 1.7,
+        y: 1.6,
         fontSize: 10,
         color: 'ffffff',
         w: 6,
@@ -540,7 +540,7 @@ const QuationExportPPT = ({ data, showIcon }: QuotationData) => {
 
       // Images aligned vertically on the left
       const imgXPos = 6.5; // Keep images aligned to the left
-      let imgYPos = 0.3; // Initial Y position for the first image
+      let imgYPos = 0.5; // Initial Y position for the first image
       const maxImageWidth = 3; // Maximum width of the image
       const imageHeight = 1.5; // Fixed height for the image
       const imageSpacing = 0.2; // Vertical spacing between images

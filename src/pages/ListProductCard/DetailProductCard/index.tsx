@@ -152,7 +152,7 @@ const DetailProductCard = () => {
               {product.location?.address}
             </ProDescriptions.Item>
             <ProDescriptions.Item label="CITY" span={2}>
-              {product.location?.city.split('-')[1]}
+              {product.location?.city.split('-')[1] || product.location?.city}
             </ProDescriptions.Item>
             <ProDescriptions.Item label="DIMENSION (WxH)" span={2}>
               {product?.attributes?.width}m x {product?.attributes?.height}m ={' '}
