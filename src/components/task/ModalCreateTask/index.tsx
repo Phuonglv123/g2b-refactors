@@ -11,14 +11,31 @@ import {
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-components';
-import { Button, Divider, Tag } from 'antd';
+import { Button, Divider, Tag, message } from 'antd';
+import dayjs from 'dayjs';
 
-const ModalCreateTask = () => {
+type ModalCreateTaskProps = {
+  onLoad?: any;
+};
+
+const ModalCreateTask = ({ onLoad }: ModalCreateTaskProps) => {
   const onFinish = async (values: any) => {
     try {
-      const response = await createTask(values);
+      const payload = {
+        ...values,
+        code: values.code || dayjs().unix(),
+      };
+      const response = await createTask(payload);
       console.log(response);
-    } catch (error) {}
+      if (response.errorCode === 0) {
+        message.success('Create task successfully');
+        onLoad();
+        return true;
+      }
+    } catch (error) {
+      message.error('Create task failed');
+      return false;
+    }
   };
   return (
     <ModalForm<ITask>
@@ -43,11 +60,41 @@ const ModalCreateTask = () => {
         status: 'called',
         state: 'todo',
         priority: 'medium',
+        type: 'task',
       }}
     >
       <Divider plain orientation="left">
         <strong>General Project</strong>
       </Divider>
+      <ProFormText name="code" label="Code" />
+      <ProFormSelect
+        name="type"
+        label="Type"
+        options={[
+          {
+            label: 'Brief',
+            value: 'brief',
+          },
+          {
+            label: 'Task',
+            value: 'task',
+          },
+          {
+            label: 'Project',
+            value: 'project',
+          },
+          {
+            label: 'Target',
+            value: 'target',
+          },
+        ]}
+        rules={[
+          {
+            required: true,
+            message: 'Please select the type',
+          },
+        ]}
+      />
       <ProFormText
         name="name"
         label="Task Name"

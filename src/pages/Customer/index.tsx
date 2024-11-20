@@ -1,7 +1,8 @@
 import { listUser, toggleUserStatus } from '@/services/user';
+import { getSrcImg } from '@/utils';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { ActionType, ProTable } from '@ant-design/pro-components';
-import { Space, Switch, Tooltip, message } from 'antd';
+import { Avatar, Space, Switch, Tooltip, message } from 'antd';
 import dayjs from 'dayjs';
 import { useRef, useState } from 'react';
 import ModalAddUser from './ModalAddUser';
@@ -41,6 +42,11 @@ const Customer: React.FC = () => {
   };
 
   const columns = [
+    {
+      title: 'Avatar',
+      key: 'avatar',
+      render: (text: any, record: any) => <Avatar size={'large'} src={getSrcImg(record.avatar)} />,
+    },
     {
       title: 'Email',
       dataIndex: 'email',

@@ -1,4 +1,6 @@
 export interface ITask {
+  code: string;
+  type: 'brief' | 'task' | 'project' | 'target';
   name: string;
   description: string;
   areas: string[];
