@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 export const currencyLocaleMap: { [key: string]: string } = {
   USD: 'en-US',
   EUR: 'de-DE',
@@ -41,4 +43,8 @@ export function convertTo12HourFormat(time: any) {
 
   // Return the formatted time string
   return `${hours}:${minutes.toString().padStart(2, '0')} ${period}`;
+}
+
+export function formatDate(date: string) {
+  return dayjs(date).format('DD/MM/YYYY HH:mm:ss');
 }

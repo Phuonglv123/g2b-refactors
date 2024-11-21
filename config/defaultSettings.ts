@@ -10,7 +10,7 @@ const Settings: ProLayoutProps & {
   navTheme: 'realDark',
 
   colorPrimary: '#febd21',
-  layout: 'mix',
+  layout: 'top',
   contentWidth: 'Fluid',
   fixedHeader: false,
   fixSiderbar: true,

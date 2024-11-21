@@ -46,3 +46,12 @@ export const updateRoleUser = async (id: string, data: any) => {
     data,
   });
 };
+
+export const updateAvatar = async (id: string, data: any) => {
+  const formData = new FormData();
+  formData.append('image', data.image);
+  return await request(`/api/v1/user/${id}/avatar/update`, {
+    method: 'PUT',
+    data: formData,
+  });
+};

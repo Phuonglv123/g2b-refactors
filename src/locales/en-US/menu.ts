@@ -47,6 +47,9 @@ export default {
   'menu.editor.mind': 'Mind Editor',
   'menu.editor.koni': 'Koni Editor',
 
+  'menu.tasks': 'Tasks',
+  'menu.business': 'Customers',
+
   'menu.products': 'Products',
   'menu.products.create': 'Create Product',
   'menu.products.update': 'Update Product',

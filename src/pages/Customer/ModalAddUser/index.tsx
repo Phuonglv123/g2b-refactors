@@ -1,6 +1,11 @@
-import { registerUser, updateRoleUser } from '@/services/user';
-import { EditOutlined } from '@ant-design/icons';
-import { ModalForm, ProFormSelect, ProFormText } from '@ant-design/pro-components';
+import { registerUser, updateAvatar, updateRoleUser } from '@/services/user';
+import { EditOutlined, UserOutlined } from '@ant-design/icons';
+import {
+  ModalForm,
+  ProFormSelect,
+  ProFormText,
+  ProFormUploadButton,
+} from '@ant-design/pro-components';
 import { Button, Modal } from 'antd';
 import { useState } from 'react';
 
@@ -39,11 +44,15 @@ const ModalAddUser = ({ onLoad, type, initValue }: ModalAddUserProps) => {
   };
 
   const handleUpdate = async (values: any) => {
+    console.log(values);
     setLoading(true);
     try {
       const payload = {
         role: values.role,
       };
+      if (values.avatar?.length > 0) {
+        await updateAvatar(initValue._id, { image: values.avatar[0].originFileObj });
+      }
       const res = await updateRoleUser(initValue._id, payload);
       console.log(res);
       if (res.errorCode === 0) {
@@ -81,6 +90,24 @@ const ModalAddUser = ({ onLoad, type, initValue }: ModalAddUserProps) => {
         destroyOnClose: true,
       }}
     >
+      <ProFormUploadButton
+        label="Avatar"
+        listType="picture-circle"
+        title={<UserOutlined size={60} />}
+        name="avatar"
+        icon={null}
+        buttonProps={{
+          shape: 'circle',
+          size: 'large',
+          style: { width: 100, height: 100, fontSize: 50 },
+        }}
+        max={1}
+        fieldProps={{
+          children: <div>Upload avatar</div>,
+          accept: 'image/*',
+          showUploadList: { showPreviewIcon: true, showRemoveIcon: true },
+        }}
+      />
       <ProFormText name="email" label="Email" disabled={type === 'edit'} />
       <ProFormText name="username" label="Tên đăng nhập" disabled={type === 'edit'} />
       <ProFormText.Password name="password" label="Mật khẩu" hidden={type === 'edit'} />

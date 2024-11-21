@@ -8,6 +8,7 @@ import defaultSettings from '../config/defaultSettings';
 import LogoOnly from './components/LogoOnly';
 import { errorConfig } from './requestErrorConfig';
 import { queryCurrentUser } from './services/auth';
+import { getSrcImg } from './utils';
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = ['/', '/login'];
 
@@ -54,7 +55,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     actionsRender: () => [],
     logo: <LogoOnly />,
     avatarProps: {
-      src: 'https://avatars.githubusercontent.com/u/8186664?s=60&v=4',
+      src: getSrcImg(initialState?.currentUser?.avatar),
       title: <AvatarName />,
       render: (_, avatarChildren) => {
         return <AvatarDropdown>{avatarChildren}</AvatarDropdown>;
