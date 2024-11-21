@@ -1,5 +1,6 @@
 import DrawCreateBusiness from '@/components/business/DrawCreateBusiness';
 import { deleteBusiness, getBusiness, updatedBusiness } from '@/services/business';
+import { formatDate } from '@/utils';
 import { CheckOutlined, CloseOutlined, DeleteOutlined } from '@ant-design/icons';
 import { ActionType, PageContainer, ProTable } from '@ant-design/pro-components';
 import { Button, Modal, Switch, message } from 'antd';
@@ -17,21 +18,37 @@ const Business: React.FC = () => {
       title: 'Industry',
       dataIndex: 'industry',
       key: 'industry',
+      search: false,
     },
     {
       title: 'Website',
       dataIndex: 'website',
       key: 'website',
+      search: false,
     },
     {
       title: 'Response',
       dataIndex: 'response',
       key: 'response',
+      search: false,
+    },
+    {
+      title: 'Created At',
+      key: 'createdAt',
+      search: false,
+      render: (_: any, record: any) => formatDate(record.createdAt),
+    },
+    {
+      title: 'Created By',
+      key: 'createdAt',
+      search: false,
+      render: (_: any, record: any) => record.createBy?.username,
     },
     {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
+      search: false,
       render: (_: any, record: any) => (
         <Switch
           checked={record.status === 1}
@@ -44,6 +61,7 @@ const Business: React.FC = () => {
     {
       title: 'Action',
       key: 'action',
+      search: false,
       valueType: 'option',
       render: (_: any, record: any) => [
         <Button
@@ -110,6 +128,9 @@ const Business: React.FC = () => {
     <PageContainer title="Manage Customer">
       <ProTable
         actionRef={actionRef}
+        search={{
+          layout: 'vertical',
+        }}
         request={onRequest}
         columns={columns}
         toolBarRender={() => [

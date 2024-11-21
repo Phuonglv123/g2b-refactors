@@ -80,7 +80,7 @@ const ModalAddUser = ({ onLoad, type, initValue }: ModalAddUserProps) => {
       trigger={
         type === 'add' ? (
           <Button key="3" type="primary">
-            Tạo mới
+            New User
           </Button>
         ) : (
           <Button type="primary" size="small" icon={<EditOutlined />} />
@@ -109,26 +109,28 @@ const ModalAddUser = ({ onLoad, type, initValue }: ModalAddUserProps) => {
         }}
       />
       <ProFormText name="email" label="Email" disabled={type === 'edit'} />
-      <ProFormText name="username" label="Tên đăng nhập" disabled={type === 'edit'} />
-      <ProFormText.Password name="password" label="Mật khẩu" hidden={type === 'edit'} />
+      <ProFormText name="username" label="Username" disabled={type === 'edit'} />
+      <ProFormText.Password name="password" label="Password" hidden={type === 'edit'} />
       <ProFormSelect
         name="role"
-        label="Quyền"
+        label="Role"
         mode="multiple"
         options={[
           { label: 'Admin', value: 'admin' },
           { label: 'Editor', value: 'editor' },
           { label: 'Sale', value: 'sale' },
           { label: 'Client', value: 'client' },
+          { label: 'Task', value: 'task' },
+          { label: 'Approve', value: 'approve' },
         ]}
       />
       <ProFormSelect
         hidden={type === 'edit'}
         name="status"
-        label="Trạng thái"
+        label="Status"
         options={[
-          { label: 'Không hoạt động', value: 0 },
-          { label: 'Hoạt động', value: 1 },
+          { label: 'Inactive', value: 0 },
+          { label: 'Active', value: 1 },
         ]}
       />
     </ModalForm>

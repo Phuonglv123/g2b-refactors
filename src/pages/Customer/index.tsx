@@ -1,3 +1,4 @@
+import logoG2b from '@/assets/logo.png';
 import { listUser, toggleUserStatus } from '@/services/user';
 import { getSrcImg } from '@/utils';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
@@ -45,7 +46,9 @@ const Customer: React.FC = () => {
     {
       title: 'Avatar',
       key: 'avatar',
-      render: (text: any, record: any) => <Avatar size={'large'} src={getSrcImg(record.avatar)} />,
+      render: (text: any, record: any) => (
+        <Avatar size={'large'} src={record?.avatar ? getSrcImg(record.avatar) : logoG2b} />
+      ),
     },
     {
       title: 'Email',

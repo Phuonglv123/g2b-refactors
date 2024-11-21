@@ -34,6 +34,7 @@ export default [
     name: 'tasks',
     icon: 'desktop',
     //component: './Tasks',
+    access: 'canTask',
     routes: [
       {
         path: '/tasks',
@@ -99,6 +100,7 @@ export default [
     icon: 'AccountBookOutlined',
     key: 'business',
     component: './Business',
+    access: 'canEditor',
   },
 
   {

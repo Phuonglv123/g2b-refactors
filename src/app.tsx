@@ -1,3 +1,4 @@
+import logoG2b from '@/assets/logo.png';
 import { AvatarDropdown, AvatarName, Footer } from '@/components';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
 import { PageLoading } from '@ant-design/pro-components';
@@ -9,6 +10,7 @@ import LogoOnly from './components/LogoOnly';
 import { errorConfig } from './requestErrorConfig';
 import { queryCurrentUser } from './services/auth';
 import { getSrcImg } from './utils';
+
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = ['/', '/login'];
 
@@ -55,7 +57,9 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     actionsRender: () => [],
     logo: <LogoOnly />,
     avatarProps: {
-      src: getSrcImg(initialState?.currentUser?.avatar),
+      src: initialState?.currentUser?.avatar
+        ? getSrcImg(initialState?.currentUser?.avatar)
+        : logoG2b,
       title: <AvatarName />,
       render: (_, avatarChildren) => {
         return <AvatarDropdown>{avatarChildren}</AvatarDropdown>;
