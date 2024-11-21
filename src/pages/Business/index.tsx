@@ -2,7 +2,7 @@ import DrawCreateBusiness from '@/components/business/DrawCreateBusiness';
 import { deleteBusiness, getBusiness, updatedBusiness } from '@/services/business';
 import { CheckOutlined, CloseOutlined, DeleteOutlined } from '@ant-design/icons';
 import { ActionType, PageContainer, ProTable } from '@ant-design/pro-components';
-import { Button, Switch, message } from 'antd';
+import { Button, Modal, Switch, message } from 'antd';
 import { useRef } from 'react';
 
 const Business: React.FC = () => {
@@ -47,9 +47,18 @@ const Business: React.FC = () => {
       valueType: 'option',
       render: (_: any, record: any) => [
         <Button
+          size="small"
           icon={<DeleteOutlined />}
+          danger
           onClick={() => {
-            deleteBusinessId(record._id);
+            Modal.confirm({
+              title: 'Delete Business',
+              content: 'Are you sure to delete this customer?',
+              onOk: () =>
+                deleteBusinessId(record?._id).then((res) =>
+                  message.success('Delete customer successfully'),
+                ),
+            });
           }}
         />,
         <DrawCreateBusiness
@@ -98,12 +107,14 @@ const Business: React.FC = () => {
     };
   };
   return (
-    <PageContainer title="Manage Business">
+    <PageContainer title="Manage Customer">
       <ProTable
         actionRef={actionRef}
         request={onRequest}
         columns={columns}
-        toolBarRender={() => [<DrawCreateBusiness type="create" />]}
+        toolBarRender={() => [
+          <DrawCreateBusiness type="create" onLoad={() => actionRef.current?.reload()} />,
+        ]}
       />
     </PageContainer>
   );

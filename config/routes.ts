@@ -32,12 +32,22 @@ export default [
   {
     path: '/tasks',
     name: 'tasks',
-    icon: 'dashboard',
-    component: './Tasks',
+    icon: 'desktop',
+    //component: './Tasks',
+    routes: [
+      {
+        path: '/tasks',
+        component: './Tasks',
+      },
+      {
+        path: '/tasks/:id',
+        component: './Tasks/TaskDetail',
+      },
+    ],
   },
   {
     name: 'products',
-    icon: 'dashboard',
+    icon: 'rest',
     path: '/products',
     key: 'products',
     access: 'canSale',
@@ -71,7 +81,7 @@ export default [
   {
     path: '/provider',
     name: 'vendor',
-    icon: 'user',
+    icon: 'global',
     access: 'canEditor',
     component: './Provider',
   },
@@ -86,7 +96,7 @@ export default [
   {
     path: '/business',
     name: 'business',
-    icon: 'AimOutlined',
+    icon: 'AccountBookOutlined',
     key: 'business',
     component: './Business',
   },
@@ -94,7 +104,7 @@ export default [
   {
     path: '/list-product-card',
     name: 'list-product-card',
-    icon: 'AimOutlined',
+    icon: 'AppstoreOutlined',
     key: 'card',
     exact: true,
     routes: [

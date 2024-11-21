@@ -1,10 +1,21 @@
-import { commentTask, getTask } from '@/services/task';
+import { createComment, reactionComment, replyComment } from '@/services/comments';
+import { getTask } from '@/services/task';
 import { formatDate } from '@/utils';
-import { CommentOutlined, UserOutlined } from '@ant-design/icons';
-import { ProForm, ProFormTextArea } from '@ant-design/pro-components';
+import {
+  CommentOutlined,
+  DislikeTwoTone,
+  FrownTwoTone,
+  HeartTwoTone,
+  LikeTwoTone,
+  MehTwoTone,
+  SmileTwoTone,
+  UserOutlined,
+} from '@ant-design/icons';
 import { history } from '@umijs/max';
-import { Avatar, Button, Col, Collapse, Divider, Drawer, Flex, Row } from 'antd';
+import { Avatar, Button, Col, Collapse, Divider, Drawer, Flex, Row, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import PriorityTask from '../PriorityTask';
 import StatusTask from '../StatusTask';
 
@@ -17,6 +28,9 @@ const DetailTask = ({ visible, onClose }: DetailTaskProps) => {
   const taskId = history.location.search.split('=')[1];
   const [loading, setLoading] = useState(false);
   const [task, setTask] = useState<any>();
+  const [comment, setComment] = useState('');
+  const [replyId, setReplyId] = useState(null);
+  const [isComment, setIsComment] = useState(false);
 
   const getTaskDetail = async () => {
     setLoading(true);
@@ -33,6 +47,36 @@ const DetailTask = ({ visible, onClose }: DetailTaskProps) => {
     }
   };
 
+  const onClickReactionComment = async (id: string, type: string) => {
+    try {
+      await reactionComment(id, { type });
+      getTaskDetail();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const onClickReplyComment = async () => {
+    if (!replyId) {
+      return;
+    }
+    try {
+      await replyComment(replyId, { content: comment });
+      getTaskDetail();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const onClickAddComment = async () => {
+    try {
+      await createComment({ task_id: taskId, content: comment });
+      getTaskDetail();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     if (taskId) {
       getTaskDetail();
@@ -42,10 +86,10 @@ const DetailTask = ({ visible, onClose }: DetailTaskProps) => {
 
   return (
     <Drawer
-      open={visible}
+      open={taskId ? true : false}
       onClose={onClose}
       loading={loading}
-      width={400}
+      width={800}
       title={`Task detail: ${task?.name}`}
       footer={
         task?.state === 'approve' && (
@@ -63,7 +107,7 @@ const DetailTask = ({ visible, onClose }: DetailTaskProps) => {
       }
     >
       <div>{task?.description}</div>
-      <Collapse defaultActiveKey={['1']} ghost size="small">
+      <Collapse defaultActiveKey={['1', '2', '3']} ghost size="small">
         <Collapse.Panel
           header={<strong>Detail</strong>}
           key="1"
@@ -101,11 +145,11 @@ const DetailTask = ({ visible, onClose }: DetailTaskProps) => {
           </Row>
         </Collapse.Panel>
       </Collapse>
+      <Divider plain orientation="left">
+        <strong>Comments</strong>
+      </Divider>
       <div style={{ height: 480, maxHeight: 480, overflow: 'auto' }}>
-        <Divider plain orientation="left">
-          <strong>Comments</strong>
-        </Divider>
-        {task?.comments.map((comment: any) => (
+        {task?.comments?.map((comment: any) => (
           <div key={comment._id}>
             <Flex align="center" justify="space-between">
               <Flex gap={4} align="center">
@@ -118,45 +162,423 @@ const DetailTask = ({ visible, onClose }: DetailTaskProps) => {
                 <strong>{formatDate(comment.createdAt)}</strong>
               </div>
             </Flex>
-            <div style={{ marginTop: 3 }}>{comment.content}</div>
+            <div
+              className="custom-img"
+              style={{ margin: 10 }}
+              dangerouslySetInnerHTML={{ __html: comment.content }}
+            />
+            <Flex gap={6} justify="space-between">
+              <Flex gap={4}>
+                <Tooltip
+                  title={comment.reactions
+                    .filter((r: any) => r.type === 'like')
+                    .map((r: any) => r.user_id.username)
+                    .join(', ')}
+                >
+                  <Button
+                    onClick={() => onClickReactionComment(comment._id, 'like')}
+                    size="small"
+                    icon={
+                      <LikeTwoTone
+                        twoToneColor={
+                          comment.reactions.filter((r: any) => r.type === 'like').length > 0
+                            ? '#febd21'
+                            : '#33333'
+                        }
+                      />
+                    }
+                    type="text"
+                  >
+                    {comment.reactions.filter((r: any) => r.type === 'like').length}
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                  title={comment.reactions
+                    .filter((r: any) => r.type === 'dislike')
+                    .map((r: any) => r.user_id.username)
+                    .join(', ')}
+                >
+                  <Button
+                    onClick={() => onClickReactionComment(comment._id, 'dislike')}
+                    size="small"
+                    icon={
+                      <DislikeTwoTone
+                        twoToneColor={
+                          comment.reactions.filter((r: any) => r.type === 'dislike').length > 0
+                            ? '#febd21'
+                            : '#33333'
+                        }
+                      />
+                    }
+                    type="text"
+                  >
+                    {comment.reactions.filter((r: any) => r.type === 'dislike').length}
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                  title={comment.reactions
+                    .filter((r: any) => r.type === 'love')
+                    .map((r: any) => r.user_id.username)
+                    .join(', ')}
+                >
+                  <Button
+                    onClick={() => onClickReactionComment(comment._id, 'love')}
+                    size="small"
+                    icon={
+                      <HeartTwoTone
+                        twoToneColor={
+                          comment.reactions.filter((r: any) => r.type === 'love').length > 0
+                            ? '#febd21'
+                            : '#33333'
+                        }
+                      />
+                    }
+                    type="text"
+                  >
+                    {comment.reactions.filter((r: any) => r.type === 'love').length}
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                  title={comment.reactions
+                    .filter((r: any) => r.type === 'laugh')
+                    .map((r: any) => r.user_id.username)
+                    .join(', ')}
+                >
+                  <Button
+                    onClick={() => onClickReactionComment(comment._id, 'laugh')}
+                    size="small"
+                    icon={
+                      <SmileTwoTone
+                        twoToneColor={
+                          comment.reactions.filter((r: any) => r.type === 'laugh').length > 0
+                            ? '#febd21'
+                            : '#33333'
+                        }
+                      />
+                    }
+                    type="text"
+                  >
+                    {comment.reactions.filter((r: any) => r.type === 'laugh').length}
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                  title={comment.reactions
+                    .filter((r: any) => r.type === 'angry')
+                    .map((r: any) => r.user_id.username)
+                    .join(', ')}
+                >
+                  <Button
+                    onClick={() => onClickReactionComment(comment._id, 'angry')}
+                    size="small"
+                    icon={
+                      <MehTwoTone
+                        twoToneColor={
+                          comment.reactions.filter((r: any) => r.type === 'angry').length > 0
+                            ? '#febd21'
+                            : '#33333'
+                        }
+                      />
+                    }
+                    type="text"
+                  >
+                    {comment.reactions.filter((r: any) => r.type === 'angry').length}
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                  title={comment.reactions
+                    .filter((r: any) => r.type === 'sad')
+                    .map((r: any) => r.user_id.username)
+                    .join(', ')}
+                >
+                  <Button
+                    onClick={() => onClickReactionComment(comment._id, 'sad')}
+                    size="small"
+                    icon={
+                      <FrownTwoTone
+                        twoToneColor={
+                          comment.reactions.filter((r: any) => r.type === 'sad').length > 0
+                            ? '#febd21'
+                            : '#33333'
+                        }
+                      />
+                    }
+                    type="text"
+                  >
+                    {comment.reactions.filter((r: any) => r.type === 'sad').length}
+                  </Button>
+                </Tooltip>
+              </Flex>
+
+              <Button
+                size="small"
+                type="text"
+                onClick={() => {
+                  setReplyId(comment._id);
+                }}
+              >
+                Reply
+              </Button>
+            </Flex>
             <Divider style={{ margin: '5px 0' }} />
+            {comment.children?.map((child: any) => (
+              <div key={child._id} style={{ padding: 20 }}>
+                <Flex align="center" justify="space-between">
+                  <Flex gap={4} align="center">
+                    <Avatar icon={<UserOutlined />} size="small" />
+                    <div>
+                      <strong>{child?.user_id?.username}</strong>
+                    </div>
+                  </Flex>
+                  <div style={{ fontSize: 10 }}>
+                    <strong>{formatDate(child.createdAt)}</strong>
+                  </div>
+                </Flex>
+                <div
+                  className="custom-img"
+                  style={{ margin: 10 }}
+                  dangerouslySetInnerHTML={{ __html: child.content }}
+                />
+                <Flex gap={6} justify="space-between">
+                  <Flex gap={4}>
+                    <Tooltip
+                      title={child.reactions
+                        .filter((r: any) => r.type === 'like')
+                        .map((r: any) => r.user_id.username)
+                        .join(', ')}
+                    >
+                      <Button
+                        onClick={() => onClickReactionComment(child._id, 'like')}
+                        size="small"
+                        icon={
+                          <LikeTwoTone
+                            twoToneColor={
+                              child.reactions.filter((r: any) => r.type === 'like').length > 0
+                                ? '#febd21'
+                                : '#33333'
+                            }
+                          />
+                        }
+                        type="text"
+                      >
+                        {child.reactions.filter((r: any) => r.type === 'like').length}
+                      </Button>
+                    </Tooltip>
+                    <Tooltip
+                      title={child.reactions
+                        .filter((r: any) => r.type === 'dislike')
+                        .map((r: any) => r.user_id.username)
+                        .join(', ')}
+                    >
+                      <Button
+                        onClick={() => onClickReactionComment(child._id, 'dislike')}
+                        size="small"
+                        icon={
+                          <DislikeTwoTone
+                            twoToneColor={
+                              child.reactions.filter((r: any) => r.type === 'dislike').length > 0
+                                ? '#febd21'
+                                : '#33333'
+                            }
+                          />
+                        }
+                        type="text"
+                      >
+                        {child.reactions.filter((r: any) => r.type === 'dislike').length}
+                      </Button>
+                    </Tooltip>
+                    <Tooltip
+                      title={child.reactions
+                        .filter((r: any) => r.type === 'love')
+                        .map((r: any) => r.user_id.username)
+                        .join(', ')}
+                    >
+                      <Button
+                        onClick={() => onClickReactionComment(child._id, 'love')}
+                        size="small"
+                        icon={
+                          <HeartTwoTone
+                            twoToneColor={
+                              child.reactions.filter((r: any) => r.type === 'love').length > 0
+                                ? '#febd21'
+                                : '#33333'
+                            }
+                          />
+                        }
+                        type="text"
+                      >
+                        {child.reactions.filter((r: any) => r.type === 'love').length}
+                      </Button>
+                    </Tooltip>
+                    <Tooltip
+                      title={child.reactions
+                        .filter((r: any) => r.type === 'laugh')
+                        .map((r: any) => r.user_id.username)
+                        .join(', ')}
+                    >
+                      <Button
+                        onClick={() => onClickReactionComment(child._id, 'laugh')}
+                        size="small"
+                        icon={
+                          <SmileTwoTone
+                            twoToneColor={
+                              child.reactions.filter((r: any) => r.type === 'laugh').length > 0
+                                ? '#febd21'
+                                : '#33333'
+                            }
+                          />
+                        }
+                        type="text"
+                      >
+                        {child.reactions.filter((r: any) => r.type === 'laugh').length}
+                      </Button>
+                    </Tooltip>
+                    <Tooltip
+                      title={child.reactions
+                        .filter((r: any) => r.type === 'angry')
+                        .map((r: any) => r.user_id.username)
+                        .join(', ')}
+                    >
+                      <Button
+                        onClick={() => onClickReactionComment(child._id, 'angry')}
+                        size="small"
+                        icon={
+                          <MehTwoTone
+                            twoToneColor={
+                              child.reactions.filter((r: any) => r.type === 'angry').length > 0
+                                ? '#febd21'
+                                : '#33333'
+                            }
+                          />
+                        }
+                        type="text"
+                      >
+                        {child.reactions.filter((r: any) => r.type === 'angry').length}
+                      </Button>
+                    </Tooltip>
+                    <Tooltip
+                      title={child.reactions
+                        .filter((r: any) => r.type === 'sad')
+                        .map((r: any) => r.user_id.username)
+                        .join(', ')}
+                    >
+                      <Button
+                        onClick={() => onClickReactionComment(child._id, 'sad')}
+                        size="small"
+                        icon={
+                          <FrownTwoTone
+                            twoToneColor={
+                              child.reactions.filter((r: any) => r.type === 'sad').length > 0
+                                ? '#febd21'
+                                : '#33333'
+                            }
+                          />
+                        }
+                        type="text"
+                      >
+                        {child.reactions.filter((r: any) => r.type === 'sad').length}
+                      </Button>
+                    </Tooltip>
+                  </Flex>
+
+                  <Button
+                    size="small"
+                    type="text"
+                    onClick={() => {
+                      setReplyId(child._id);
+                    }}
+                  >
+                    Reply
+                  </Button>
+                </Flex>
+              </div>
+            ))}
           </div>
         ))}
       </div>
 
-      <ProForm
-        onFinish={async (values: any) => {
-          await commentTask(taskId, values.content);
-          getTaskDetail();
-        }}
-        submitter={{
-          resetButtonProps: {
-            disabled: true,
-            hidden: true,
-          },
-          render: (props, dom) => {
-            return (
-              <Button type="primary" icon={<CommentOutlined />} onClick={props.submit}>
-                Add Comment
-              </Button>
-            );
-          },
-        }}
-      >
-        <ProFormTextArea
-          name="content"
-          label="Comment"
-          rules={[
-            {
-              required: true,
-              message: 'Please input your comment!',
-            },
-          ]}
-        />
-      </ProForm>
-      {/* <Button type="default" icon={<CommentOutlined />}>
-        Add Comment
-      </Button> */}
+      {isComment && (
+        <div>
+          <ReactQuill
+            theme="snow"
+            value={comment}
+            onChange={setComment}
+            style={{ height: 200, maxHeight: 200, marginBottom: 60 }}
+            modules={{
+              toolbar: [
+                [{ header: '1' }, { header: '2' }, { font: [] }],
+                [{ size: [] }],
+                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+                ['link', 'image', 'video'],
+                ['clean'],
+              ],
+            }}
+          />
+
+          <Button
+            type="primary"
+            icon={<CommentOutlined />}
+            onClick={async () => {
+              if (replyId) {
+                await onClickReplyComment();
+              } else {
+                await onClickAddComment();
+              }
+              setComment('');
+              setIsComment(false);
+            }}
+          >
+            Add Comment
+          </Button>
+        </div>
+      )}
+      {replyId && (
+        <div>
+          <ReactQuill
+            theme="snow"
+            value={comment}
+            onChange={setComment}
+            style={{ height: 200, maxHeight: 200, marginBottom: 60 }}
+            modules={{
+              toolbar: [
+                [{ header: '1' }, { header: '2' }, { font: [] }],
+                [{ size: [] }],
+                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+                ['link', 'image', 'video'],
+                ['clean'],
+              ],
+            }}
+          />
+
+          <Button
+            type="primary"
+            icon={<CommentOutlined />}
+            onClick={async () => {
+              if (replyId) {
+                await onClickReplyComment();
+              } else {
+                await onClickAddComment();
+              }
+              setComment('');
+              setIsComment(false);
+            }}
+          >
+            Add Comment
+          </Button>
+        </div>
+      )}
+      {!isComment && (
+        <Button
+          type="primary"
+          onClick={() => {
+            setIsComment(true);
+            setReplyId(null);
+          }}
+        >
+          Add Comment
+        </Button>
+      )}
     </Drawer>
   );
 };

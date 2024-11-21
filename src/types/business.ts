@@ -1,4 +1,5 @@
 export interface IBusiness {
+  code: string;
   _id?: string;
   name: string;
   industry: string;

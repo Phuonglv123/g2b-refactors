@@ -37,3 +37,12 @@ export const commentTask = async (id: string, content: string) => {
     },
   });
 };
+
+export const updateStatusTask = async (id: string, status: any) => {
+  return await request(`/api/v1/task/update/status/${id}`, {
+    method: 'PUT',
+    data: {
+      status,
+    },
+  });
+};

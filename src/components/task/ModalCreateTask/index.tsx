@@ -5,14 +5,17 @@ import { listUser } from '@/services/user';
 import { ITask } from '@/types/task';
 import {
   ModalForm,
+  ProForm,
   ProFormDatePicker,
+  ProFormDependency,
   ProFormDigit,
   ProFormSelect,
   ProFormText,
-  ProFormTextArea,
 } from '@ant-design/pro-components';
 import { Button, Divider, Tag, message } from 'antd';
 import dayjs from 'dayjs';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 type ModalCreateTaskProps = {
   onLoad?: any;
@@ -105,172 +108,7 @@ const ModalCreateTask = ({ onLoad }: ModalCreateTaskProps) => {
           },
         ]}
       />
-      <ProFormSelect
-        mode="multiple"
-        name="areas"
-        label="Areas"
-        showSearch
-        rules={[
-          {
-            required: true,
-            message: 'Please select the areas',
-          },
-        ]}
-        options={[
-          {
-            label: 'Indoor',
-            value: 'indoor',
-          },
-          {
-            label: 'Outdoor',
-            value: 'outdoor',
-          },
-          {
-            label: 'Intersection',
-            value: 'intersection',
-          },
-          {
-            label: 'Roundabout',
-            value: 'roundabout',
-          },
-          {
-            label: 'Industrial Area',
-            value: 'industrial_area',
-          },
-          {
-            label: 'Shopping Mall',
-            value: 'shopping_mall',
-          },
-          {
-            label: 'School',
-            value: 'school',
-          },
-          {
-            label: 'Airport',
-            value: 'airport',
-          },
-          {
-            label: 'Highway',
-            value: 'highway',
-          },
-          {
-            label: 'Route',
-            value: 'route',
-          },
-          {
-            label: 'City Center',
-            value: 'city_center',
-          },
-          {
-            label: 'Hospital',
-            value: 'hospital',
-          },
-          {
-            label: 'Metro/Subways',
-            value: 'metro_subways',
-          },
-          {
-            label: 'Park',
-            value: 'park',
-          },
-          {
-            label: 'Supermarket',
-            value: 'supermarket',
-          },
-          {
-            label: 'Metro/Train/Bus Station',
-            value: 'metro_train_bus_station',
-          },
-          {
-            label: 'Office Building',
-            value: 'office_building',
-          },
-          {
-            label: 'Residents',
-            value: 'residents',
-          },
-          {
-            label: 'Market Billboard',
-            value: 'market_billboard',
-          },
-          {
-            label: 'Others',
-            value: 'others',
-          },
-        ]}
-      />
-      <ProFormSelect
-        name="currency"
-        label="Currency"
-        options={[
-          {
-            label: 'USD',
-            value: 'USD',
-          },
-          {
-            label: 'VND',
-            value: 'VND',
-          },
-          {
-            label: 'EUR',
-            value: 'EUR',
-          },
-          {
-            label: 'GBP',
-            value: 'GBP',
-          },
-          {
-            label: 'CAD',
-            value: 'CAD',
-          },
-          {
-            label: 'CNY',
-            value: 'CNY',
-          },
-          {
-            label: 'HKD',
-            value: 'HKD',
-          },
-          {
-            label: 'IDR',
-            value: 'IDR',
-          },
-          {
-            label: 'JPY',
-            value: 'JPY',
-          },
-          {
-            label: 'SGD',
-            value: 'SGD',
-          },
-          {
-            label: 'INR',
-            value: 'INR',
-          },
-          {
-            label: 'THB',
-            value: 'THB',
-          },
-          {
-            label: 'KRW',
-            value: 'KRW',
-          },
-          {
-            label: 'MYR',
-            value: 'MYR',
-          },
-        ]}
-      />
-      <ProFormDigit
-        name="estimated_budget"
-        label="Estimated budget"
-        rules={[
-          {
-            required: true,
-            message: 'Please enter the estimated budget',
-          },
-        ]}
-      />
+
       <ProFormSelect
         name="status"
         label="Status"
@@ -315,49 +153,255 @@ const ModalCreateTask = ({ onLoad }: ModalCreateTaskProps) => {
           },
         ]}
       />
-      <ProFormTextArea name="description" label="Description" />
-      <ProFormSelect
-        name="product_id"
-        label="Product"
-        showSearch
-        rules={[
-          {
-            required: true,
-            message: 'Please select the product',
-          },
-        ]}
-        mode="multiple"
-        request={async ({ keyWords }) => {
-          return await listProducts({
-            status: 1,
-            page: 1,
-            size: 10,
-            product_code: keyWords,
-          }).then((response) => {
-            return response.data.map((product: any) => {
-              return { label: product.product_name, value: product._id };
-            });
-          });
+      <ProFormDependency name={['type']}>
+        {({ type }) => {
+          if (type === 'brief' || type === 'target') {
+            return (
+              <>
+                <ProFormSelect
+                  mode="multiple"
+                  name="areas"
+                  label="Areas"
+                  showSearch
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please select the areas',
+                    },
+                  ]}
+                  options={[
+                    {
+                      label: 'Indoor',
+                      value: 'indoor',
+                    },
+                    {
+                      label: 'Outdoor',
+                      value: 'outdoor',
+                    },
+                    {
+                      label: 'Intersection',
+                      value: 'intersection',
+                    },
+                    {
+                      label: 'Roundabout',
+                      value: 'roundabout',
+                    },
+                    {
+                      label: 'Industrial Area',
+                      value: 'industrial_area',
+                    },
+                    {
+                      label: 'Shopping Mall',
+                      value: 'shopping_mall',
+                    },
+                    {
+                      label: 'School',
+                      value: 'school',
+                    },
+                    {
+                      label: 'Airport',
+                      value: 'airport',
+                    },
+                    {
+                      label: 'Highway',
+                      value: 'highway',
+                    },
+                    {
+                      label: 'Route',
+                      value: 'route',
+                    },
+                    {
+                      label: 'City Center',
+                      value: 'city_center',
+                    },
+                    {
+                      label: 'Hospital',
+                      value: 'hospital',
+                    },
+                    {
+                      label: 'Metro/Subways',
+                      value: 'metro_subways',
+                    },
+                    {
+                      label: 'Park',
+                      value: 'park',
+                    },
+                    {
+                      label: 'Supermarket',
+                      value: 'supermarket',
+                    },
+                    {
+                      label: 'Metro/Train/Bus Station',
+                      value: 'metro_train_bus_station',
+                    },
+                    {
+                      label: 'Office Building',
+                      value: 'office_building',
+                    },
+                    {
+                      label: 'Residents',
+                      value: 'residents',
+                    },
+                    {
+                      label: 'Market Billboard',
+                      value: 'market_billboard',
+                    },
+                    {
+                      label: 'Others',
+                      value: 'others',
+                    },
+                  ]}
+                />
+                <ProFormSelect
+                  name="currency"
+                  label="Currency"
+                  options={[
+                    {
+                      label: 'USD',
+                      value: 'USD',
+                    },
+                    {
+                      label: 'VND',
+                      value: 'VND',
+                    },
+                    {
+                      label: 'EUR',
+                      value: 'EUR',
+                    },
+                    {
+                      label: 'GBP',
+                      value: 'GBP',
+                    },
+                    {
+                      label: 'CAD',
+                      value: 'CAD',
+                    },
+                    {
+                      label: 'CNY',
+                      value: 'CNY',
+                    },
+                    {
+                      label: 'HKD',
+                      value: 'HKD',
+                    },
+                    {
+                      label: 'IDR',
+                      value: 'IDR',
+                    },
+                    {
+                      label: 'JPY',
+                      value: 'JPY',
+                    },
+                    {
+                      label: 'SGD',
+                      value: 'SGD',
+                    },
+                    {
+                      label: 'INR',
+                      value: 'INR',
+                    },
+                    {
+                      label: 'THB',
+                      value: 'THB',
+                    },
+                    {
+                      label: 'KRW',
+                      value: 'KRW',
+                    },
+                    {
+                      label: 'MYR',
+                      value: 'MYR',
+                    },
+                  ]}
+                />
+                <ProFormDigit
+                  name="estimated_budget"
+                  label="Estimated budget"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please enter the estimated budget',
+                    },
+                  ]}
+                />
+                <ProFormSelect
+                  name="product_id"
+                  label="Product"
+                  showSearch
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please select the product',
+                    },
+                  ]}
+                  mode="multiple"
+                  request={async ({ keyWords }) => {
+                    return await listProducts({
+                      status: 1,
+                      page: 1,
+                      size: 10,
+                      product_code: keyWords,
+                    }).then((response) => {
+                      return response.data.map((product: any) => {
+                        return { label: product.product_name, value: product._id };
+                      });
+                    });
+                  }}
+                />
+                <ProFormSelect
+                  name="business_id"
+                  label="Business"
+                  showSearch
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please select the business',
+                    },
+                  ]}
+                  request={async () => {
+                    return await getBusiness({}).then((response) => {
+                      return response.data.map((business: any) => {
+                        return { label: business.name, value: business._id };
+                      });
+                    });
+                  }}
+                />
+              </>
+            );
+          }
         }}
-      />
-      <ProFormSelect
-        name="business_id"
-        label="Business"
-        showSearch
-        rules={[
-          {
-            required: true,
-            message: 'Please select the business',
-          },
-        ]}
-        request={async () => {
-          return await getBusiness({}).then((response) => {
-            return response.data.map((business: any) => {
-              return { label: business.name, value: business._id };
-            });
-          });
-        }}
-      />
+      </ProFormDependency>
+      <div style={{ height: 340 }}>
+        <Divider plain orientation="left">
+          <strong>Description</strong>
+        </Divider>
+        <ProForm.Item
+          name="description"
+          label="Description"
+          rules={[
+            {
+              required: true,
+              message: 'Please enter the description',
+            },
+          ]}
+        >
+          <ReactQuill
+            theme="snow"
+            style={{ height: 200 }} // Adjusted height for approximately 5 rows
+            modules={{
+              toolbar: [
+                [{ header: '1' }, { header: '2' }, { font: [] }],
+                [{ size: [] }],
+                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+                ['link', 'image', 'video'],
+                ['clean'],
+              ],
+            }}
+          />
+        </ProForm.Item>
+      </div>
+
       <Divider plain orientation="left">
         <strong>More Options</strong>
       </Divider>
@@ -406,7 +450,6 @@ const ModalCreateTask = ({ onLoad }: ModalCreateTaskProps) => {
           });
         }}
       />
-      <ProFormTextArea name="note" label="Note" />
     </ModalForm>
   );
 };

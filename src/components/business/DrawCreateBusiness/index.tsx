@@ -1,8 +1,9 @@
 import { createBusiness, updatedBusiness } from '@/services/business';
 import { IBusiness } from '@/types/business';
 import { EditOutlined } from '@ant-design/icons';
-import { DrawerForm, ProFormSelect, ProFormText } from '@ant-design/pro-components';
+import { DrawerForm, ProForm, ProFormSelect, ProFormText } from '@ant-design/pro-components';
 import { Button, message } from 'antd';
+import dayjs from 'dayjs';
 type DrawCreateBusinessProps = {
   type: 'create' | 'update';
   data?: IBusiness;
@@ -10,10 +11,15 @@ type DrawCreateBusinessProps = {
 };
 
 const DrawCreateBusiness = ({ type, data, onLoad }: DrawCreateBusinessProps) => {
+  const [form] = ProForm.useForm();
+
   const onFinish = async (values: IBusiness) => {
     try {
-      await createBusiness(values);
+      const payload: any = { ...values, code: values.code || dayjs().unix() };
+      await createBusiness(payload);
       message.success('Create business successfully');
+      onLoad();
+      form.resetFields();
       return true;
     } catch (error: any) {
       const errorCode = error.data.errorCode;
@@ -44,13 +50,24 @@ const DrawCreateBusiness = ({ type, data, onLoad }: DrawCreateBusinessProps) => 
         type === 'create' ? (
           <Button type="primary">Create</Button>
         ) : (
-          <Button icon={<EditOutlined />} />
+          <Button size="small" icon={<EditOutlined />} />
         )
       }
       onFinish={type === 'create' ? onFinish : onUpdate}
       initialValues={data}
+      form={form}
     >
-      <ProFormText name={'name'} label={'Name Company'} />
+      <ProFormText name={'code'} label={'Code'} />
+      <ProFormText
+        name={'name'}
+        label={'Name Company'}
+        rules={[
+          {
+            required: true,
+            message: 'Please enter the company name',
+          },
+        ]}
+      />
       <ProFormSelect
         label={'Industry'}
         name={'industry'}
