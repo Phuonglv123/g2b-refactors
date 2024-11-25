@@ -6,6 +6,10 @@ const Footer: React.FC = () => {
     <DefaultFooter
       style={{
         background: 'none',
+        padding: 0,
+        margin: 0,
+        paddingBlock: 0,
+        marginBlock: 0,
       }}
       links={[
         {

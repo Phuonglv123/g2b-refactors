@@ -7,12 +7,13 @@ import {
   ModalForm,
   ProForm,
   ProFormDatePicker,
+  ProFormDateTimePicker,
   ProFormDependency,
   ProFormDigit,
   ProFormSelect,
   ProFormText,
 } from '@ant-design/pro-components';
-import { Button, Divider, Tag, message } from 'antd';
+import { Button, Divider, message } from 'antd';
 import dayjs from 'dayjs';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -109,7 +110,7 @@ const ModalCreateTask = ({ onLoad }: ModalCreateTaskProps) => {
         ]}
       />
 
-      <ProFormSelect
+      {/* <ProFormSelect
         name="status"
         label="Status"
         options={[
@@ -122,8 +123,8 @@ const ModalCreateTask = ({ onLoad }: ModalCreateTaskProps) => {
           { label: 'Consider', value: 'consider' },
           { label: 'No Response', value: 'no_response' },
         ]}
-      />
-      <ProFormSelect
+      /> */}
+      {/* <ProFormSelect
         name="state"
         label="State"
         options={[
@@ -152,10 +153,10 @@ const ModalCreateTask = ({ onLoad }: ModalCreateTaskProps) => {
             value: 'won',
           },
         ]}
-      />
+      /> */}
       <ProFormDependency name={['type']}>
         {({ type }) => {
-          if (type === 'brief' || type === 'target') {
+          if (type === 'brief' || type === 'target' || type === 'project') {
             return (
               <>
                 <ProFormSelect
@@ -405,7 +406,16 @@ const ModalCreateTask = ({ onLoad }: ModalCreateTaskProps) => {
       <Divider plain orientation="left">
         <strong>More Options</strong>
       </Divider>
-      <ProFormDatePicker name="deadline" label="Deadline" />
+      <ProFormDatePicker
+        name="deadline"
+        label="Deadline"
+        rules={[
+          {
+            required: true,
+            message: 'Please enter the deadline',
+          },
+        ]}
+      />
       <ProFormSelect
         name="priority"
         label="Priority"
@@ -424,15 +434,16 @@ const ModalCreateTask = ({ onLoad }: ModalCreateTaskProps) => {
           },
         ]}
       />
-      <ProFormDigit name="estimated_time" label="Estimated Time" />
-      <ProFormDigit name="actual_time" label="Actual Time" />
-      <ProFormDigit name="completed_time" label="Completed Time" />
+      <ProFormDateTimePicker name="estimated_time" label="Estimated Time" />
+      <ProFormDateTimePicker name="actual_time" label="Actual Time" />
+      <ProFormDateTimePicker name="completed_time" label="Completed Time" />
       <ProFormDatePicker name="completed_date" label="Completed Date" />
       <ProFormSelect
         name="assigned_to"
         label="Assigned To"
-        request={async () => {
-          return await listUser({}).then((response) => {
+        showSearch
+        request={async ({ keyWords }) => {
+          return await listUser({ username: keyWords }).then((response) => {
             return response.data.map((user: any) => {
               return { label: user.username, value: user._id };
             });

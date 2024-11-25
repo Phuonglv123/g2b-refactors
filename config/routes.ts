@@ -126,7 +126,7 @@ export default [
   {
     path: '/maps',
     key: 'maps',
-    name: 'Maps',
+    name: 'maps',
     icon: 'GlobalOutlined',
     routes: [
       {

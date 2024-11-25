@@ -1,10 +1,12 @@
 import { Tag } from 'antd';
+import { useState } from 'react';
 
 interface StatusTaskProps {
   value: string;
 }
 
 const StatusTask: React.FC<StatusTaskProps> = ({ value }) => {
+  const [isUpdate, setIsUpdate] = useState(false);
   const renderStatus = () => {
     switch (value) {
       case 'called':
@@ -23,6 +25,10 @@ const StatusTask: React.FC<StatusTaskProps> = ({ value }) => {
         return <Tag color="geekblue">Consider</Tag>;
       case 'no_response':
         return <Tag color="magenta">No Response</Tag>;
+      case 'approve':
+        return <Tag color="green">Approve</Tag>;
+      case 'rejected':
+        return <Tag color="red">Rejected</Tag>;
       default:
         return 'No Status';
     }

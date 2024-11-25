@@ -3,7 +3,7 @@ import { request } from '@umijs/max';
 export const getTasks = async (params: any) => {
   return await request('/api/v1/task/get', {
     method: 'GET',
-    data: params,
+    params: params,
   });
 };
 
@@ -20,7 +20,7 @@ export const createTask = async (params: any) => {
   });
 };
 
-export const updateStateTask = async (id: string, state: any) => {
+export const updateStateTask = async (id?: string, state?: any) => {
   return await request(`/api/v1/task/update/state/${id}`, {
     method: 'PUT',
     data: {
@@ -44,5 +44,12 @@ export const updateStatusTask = async (id: string, status: any) => {
     data: {
       status,
     },
+  });
+};
+
+export const updateTask = async (id: string, params: any) => {
+  return await request(`/api/v1/task/update/${id}`, {
+    method: 'PUT',
+    data: params,
   });
 };

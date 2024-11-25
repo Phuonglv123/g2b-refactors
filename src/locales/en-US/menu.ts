@@ -50,6 +50,8 @@ export default {
   'menu.tasks': 'Tasks',
   'menu.business': 'Customers',
 
+  'menu.maps': 'Maps',
+
   'menu.products': 'Products',
   'menu.products.create': 'Create Product',
   'menu.products.update': 'Update Product',

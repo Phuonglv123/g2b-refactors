@@ -57,8 +57,8 @@ const Map = () => {
         // Create the marker
         new mapboxgl.Marker({ element: customMarker })
           .setLngLat([
-            parseFloat(product.location?.longitude),
-            parseFloat(product.location?.latitude),
+            parseFloat(product.location?.longitude.toString().trim()) || 0,
+            parseFloat(product.location?.latitude.toString().trim()) || 0,
           ])
           .addTo(mapRef.current);
 

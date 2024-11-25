@@ -13,11 +13,23 @@ import {
 } from '@ant-design/icons';
 import { history } from '@umijs/max';
 import { Avatar, Button, Col, Collapse, Divider, Drawer, Flex, Row, Tooltip } from 'antd';
-import { useEffect, useState } from 'react';
+
+import { Mention } from 'react-mentions';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+
+import { useEffect, useState } from 'react';
 import PriorityTask from '../PriorityTask';
 import StatusTask from '../StatusTask';
+
+const atValues = [
+  { id: 1, value: 'Fredrik Sundqvist' },
+  { id: 2, value: 'Patrik Sjölin' },
+];
+const hashValues = [
+  { id: 3, value: 'Fredrik Sundqvist 2' },
+  { id: 4, value: 'Patrik Sjölin 2' },
+];
 
 type DetailTaskProps = {
   visible: boolean;
@@ -83,6 +95,10 @@ const DetailTask = ({ visible, onClose }: DetailTaskProps) => {
     }
   }, [taskId]);
   console.log(task);
+
+  const modules = {
+    toolbar: [['link', 'image']],
+  };
 
   return (
     <Drawer
@@ -496,23 +512,41 @@ const DetailTask = ({ visible, onClose }: DetailTaskProps) => {
         ))}
       </div>
 
-      {isComment && (
+      <div>
+        <ReactQuill
+          theme="snow"
+          value={comment}
+          onChange={setComment}
+          style={{ height: 200, maxHeight: 200, marginBottom: 60 }}
+          modules={modules}
+        >
+          <Mention trigger="@" data={[{ id: '1', display: 'John Doe' }]} />
+        </ReactQuill>
+
+        <Button
+          type="primary"
+          icon={<CommentOutlined />}
+          onClick={async () => {
+            if (replyId) {
+              await onClickReplyComment();
+            } else {
+              await onClickAddComment();
+            }
+            setComment('');
+            setIsComment(false);
+          }}
+        >
+          Add Comment
+        </Button>
+      </div>
+      {/* {replyId && (
         <div>
           <ReactQuill
             theme="snow"
             value={comment}
             onChange={setComment}
             style={{ height: 200, maxHeight: 200, marginBottom: 60 }}
-            modules={{
-              toolbar: [
-                [{ header: '1' }, { header: '2' }, { font: [] }],
-                [{ size: [] }],
-                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-                ['link', 'image', 'video'],
-                ['clean'],
-              ],
-            }}
+            modules={modules}
           />
 
           <Button
@@ -531,43 +565,7 @@ const DetailTask = ({ visible, onClose }: DetailTaskProps) => {
             Add Comment
           </Button>
         </div>
-      )}
-      {replyId && (
-        <div>
-          <ReactQuill
-            theme="snow"
-            value={comment}
-            onChange={setComment}
-            style={{ height: 200, maxHeight: 200, marginBottom: 60 }}
-            modules={{
-              toolbar: [
-                [{ header: '1' }, { header: '2' }, { font: [] }],
-                [{ size: [] }],
-                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-                ['link', 'image', 'video'],
-                ['clean'],
-              ],
-            }}
-          />
-
-          <Button
-            type="primary"
-            icon={<CommentOutlined />}
-            onClick={async () => {
-              if (replyId) {
-                await onClickReplyComment();
-              } else {
-                await onClickAddComment();
-              }
-              setComment('');
-              setIsComment(false);
-            }}
-          >
-            Add Comment
-          </Button>
-        </div>
-      )}
+      )} */}
       {!isComment && (
         <Button
           type="primary"
