@@ -232,8 +232,11 @@ const PageTaskDetail: React.FC = () => {
                     <Typography.Text strong>Assigned to:</Typography.Text>
                     <Select
                       options={userSuggestions}
-                      value={data?.assigned_to?._id}
+                      value={data?.assigned_to?.map((user: any) => user._id)}
+                      mode="multiple"
+                      showSearch
                       onChange={onUpdateAssignTo}
+                      style={{ width: 200 }}
                     />
                   </Flex>
                   <Flex gap={8} justify="space-between">

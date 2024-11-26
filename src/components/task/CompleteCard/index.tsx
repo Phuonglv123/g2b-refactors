@@ -30,8 +30,8 @@ const CompletedCard = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
           </Flex>
         </Col>
         <Col span={3}>
-          <Tooltip title={task.assigned_to?.username}>
-            <Avatar src={getSrcImg(task?.assigned_to?.avatar)} icon={<UserOutlined />} />
+          <Tooltip title={task.assigned_to[0]?.username}>
+            <Avatar src={getSrcImg(task?.assigned_to[0]?.avatar)} icon={<UserOutlined />} />
           </Tooltip>
         </Col>
       </Row>
