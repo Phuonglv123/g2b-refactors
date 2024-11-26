@@ -1,6 +1,6 @@
 import { getBusiness } from '@/services/business';
 import { listProducts } from '@/services/products';
-import { createTask } from '@/services/task';
+import { createTask, updateTask } from '@/services/task';
 import { listUser } from '@/services/user';
 import { ITask } from '@/types/task';
 import {
@@ -20,9 +20,11 @@ import 'react-quill/dist/quill.snow.css';
 
 type ModalCreateTaskProps = {
   onLoad?: any;
+  initValue?: any;
+  type?: 'create' | 'update';
 };
 
-const ModalCreateTask = ({ onLoad }: ModalCreateTaskProps) => {
+const ModalCreateTask = ({ onLoad, initValue, type }: ModalCreateTaskProps) => {
   const onFinish = async (values: any) => {
     try {
       const payload = {
@@ -41,12 +43,35 @@ const ModalCreateTask = ({ onLoad }: ModalCreateTaskProps) => {
       return false;
     }
   };
+  const onUpdate = async (values: any) => {
+    try {
+      const payload: any = {
+        ...values,
+        assigned_to: values.assigned_to || null,
+        assigned_by: values.assigned_by || null,
+      };
+
+      const response = await updateTask(initValue?._id, payload);
+      console.log(response);
+      if (response.errorCode === 0) {
+        message.success('Update task successfully');
+        onLoad();
+        return true;
+      }
+    } catch (error) {
+    } finally {
+      onLoad();
+      return true;
+    }
+  };
   return (
     <ModalForm<ITask>
-      trigger={<Button type="primary">New Task</Button>}
+      trigger={
+        type !== 'update' ? <Button type="primary">Create Task</Button> : <div>Update Task</div>
+      }
       //@ts-ignore
       size="md"
-      onFinish={onFinish}
+      onFinish={type !== 'update' ? onFinish : onUpdate}
       layout="horizontal"
       title="Create New Task"
       labelCol={{ span: 4 }}
@@ -61,10 +86,13 @@ const ModalCreateTask = ({ onLoad }: ModalCreateTaskProps) => {
         },
       }}
       initialValues={{
+        ...initValue,
         status: 'called',
         state: 'todo',
-        priority: 'medium',
-        type: 'task',
+        priority: initValue?.priority || 'medium',
+        type: initValue?.type || 'task',
+        assigned_to: initValue?.assigned_to?._id || '',
+        assigned_by: initValue?.assigned_by?._id || '',
       }}
     >
       <Divider plain orientation="left">
@@ -110,50 +138,6 @@ const ModalCreateTask = ({ onLoad }: ModalCreateTaskProps) => {
         ]}
       />
 
-      {/* <ProFormSelect
-        name="status"
-        label="Status"
-        options={[
-          { label: 'Called', value: 'called' },
-          { label: 'Quote Sent', value: 'quote_sent' },
-          { label: 'Negotiate', value: 'negotiate' },
-          { label: 'Win', value: 'win' },
-          { label: 'Not Contacted', value: 'not_contacted' },
-          { label: 'Messaged', value: 'messaged' },
-          { label: 'Consider', value: 'consider' },
-          { label: 'No Response', value: 'no_response' },
-        ]}
-      /> */}
-      {/* <ProFormSelect
-        name="state"
-        label="State"
-        options={[
-          {
-            label: <Tag color="default">Todo</Tag>,
-            value: 'todo',
-          },
-          {
-            label: 'In Progress',
-            value: 'in_progress',
-          },
-          {
-            label: 'Approve',
-            value: 'approve',
-          },
-          {
-            label: 'Completed',
-            value: 'completed',
-          },
-          {
-            label: 'Follow',
-            value: 'follow',
-          },
-          {
-            label: 'Won',
-            value: 'won',
-          },
-        ]}
-      /> */}
       <ProFormDependency name={['type']}>
         {({ type }) => {
           if (type === 'brief' || type === 'target' || type === 'project') {
@@ -315,16 +299,7 @@ const ModalCreateTask = ({ onLoad }: ModalCreateTaskProps) => {
                     },
                   ]}
                 />
-                <ProFormDigit
-                  name="estimated_budget"
-                  label="Estimated budget"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Please enter the estimated budget',
-                    },
-                  ]}
-                />
+                <ProFormDigit name="estimated_budget" label="Estimated budget" />
                 <ProFormSelect
                   name="product_id"
                   label="Product"
