@@ -1,10 +1,10 @@
-import { updateStateTask } from '@/services/task';
+import { deleteTask, updateStateTask } from '@/services/task';
 import { ITask } from '@/types/task';
 import { getSrcImg } from '@/utils';
 import { CommentOutlined, DownOutlined, UserOutlined } from '@ant-design/icons';
 import { ProCard } from '@ant-design/pro-components';
 import { history, useModel } from '@umijs/max';
-import { Avatar, Col, Dropdown, Flex, Row, Space, Tooltip } from 'antd';
+import { Avatar, Col, Dropdown, Flex, Row, Space, Tooltip, message } from 'antd';
 import DrawerDetailTask from '../DrawerDetailTask';
 import ModalCreateTask from '../ModalCreateTask';
 import PriorityTask from '../PriorityTask';
@@ -13,8 +13,27 @@ import TypeTask from '../TypeTask';
 
 const ToDoCard = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
   const { initialState } = useModel('@@initialState');
+
+  const onDeleteTask = async (id?: string) => {
+    if (!id) return;
+    try {
+      await deleteTask(id);
+      message.success('Delete task successfully');
+      onLoad();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <ProCard key={task._id} bordered size="small">
+    <ProCard
+      key={task._id}
+      bordered
+      size="small"
+      // bodyStyle={{
+      //   backgroundColor: '#dba41f1f',
+      // }}
+    >
       <Row justify={'space-between'} align={'top'}>
         <Col span={21}>
           <Flex align="flex-start" justify="start">
@@ -93,9 +112,7 @@ const ToDoCard = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
                   {
                     label: 'Delete',
                     key: 'delete',
-                    onClick: async () => {
-                      //   await updateStateTask(task._id, 'delete');
-                    },
+                    onClick: async () => onDeleteTask(task._id),
                   },
                 ],
               }}

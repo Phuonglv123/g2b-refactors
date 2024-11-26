@@ -17,12 +17,12 @@ export interface ITask {
   product_id: string[];
   business_id: string;
   comments: string[];
-  deadline: Date;
+  deadline: string;
   priority: 'low' | 'medium' | 'high';
-  estimated_time: number;
-  actual_time: number;
-  completed_time: number;
-  completed_date: Date;
+  estimated_time: string;
+  actual_time: string;
+  completed_time: string;
+  completed_date: string;
   assigned_to: any;
   assigned_by: any;
   created_by: any;
@@ -34,7 +34,7 @@ export interface ITask {
   type_ad: string[];
   customer_source: string;
   avatar: string;
-  reminder: Date;
+  reminder: string;
   updateBy: any;
 }
 
