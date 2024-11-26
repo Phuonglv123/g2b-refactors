@@ -150,7 +150,9 @@ const DrawerDetailTask = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
       </Flex>
       <Flex justify="space-between">
         <div>Assigned to: </div>
-        <DisplayUser user={data?.assigned_to} />
+        {data?.assigned_to.map((user: any) => (
+          <DisplayUser key={user._id} user={user} />
+        ))}
       </Flex>
       <Divider orientation="left">Description</Divider>
       <div dangerouslySetInnerHTML={{ __html: task.description }}></div>

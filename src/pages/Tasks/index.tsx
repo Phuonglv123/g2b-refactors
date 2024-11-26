@@ -173,7 +173,9 @@ const TaskPage: React.FC = () => {
                           draggableId={task._id}
                           index={index}
                           isDragDisabled={
-                            task.assigned_to?._id === initialState?.currentUser?._id ? false : true
+                            !task.assigned_to
+                              ?.map((user: any) => user._id)
+                              .includes(initialState?.currentUser?._id)
                           }
                         >
                           {(provided) => (
@@ -225,7 +227,9 @@ const TaskPage: React.FC = () => {
                           draggableId={task._id}
                           index={index}
                           isDragDisabled={
-                            task.assigned_to?._id === initialState?.currentUser?._id ? false : true
+                            !task.assigned_to
+                              ?.map((user: any) => user._id)
+                              .includes(initialState?.currentUser?._id)
                           }
                         >
                           {(provided) => (
@@ -274,7 +278,9 @@ const TaskPage: React.FC = () => {
                           draggableId={task._id}
                           index={index}
                           isDragDisabled={
-                            task.assigned_to?._id === initialState?.currentUser?._id ? false : true
+                            !task.assigned_to
+                              ?.map((user: any) => user._id)
+                              .includes(initialState?.currentUser?._id)
                           }
                         >
                           {(provided) => (
@@ -323,7 +329,9 @@ const TaskPage: React.FC = () => {
                           draggableId={task._id}
                           index={index}
                           isDragDisabled={
-                            task.assigned_to?._id === initialState?.currentUser?._id ? false : true
+                            !task.assigned_to
+                              ?.map((user: any) => user._id)
+                              .includes(initialState?.currentUser?._id)
                           }
                         >
                           {(provided) => (
