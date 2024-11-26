@@ -6,6 +6,7 @@ import { ProCard } from '@ant-design/pro-components';
 import { history, useModel } from '@umijs/max';
 import { Avatar, Col, Dropdown, Flex, Row, Space, Tooltip } from 'antd';
 import DrawerDetailTask from '../DrawerDetailTask';
+import ModalCreateTask from '../ModalCreateTask';
 import PriorityTask from '../PriorityTask';
 import StatusTask from '../StatusTask';
 import TypeTask from '../TypeTask';
@@ -82,6 +83,12 @@ const ToDoCard = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
                     onClick: () => {
                       history.push(`/tasks/${task._id}`);
                     },
+                  },
+                  {
+                    label: (
+                      <ModalCreateTask initValue={task} type="update" onLoad={() => onLoad()} />
+                    ),
+                    key: 'edit',
                   },
                   {
                     label: 'Delete',

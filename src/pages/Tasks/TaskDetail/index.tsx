@@ -14,6 +14,7 @@ import {
   Row,
   Select,
   Space,
+  Tag,
   Typography,
 } from 'antd';
 import ReactQuill from 'react-quill';
@@ -24,6 +25,7 @@ import CommentEditor from '@/components/task/CommentEditor';
 import ShowCommentTask from '@/components/task/ShowCommentTask';
 import DisplayUser from '@/components/user/DisplayUser';
 import { listUser } from '@/services/user';
+import { formatNumberVietnamese } from '@/utils';
 import { CommentOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
@@ -90,9 +92,9 @@ const PageTaskDetail: React.FC = () => {
             </Space>
           </Flex>
         }
-        bodyStyle={{
-          maxHeight: 'calc(100vh - 200px)',
-        }}
+        // bodyStyle={{
+        //   maxHeight: 'calc(100vh - 200px)',
+        // }}
       >
         <Row gutter={24}>
           <Col span={10} style={{ width: '100%' }}>
@@ -106,10 +108,36 @@ const PageTaskDetail: React.FC = () => {
                     <Typography.Text strong>Code:</Typography.Text>
                     <Typography.Text strong>{data?.code}</Typography.Text>
                   </Flex>
-                  {/* <Flex gap={8} justify="space-between">
-                    <Typography.Text strong>Type:</Typography.Text>
-                    <TypeTask value={data?.type} />
-                  </Flex> */}
+                  <Flex gap={8} justify="space-between">
+                    <Typography.Text strong>Product:</Typography.Text>
+                    <div>
+                      {data?.product_id?.map((product: any) => (
+                        <Tag key={product._id}>{product.product_name}</Tag>
+                      ))}
+                    </div>
+                  </Flex>
+                  <Flex gap={8} justify="space-between">
+                    <Typography.Text strong>Customer:</Typography.Text>
+                    <Tag>{data?.business_id?.name}</Tag>
+                  </Flex>
+                  <Flex gap={8} justify="space-between">
+                    <Typography.Text strong>Areas:</Typography.Text>
+                    <div>
+                      {data?.areas?.map((area: any) => (
+                        <Tag key={area}>{area}</Tag>
+                      ))}
+                    </div>
+                  </Flex>
+                  <Flex gap={8} justify="space-between">
+                    <Typography.Text strong>Currency:</Typography.Text>
+                    <Typography.Text strong>{data?.currency}</Typography.Text>
+                  </Flex>
+                  <Flex gap={8} justify="space-between">
+                    <Typography.Text strong>Estimated budget :</Typography.Text>
+                    <Typography.Text strong>
+                      {formatNumberVietnamese(data?.estimated_budget)}
+                    </Typography.Text>
+                  </Flex>
                   <Flex gap={8} justify="space-between">
                     <Typography.Text strong>Status:</Typography.Text>
                     <Select
