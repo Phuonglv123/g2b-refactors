@@ -53,6 +53,7 @@ const CompletedCard = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
           <div style={{ display: 'flex', gap: 4 }}>
             {task.comments?.length} <CommentOutlined />
           </div>
+
           <div>
             <Dropdown
               menu={{

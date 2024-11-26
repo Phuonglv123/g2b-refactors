@@ -172,12 +172,9 @@ const TaskPage: React.FC = () => {
                           key={task._id}
                           draggableId={task._id}
                           index={index}
-                          // isDragDisabled={
-                          //   task.assigned_to?._id === initialState?.currentUser?._id &&
-                          //   task.status !== 'no_response'
-                          //     ? false
-                          //     : true
-                          // }
+                          isDragDisabled={
+                            task.assigned_to?._id === initialState?.currentUser?._id ? false : true
+                          }
                         >
                           {(provided) => (
                             <div
@@ -227,12 +224,9 @@ const TaskPage: React.FC = () => {
                           key={task._id}
                           draggableId={task._id}
                           index={index}
-                          // isDragDisabled={
-                          //   task.assigned_to?._id === initialState?.currentUser?._id &&
-                          //   task.status !== 'no_response'
-                          //     ? false
-                          //     : true
-                          // }
+                          isDragDisabled={
+                            task.assigned_to?._id === initialState?.currentUser?._id ? false : true
+                          }
                         >
                           {(provided) => (
                             <div
@@ -279,12 +273,9 @@ const TaskPage: React.FC = () => {
                           key={task._id}
                           draggableId={task._id}
                           index={index}
-                          // isDragDisabled={
-                          //   task.assigned_to?._id === initialState?.currentUser?._id &&
-                          //   task.status !== 'no_response'
-                          //     ? false
-                          //     : true
-                          // }
+                          isDragDisabled={
+                            task.assigned_to?._id === initialState?.currentUser?._id ? false : true
+                          }
                         >
                           {(provided) => (
                             <div
@@ -331,12 +322,9 @@ const TaskPage: React.FC = () => {
                           key={task._id}
                           draggableId={task._id}
                           index={index}
-                          // isDragDisabled={
-                          //   task.assigned_to?._id === initialState?.currentUser?._id &&
-                          //   task.status !== 'no_response'
-                          //     ? false
-                          //     : true
-                          // }
+                          isDragDisabled={
+                            task.assigned_to?._id === initialState?.currentUser?._id ? false : true
+                          }
                         >
                           {(provided) => (
                             <div

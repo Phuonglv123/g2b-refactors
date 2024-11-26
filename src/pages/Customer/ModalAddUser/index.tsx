@@ -1,4 +1,5 @@
 import { registerUser, updateAvatar, updateRoleUser } from '@/services/user';
+import { getSrcImg } from '@/utils';
 import { EditOutlined, UserOutlined } from '@ant-design/icons';
 import {
   ModalForm,
@@ -42,7 +43,7 @@ const ModalAddUser = ({ onLoad, type, initValue }: ModalAddUserProps) => {
       setLoading(false);
     }
   };
-
+  console.log(initValue);
   const handleUpdate = async (values: any) => {
     console.log(values);
     setLoading(true);
@@ -76,7 +77,17 @@ const ModalAddUser = ({ onLoad, type, initValue }: ModalAddUserProps) => {
       width={400}
       onFinish={type === 'edit' ? handleUpdate : handleFinish}
       loading={loading}
-      initialValues={initValue}
+      initialValues={{
+        ...initValue,
+        avatar: [
+          {
+            uid: initValue?._id,
+            name: initValue?.avatar,
+            status: 'done',
+            url: getSrcImg(initValue?.avatar),
+          },
+        ],
+      }}
       trigger={
         type === 'add' ? (
           <Button key="3" type="primary">

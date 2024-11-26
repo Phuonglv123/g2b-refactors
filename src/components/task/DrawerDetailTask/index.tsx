@@ -37,7 +37,9 @@ const DrawerDetailTask = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
       width={600}
       trigger={
         <div className={styles.titelDraw}>
-          {data.name?.toString().toUpperCase().substring(0, 30) + '...'}
+          {data.name?.toString().length > 40
+            ? data.name?.toString().toUpperCase().substring(0, 40) + '...'
+            : data.name?.toString().toUpperCase()}
         </div>
       }
       title={data.name?.toString().toUpperCase()}

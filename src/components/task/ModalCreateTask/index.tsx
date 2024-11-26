@@ -311,14 +311,15 @@ const ModalCreateTask = ({ onLoad, initValue, type }: ModalCreateTaskProps) => {
                     },
                   ]}
                   mode="multiple"
-                  request={async ({ keyWords }) => {
+                  request={async () => {
                     return await listProducts({
                       status: 1,
                       page: 1,
-                      size: 10,
-                      product_code: keyWords,
-                    }).then((response) => {
-                      return response.data.map((product: any) => {
+                      size: 1000,
+                      //product_code: keyWords,
+                    }).then(async (response) => {
+                      console.log(response);
+                      return await response.data.map((product: any) => {
                         return { label: product.product_name, value: product._id };
                       });
                     });
@@ -326,7 +327,7 @@ const ModalCreateTask = ({ onLoad, initValue, type }: ModalCreateTaskProps) => {
                 />
                 <ProFormSelect
                   name="business_id"
-                  label="Business"
+                  label="Customer"
                   showSearch
                   rules={[
                     {
@@ -351,16 +352,7 @@ const ModalCreateTask = ({ onLoad, initValue, type }: ModalCreateTaskProps) => {
         <Divider plain orientation="left">
           <strong>Description</strong>
         </Divider>
-        <ProForm.Item
-          name="description"
-          label="Description"
-          rules={[
-            {
-              required: true,
-              message: 'Please enter the description',
-            },
-          ]}
-        >
+        <ProForm.Item name="description" label="Description">
           <ReactQuill
             theme="snow"
             style={{ height: 200 }} // Adjusted height for approximately 5 rows
@@ -381,7 +373,7 @@ const ModalCreateTask = ({ onLoad, initValue, type }: ModalCreateTaskProps) => {
       <Divider plain orientation="left">
         <strong>More Options</strong>
       </Divider>
-      <ProFormDatePicker
+      <ProFormDateTimePicker
         name="deadline"
         label="Deadline"
         rules={[
@@ -417,6 +409,7 @@ const ModalCreateTask = ({ onLoad, initValue, type }: ModalCreateTaskProps) => {
         name="assigned_to"
         label="Assigned To"
         showSearch
+        mode="multiple"
         request={async ({ keyWords }) => {
           return await listUser({ username: keyWords }).then((response) => {
             return response.data.map((user: any) => {

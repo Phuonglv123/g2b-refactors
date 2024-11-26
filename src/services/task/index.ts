@@ -53,3 +53,18 @@ export const updateTask = async (id: string, params: any) => {
     data: params,
   });
 };
+
+export const reminderTask = async (id: string, reminder: string) => {
+  return await request(`/api/v1/task/reminder/${id}`, {
+    method: 'PUT',
+    data: {
+      reminder,
+    },
+  });
+};
+
+export const deleteTask = async (id: string) => {
+  return await request(`/api/v1/task/delete/${id}`, {
+    method: 'DELETE',
+  });
+};

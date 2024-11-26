@@ -166,10 +166,66 @@ const DrawCreateBusiness = ({ type, data, onLoad }: DrawCreateBusinessProps) => 
       <ProFormText label="Hotline" name={'hotline'} />
       <ProFormText label="Email" name={'email'} />
       <ProFormText label="Website" name={'website'} />
-
-      <ProFormText label="Group" name={'group'} />
-      <ProFormText label="Source" name={'source'} />
-      <ProFormText label="Estimated budget" name={'estimated_budget'} />
+      <ProFormSelect
+        label="Group"
+        name={'group'}
+        options={[
+          {
+            value: 'Potential customer',
+            label: 'Potential customer',
+          },
+          {
+            value: 'Current customer',
+            label: 'Current customer',
+          },
+          {
+            value: 'Former customer',
+            label: 'Former customer',
+          },
+          {
+            value: 'Others',
+            label: 'Others',
+          },
+        ]}
+      />
+      <ProFormSelect
+        label="Source"
+        name={'source'}
+        options={[
+          {
+            value: 'Social media',
+            label: 'Social media',
+          },
+          {
+            value: 'Email Marketing',
+            label: 'Email Marketing',
+          },
+          {
+            value: 'Organic search',
+            label: 'Organic search',
+          },
+          {
+            value: 'Advertising',
+            label: 'Advertising',
+          },
+          {
+            value: 'Introduction',
+            label: 'Introduction',
+          },
+          {
+            value: 'Hotline',
+            label: 'Hotline',
+          },
+          {
+            value: 'Offline source',
+            label: 'Offline source',
+          },
+          {
+            value: 'Cold call',
+            label: 'Cold call',
+          },
+        ]}
+      />
       <ProFormText label="Note" name={'note'} />
       <ProFormSelect
         label="Status"

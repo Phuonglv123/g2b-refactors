@@ -1,10 +1,22 @@
-import { updateStateTask } from '@/services/task';
+import { reminderTask, updateStateTask } from '@/services/task';
 import { ITask } from '@/types/task';
 import { getSrcImg } from '@/utils';
-import { CommentOutlined, DownOutlined, UserOutlined } from '@ant-design/icons';
+import { BellOutlined, CommentOutlined, DownOutlined, UserOutlined } from '@ant-design/icons';
 import { ProCard } from '@ant-design/pro-components';
 import { history, useModel } from '@umijs/max';
-import { Avatar, Col, Dropdown, Flex, Row, Space, Tooltip } from 'antd';
+import {
+  Avatar,
+  Button,
+  Col,
+  DatePicker,
+  Dropdown,
+  Flex,
+  Modal,
+  Row,
+  Space,
+  Tooltip,
+  message,
+} from 'antd';
 import dayjs from 'dayjs';
 import DrawerDetailTask from '../DrawerDetailTask';
 import PriorityTask from '../PriorityTask';
@@ -13,6 +25,46 @@ import TypeTask from '../TypeTask';
 
 const FollowCard = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
   const { initialState } = useModel('@@initialState');
+
+  const onRemindTask = async () => {
+    let dateRemind: any = null;
+    Modal.confirm({
+      title: 'Remind task',
+      content: (
+        <div>
+          <div>
+            Are you sure you want to remind this task? <br />
+          </div>
+          <div>
+            Please select the date and time you want to remind <br />
+          </div>
+          <DatePicker
+            showTime
+            //defaultValue={dateRemind}
+            disabledDate={(current) => {
+              return current && current < dayjs().endOf('day');
+            }}
+            onChange={(e) => {
+              dateRemind = dayjs(e).format('YYYY-MM-DD HH:mm:ss');
+            }}
+            style={{ width: '100%' }}
+          />
+        </div>
+      ),
+      onOk: async () => {
+        console.log(dateRemind);
+        if (task._id && dateRemind) {
+          try {
+            await reminderTask(task?._id, dateRemind);
+            message.success('Remind task successfully');
+            onLoad();
+          } catch (error) {
+            message.error('Remind task failed');
+          }
+        }
+      },
+    });
+  };
 
   return (
     <ProCard
@@ -46,6 +98,21 @@ const FollowCard = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
           <div>Status: </div>
           <StatusTask value={task.status} />
         </Flex>
+        <Flex justify="space-between">
+          <div>Remind: </div>
+          {task.reminder ? (
+            <div>{task?.reminder}</div>
+          ) : (
+            <Button
+              size="small"
+              type="primary"
+              icon={<BellOutlined />}
+              onClick={() => onRemindTask()}
+            >
+              Remind
+            </Button>
+          )}
+        </Flex>
       </Space>
 
       <div>
@@ -54,6 +121,7 @@ const FollowCard = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
           <div style={{ display: 'flex', gap: 4 }}>
             {task.comments?.length} <CommentOutlined />
           </div>
+
           <div>
             <Dropdown
               menu={{
