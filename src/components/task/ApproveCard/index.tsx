@@ -1,3 +1,4 @@
+import access from '@/access';
 import { updateStateTask, updateStatusTask } from '@/services/task';
 import { ITask } from '@/types/task';
 import { getSrcImg } from '@/utils';
@@ -12,6 +13,7 @@ import TypeTask from '../TypeTask';
 
 const ApproveCard = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
   const { initialState } = useModel('@@initialState');
+  const { canApprove } = access(initialState);
 
   const onUpdatedStatus = async (status: string) => {
     try {
@@ -64,7 +66,7 @@ const ApproveCard = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
           <div style={{ display: 'flex', gap: 4 }}>
             {task.comments?.length} <CommentOutlined />
           </div>
-          {task.state === 'approve' && (
+          {task.state === 'approve' && canApprove && (
             <Space>
               <Button
                 size="small"
