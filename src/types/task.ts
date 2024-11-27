@@ -36,6 +36,10 @@ export interface ITask {
   avatar: string;
   reminder: string;
   updateBy: any;
+  createdAt: string;
+  updatedAt: string;
+  approved_by: any;
+  approved_status: string;
 }
 
 export enum TaskState {

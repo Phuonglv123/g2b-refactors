@@ -1,11 +1,11 @@
 import access from '@/access';
 import DisplayUser from '@/components/user/DisplayUser';
-import { getTask, updateStatusTask } from '@/services/task';
+import { updateStatusTask } from '@/services/task';
 import { ITask } from '@/types/task';
 import { formatDate } from '@/utils';
 import { CommentOutlined } from '@ant-design/icons';
 import { DrawerForm } from '@ant-design/pro-components';
-import { useModel, useRequest } from '@umijs/max';
+import { useModel } from '@umijs/max';
 import { Button, Divider, Flex, Select, Space, Typography } from 'antd';
 import { useState } from 'react';
 import CommentEditor from '../CommentEditor';
@@ -20,14 +20,9 @@ const DrawerDetailTask = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
   const { canApprove } = access(initialState);
   const [isComment, setIsComment] = useState(false);
 
-  const { data, loading, refresh } = useRequest(() => getTask(task._id || ''), {
-    initialData: task,
-  });
-
-  if (!data) return null;
+  if (!task) return null;
   return (
     <DrawerForm
-      loading={loading}
       drawerProps={{
         destroyOnClose: true,
         onClose: (e) => {
@@ -37,15 +32,15 @@ const DrawerDetailTask = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
       width={600}
       trigger={
         <div className={styles.titelDraw}>
-          {data.name?.toString().length > 40
-            ? data.name?.toString().toUpperCase().substring(0, 40) + '...'
-            : data.name?.toString().toUpperCase()}
+          {task.name?.toString().length > 40
+            ? task.name?.toString().toUpperCase().substring(0, 40) + '...'
+            : task.name?.toString().toUpperCase()}
         </div>
       }
-      title={data.name?.toString().toUpperCase()}
+      title={task?.name?.toString().toUpperCase()}
       submitter={{
         render: (props, dom) => {
-          if (canApprove && data.state === 'approve') {
+          if (canApprove && task?.state === 'approve') {
             return (
               <Flex gap={24} style={{ width: '100%' }}>
                 <Button key="submit" type="primary" block>
@@ -64,26 +59,26 @@ const DrawerDetailTask = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
       <Space direction="vertical" style={{ width: '100%' }}>
         <Flex justify="space-between">
           <div>Code: </div>
-          <Typography.Text strong>{data?.code}</Typography.Text>
+          <Typography.Text strong>{task?.code}</Typography.Text>
         </Flex>
         <Flex justify="space-between">
           <div>Type: </div>
-          <TypeTask value={data.type} />
+          <TypeTask value={task?.type} />
         </Flex>
         <Flex justify="space-between">
           <div>Priority: </div>
-          <PriorityTask value={data.priority} />
+          <PriorityTask value={task?.priority} />
         </Flex>
         <Flex justify="space-between">
           <div>Status: </div>
           <Select
-            value={data.status}
+            value={task?.status}
             style={{ width: 150 }}
             size="middle"
             onChange={async (value) => {
               try {
-                await updateStatusTask(data._id, value);
-                refresh();
+                await updateStatusTask(task?._id, value);
+                onLoad();
               } catch (error) {}
             }}
             options={[
@@ -137,23 +132,29 @@ const DrawerDetailTask = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
       <Divider orientation="left">Time</Divider>
       <Flex justify="space-between">
         <div>Deadline: </div>
-        <div>{formatDate(data?.deadline)}</div>
+        <div>{formatDate(task?.deadline)}</div>
       </Flex>
       <Flex justify="space-between">
         <div>Estimated time: </div>
-        <div>{data?.estimated_time} hour</div>
+        <div>{task?.estimated_time} hour</div>
       </Flex>
       <Divider orientation="left">People</Divider>
       <Flex justify="space-between">
         <div>Assigned by: </div>
-        {data?.assigned_by && <DisplayUser user={data?.assigned_by} />}
+        {task?.assigned_by && <DisplayUser user={task?.assigned_by} />}
       </Flex>
       <Flex justify="space-between">
         <div>Assigned to: </div>
-        {data?.assigned_to.map((user: any) => (
+        {task?.assigned_to.map((user: any) => (
           <DisplayUser key={user._id} user={user} />
         ))}
       </Flex>
+      {task?.approved_by && (
+        <Flex justify="space-between">
+          <div>Approved by: </div>
+          <DisplayUser user={task?.approved_by} />
+        </Flex>
+      )}
       <Divider orientation="left">Description</Divider>
       <div dangerouslySetInnerHTML={{ __html: task.description }}></div>
       <Space direction="vertical" style={{ width: '100%' }}>
@@ -167,14 +168,14 @@ const DrawerDetailTask = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
             Add Comment
           </Button>
         </Flex>
-        {isComment && task?._id && <CommentEditor taskId={task?._id} onLoad={() => refresh()} />}
+        {isComment && task?._id && <CommentEditor taskId={task?._id} onLoad={() => onLoad()} />}
         <div
           style={{
             maxHeight: 600,
             overflow: 'auto',
           }}
         >
-          <ShowCommentTask comments={data?.comments} refresh={() => refresh()} />
+          <ShowCommentTask comments={task?.comments} refresh={() => onLoad()} />
         </div>
       </Space>
     </DrawerForm>

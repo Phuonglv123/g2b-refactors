@@ -77,88 +77,100 @@ const DrawCreateBusiness = ({ type, data, onLoad }: DrawCreateBusinessProps) => 
             label: 'FMCG',
           },
           {
-            value: 'TMĐT',
-            label: 'TMĐT',
+            value: 'E-commerce',
+            label: 'E-commerce',
           },
           {
             value: 'F&B',
             label: 'F&B',
           },
           {
-            value: 'Tài chính - Ngân hàng',
-            label: 'Tài chính - Ngân hàng',
+            value: 'Finance',
+            label: 'Finance',
           },
           {
-            value: 'Điện tử',
-            label: 'Điện tử',
+            value: 'Banking',
+            label: 'Banking',
           },
           {
-            value: 'Điện lạnh',
-            label: 'Điện lạnh',
+            value: 'Electronics',
+            label: 'Electronics',
           },
           {
-            value: 'Làm đẹp/Chăm sóc sức khỏe',
-            label: 'Làm đẹp/Chăm sóc sức khỏe',
+            value: 'Refrigeration',
+            label: 'Refrigeration',
           },
           {
-            value: 'Bảo hiểm',
-            label: 'Bảo hiểm',
+            value: 'Beauty & Health',
+            label: 'Beauty & Health',
           },
           {
-            value: 'Trang sức',
-            label: 'Trang sức',
+            value: 'Insurance',
+            label: 'Insurance',
           },
           {
-            value: 'Bất động sản',
-            label: 'Bất động sản',
+            value: 'Jewelry',
+            label: 'Jewelry',
           },
           {
-            value: 'Dược phẩm',
-            label: 'Dược phẩm',
+            value: 'Real Estate',
+            label: 'Real Estate',
           },
           {
-            value: 'Mỹ phẩm',
-            label: 'Mỹ phẩm',
+            value: 'Pharmaceuticals',
+            label: 'Pharmaceuticals',
           },
           {
-            value: 'Tín dụng',
-            label: 'Tín dụng',
+            value: 'Cosmetics',
+            label: 'Cosmetics',
           },
           {
-            value: 'Kỹ thuật',
-            label: 'Kỹ thuật',
+            value: 'Credit',
+            label: 'Credit',
           },
           {
-            value: 'Du lịch',
-            label: 'Du lịch',
+            value: 'Technique',
+            label: 'Technique',
           },
           {
-            value: 'Giải trí',
-            label: 'Giải trí',
+            value: 'Tourism',
+            label: 'Tourism',
           },
           {
-            value: 'Giáo dục',
-            label: 'Giáo dục',
+            value: 'Entertainment',
+            label: 'Entertainment',
+          },
+          {
+            value: 'Education',
+            label: 'Education',
           },
           {
             value: 'Game',
             label: 'Game',
           },
           {
-            value: 'Hàng không',
-            label: 'Hàng không',
+            value: 'Air',
+            label: 'Air',
           },
           {
-            value: 'Điện ảnh',
-            label: 'Điện ảnh',
+            value: 'Cinema',
+            label: 'Cinema',
           },
           {
             value: 'Event',
             label: 'Event',
           },
           {
-            value: 'Sản xuất',
-            label: 'Sản xuất',
+            value: 'Manufacture',
+            label: 'Manufacture',
+          },
+          {
+            value: 'Beverage',
+            label: 'Beverage',
+          },
+          {
+            value: 'Agency',
+            label: 'Agency',
           },
         ]}
       />

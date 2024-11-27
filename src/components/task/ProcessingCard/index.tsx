@@ -4,7 +4,7 @@ import { getSrcImg } from '@/utils';
 import { CommentOutlined, DownOutlined, UserOutlined } from '@ant-design/icons';
 import { ProCard } from '@ant-design/pro-components';
 import { history, useModel } from '@umijs/max';
-import { Avatar, Col, Dropdown, Flex, Row, Space, Tooltip } from 'antd';
+import { Avatar, Col, Dropdown, Flex, Row, Space, Tag, Tooltip } from 'antd';
 import dayjs from 'dayjs';
 import DrawerDetailTask from '../DrawerDetailTask';
 import PriorityTask from '../PriorityTask';
@@ -46,6 +46,16 @@ const ProcessingCard = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
           <div>Status: </div>
           <StatusTask value={task.status} />
         </Flex>
+        {task?.approved_status && (
+          <Flex justify="space-between">
+            <div>Approve status: </div>
+            {task?.approved_status === 'approved' ? (
+              <Tag color="success">{task?.approved_status}</Tag>
+            ) : (
+              <Tag color="warning">{task?.approved_status}</Tag>
+            )}
+          </Flex>
+        )}
       </Space>
 
       <div>

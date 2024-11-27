@@ -1,11 +1,16 @@
 import access from '@/access';
-import { updateStateTask, updateStatusTask } from '@/services/task';
+import {
+  updateApprroveTask,
+  updateRejectTask,
+  updateStateTask,
+  updateStatusTask,
+} from '@/services/task';
 import { ITask } from '@/types/task';
 import { getSrcImg } from '@/utils';
 import { CommentOutlined, DownOutlined, UserOutlined } from '@ant-design/icons';
 import { ProCard } from '@ant-design/pro-components';
 import { history, useModel } from '@umijs/max';
-import { Avatar, Button, Col, Dropdown, Flex, Modal, Row, Space, Tooltip } from 'antd';
+import { Avatar, Button, Col, Dropdown, Flex, Modal, Row, Space, Tooltip, message } from 'antd';
 import DrawerDetailTask from '../DrawerDetailTask';
 import PriorityTask from '../PriorityTask';
 import StatusTask from '../StatusTask';
@@ -14,6 +19,42 @@ import TypeTask from '../TypeTask';
 const ApproveCard = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
   const { initialState } = useModel('@@initialState');
   const { canApprove } = access(initialState);
+
+  const onApproveModal = () => {
+    Modal.confirm({
+      title: 'Approve',
+      content: 'Are you sure you want to approve this task?',
+      onOk: async () => {
+        try {
+          await updateApprroveTask(task._id);
+          message.success('Approve task successfully');
+          onLoad();
+        } catch (error) {
+          message.error('Approve task failed');
+        }
+      },
+      okText: 'Yes',
+      cancelText: 'No',
+    });
+  };
+
+  const onRejectModal = () => {
+    Modal.confirm({
+      title: 'Reject',
+      content: 'Are you sure you want to reject this task?',
+      onOk: async () => {
+        try {
+          await updateRejectTask(task._id);
+          message.success('Reject task successfully');
+          onLoad();
+        } catch (error) {
+          message.error('Reject task failed');
+        }
+      },
+      okText: 'Yes',
+      cancelText: 'No',
+    });
+  };
 
   const onUpdatedStatus = async (status: string) => {
     try {
@@ -68,35 +109,10 @@ const ApproveCard = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
           </div>
           {task.state === 'approve' && canApprove && (
             <Space>
-              <Button
-                size="small"
-                type="primary"
-                onClick={() => {
-                  Modal.confirm({
-                    title: 'Approve',
-                    content: 'Are you sure you want to approve this task?',
-                    onOk: () => onUpdatedStatus('approve'),
-                    okText: 'Yes',
-                    cancelText: 'No',
-                  });
-                }}
-              >
+              <Button size="small" type="primary" onClick={() => onApproveModal()}>
                 Approve
               </Button>
-              <Button
-                size="small"
-                type="primary"
-                danger
-                onClick={() => {
-                  Modal.confirm({
-                    title: 'Reject',
-                    content: 'Are you sure you want to reject this task?',
-                    onOk: () => onUpdatedStatus('rejected'),
-                    okText: 'Yes',
-                    cancelText: 'No',
-                  });
-                }}
-              >
+              <Button size="small" type="primary" danger onClick={() => onRejectModal()}>
                 Reject
               </Button>
             </Space>

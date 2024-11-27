@@ -14,6 +14,7 @@ import {
   Modal,
   Row,
   Space,
+  Tag,
   Tooltip,
   message,
 } from 'antd';
@@ -98,6 +99,16 @@ const FollowCard = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
           <div>Status: </div>
           <StatusTask value={task.status} />
         </Flex>
+        {task?.approved_status && (
+          <Flex justify="space-between">
+            <div>Approve status: </div>
+            {task?.approved_status === 'approved' ? (
+              <Tag color="success">{task?.approved_status}</Tag>
+            ) : (
+              <Tag color="warning">{task?.approved_status}</Tag>
+            )}
+          </Flex>
+        )}
         <Flex justify="space-between">
           <div>Remind: </div>
           {task.reminder ? (

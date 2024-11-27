@@ -9,7 +9,7 @@ type DisplayUserProps = {
 
 const DisplayUser = ({ user }: DisplayUserProps) => {
   return (
-    <Space style={{ width: 80 }}>
+    <Space style={{ width: 100 }}>
       <Avatar src={getSrcImg(user?.avatar)} icon={<UserOutlined />} size={25} />
       <Typography.Text strong>{user?.username}</Typography.Text>
     </Space>

@@ -247,6 +247,12 @@ const PageTaskDetail: React.FC = () => {
                     <Typography.Text strong>Created by:</Typography.Text>
                     <DisplayUser user={data?.created_by} />
                   </Flex>
+                  {data?.approved_by && (
+                    <Flex justify="space-between">
+                      <div>Approved by: </div>
+                      <DisplayUser user={data?.approved_by} />
+                    </Flex>
+                  )}
                 </Space>
               </Col>
             </Row>

@@ -383,12 +383,7 @@ const TaskPage: React.FC = () => {
                           key={task._id}
                           draggableId={task._id}
                           index={index}
-                          // isDragDisabled={
-                          //   task.assigned_to?._id === initialState?.currentUser?._id &&
-                          //   task.status !== 'no_response'
-                          //     ? false
-                          //     : true
-                          // }
+                          isDragDisabled={true}
                         >
                           {(provided) => (
                             <div

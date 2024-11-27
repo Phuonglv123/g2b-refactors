@@ -91,7 +91,7 @@ const ModalCreateTask = ({ onLoad, initValue, type }: ModalCreateTaskProps) => {
         state: 'todo',
         priority: initValue?.priority || 'medium',
         type: initValue?.type || 'task',
-        assigned_to: initValue?.assigned_to?._id || '',
+        assigned_to: initValue?.assigned_to?.map((user: any) => user._id) || [],
         assigned_by: initValue?.assigned_by?._id || '',
       }}
     >
@@ -411,7 +411,7 @@ const ModalCreateTask = ({ onLoad, initValue, type }: ModalCreateTaskProps) => {
         showSearch
         mode="multiple"
         request={async ({ keyWords }) => {
-          return await listUser({ username: keyWords }).then((response) => {
+          return await listUser({ username: keyWords, size: 100 }).then((response) => {
             return response.data.map((user: any) => {
               return { label: user.username, value: user._id };
             });

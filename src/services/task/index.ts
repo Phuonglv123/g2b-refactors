@@ -7,7 +7,8 @@ export const getTasks = async (params: any) => {
   });
 };
 
-export const getTask = async (id: string) => {
+export const getTask = async (id?: string) => {
+  if (!id) return;
   return await request(`/api/v1/task/get/${id}`, {
     method: 'GET',
   });
@@ -38,7 +39,8 @@ export const commentTask = async (id: string, content: string) => {
   });
 };
 
-export const updateStatusTask = async (id: string, status: any) => {
+export const updateStatusTask = async (id?: string, status?: any) => {
+  if (!id || !status) return;
   return await request(`/api/v1/task/update/status/${id}`, {
     method: 'PUT',
     data: {
@@ -66,5 +68,19 @@ export const reminderTask = async (id: string, reminder: string) => {
 export const deleteTask = async (id: string) => {
   return await request(`/api/v1/task/delete/${id}`, {
     method: 'DELETE',
+  });
+};
+
+export const updateApprroveTask = async (id?: string) => {
+  if (!id) return;
+  return await request(`/api/v1/task/approve/${id}`, {
+    method: 'PUT',
+  });
+};
+
+export const updateRejectTask = async (id?: string) => {
+  if (!id) return;
+  return await request(`/api/v1/task/reject/${id}`, {
+    method: 'PUT',
   });
 };
