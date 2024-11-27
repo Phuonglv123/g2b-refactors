@@ -221,6 +221,7 @@ const TaskPage: React.FC = () => {
                   >
                     {tasks
                       .filter((task: any) => task.state === 'in_progress')
+                      .sort((a: any, b: any) => a.updatedAt - b.updatedAt)
                       .map((task: any, index: number) => (
                         <Draggable
                           key={task._id}
@@ -272,6 +273,7 @@ const TaskPage: React.FC = () => {
                   >
                     {tasks
                       .filter((task: any) => task.state === 'approve')
+                      .sort((a: any, b: any) => a.updatedAt - b.updatedAt)
                       .map((task: any, index: number) => (
                         <Draggable
                           key={task._id}
@@ -323,6 +325,7 @@ const TaskPage: React.FC = () => {
                   >
                     {tasks
                       .filter((task: any) => task.state === 'follow')
+                      .sort((a: any, b: any) => a.updatedAt - b.updatedAt)
                       .map((task: any, index: number) => (
                         <Draggable
                           key={task._id}
@@ -374,6 +377,7 @@ const TaskPage: React.FC = () => {
                   >
                     {tasks
                       .filter((task: any) => task.state === 'completed')
+                      .sort((a: any, b: any) => a.updatedAt - b.updatedAt)
                       .map((task: any, index: number) => (
                         <Draggable
                           key={task._id}
