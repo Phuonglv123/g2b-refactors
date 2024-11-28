@@ -51,8 +51,9 @@ const ModalAddUser = ({ onLoad, type, initValue }: ModalAddUserProps) => {
       const payload = {
         role: values.role,
       };
-      if (values?.avatar?.length > 0) {
-        await updateAvatar(initValue._id, { image: values.avatar[0].originFileObj });
+      console.log(values.avatar[0]?.originFileObj);
+      if (values.avatar[0]?.originFileObj) {
+        await updateAvatar(initValue._id, { image: values.avatar[0]?.originFileObj });
       }
       const res = await updateRoleUser(initValue._id, payload);
       console.log(res);
