@@ -29,6 +29,10 @@ const StatusTask: React.FC<StatusTaskProps> = ({ value }) => {
         return <Tag color="green">Approve</Tag>;
       case 'rejected':
         return <Tag color="red">Rejected</Tag>;
+      case 'pending':
+        return <Tag color="orange">Pending</Tag>;
+      case 'failed':
+        return <Tag color="red">Failed</Tag>;
       default:
         return 'No Status';
     }

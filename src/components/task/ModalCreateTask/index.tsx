@@ -418,7 +418,7 @@ const ModalCreateTask = ({ onLoad, initValue, type }: ModalCreateTaskProps) => {
           });
         }}
       />
-      <ProFormSelect
+      {/* <ProFormSelect
         name="assigned_by"
         label="Assigned By"
         request={async () => {
@@ -428,7 +428,7 @@ const ModalCreateTask = ({ onLoad, initValue, type }: ModalCreateTaskProps) => {
             });
           });
         }}
-      />
+      /> */}
     </ModalForm>
   );
 };

@@ -1,9 +1,11 @@
 import TabProducts from '@/components/Dashboard/TabProducts';
+import TabTasks from '@/components/Dashboard/TabTasks';
 import TabUsers from '@/components/Dashboard/TabUsers';
 import {
   chartFilterTypeProduct,
   chartProductByCountry,
   chartProductByProvice,
+  chartTaskByUser,
   chartTypeProductByUser,
   chartUserTask,
   staticProduct,
@@ -38,7 +40,7 @@ const Dashboard: React.FC = () => {
   const [chartProductByProvices, setChartProductByProvices] = useState<any>([]);
 
   const [chartUserTasks, setChartUserTasks] = useState<any>([]);
-  const [chartTaskByUser, setChartTaskByUser] = useState<any>([]);
+  const [chartTasksByUser, setChartTasksByUser] = useState<any>([]);
 
   const onRequestGetStatics = async (values: any) => {
     try {
@@ -61,11 +63,13 @@ const Dashboard: React.FC = () => {
       const chartProductByCountrys = await chartProductByCountry();
       const chartProductByProvices = await chartProductByProvice();
       const chartUserTasks = await chartUserTask();
+      const chartUser = await chartTaskByUser();
       setChartTypeProduct(typeProduct);
       setCharts(chart.map((item: any) => ({ ...item, value: item.productCount })));
       setChartProductByCountrys(chartProductByCountrys);
       setChartProductByProvices(chartProductByProvices);
       setChartUserTasks(chartUserTasks);
+      setChartTasksByUser(chartUser);
       console.log(res);
       setStatics(res);
       return true;
@@ -213,6 +217,7 @@ const Dashboard: React.FC = () => {
           {
             key: 'tasks',
             label: 'Tasks',
+            children: <TabTasks charts={chartUserTasks} chartTasksByUser={chartTasksByUser} />,
           },
         ]}
         onChange={(e) => console.log(e)}

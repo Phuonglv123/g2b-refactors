@@ -114,6 +114,15 @@ const DrawerDetailTask = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
                 label: <StatusTask value={'no_response'} />,
                 value: 'no_response',
               },
+
+              {
+                label: <StatusTask value={'pending'} />,
+                value: 'pending',
+              },
+              {
+                label: <StatusTask value={'failed'} />,
+                value: 'failed',
+              },
               {
                 label: <StatusTask value={'approve'} />,
                 value: 'approve',
@@ -136,7 +145,7 @@ const DrawerDetailTask = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
       </Flex>
       <Flex justify="space-between">
         <div>Estimated time: </div>
-        <div>{task?.estimated_time} hour</div>
+        <div>{formatDate(task?.estimated_time)}</div>
       </Flex>
       <Divider orientation="left">People</Divider>
       <Flex justify="space-between">
