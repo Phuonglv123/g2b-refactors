@@ -653,7 +653,7 @@ const ListProductCard = () => {
               key: 'type',
               valueEnum: {
                 LED: { text: 'LED' },
-                BILLBOAD: { text: 'BILLBOARD' },
+                BILLBOARD: { text: 'BILLBOARD' },
                 PANO: { text: 'PANO' },
                 BANNER: { text: 'BANNER' },
                 BANDROLL: { text: 'BANDROLL' },
