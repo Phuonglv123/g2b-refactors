@@ -236,7 +236,7 @@ const ListProductCard = () => {
                             ? item?.production_cost.toString()
                             : '',
                           traffic: `${formatNumberVietnamese(item.traffic)} vehicles/day`,
-                          areas: item.areas || [''],
+                          areas: item.areas.join(',') || '',
                         },
                       };
                     })}

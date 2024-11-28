@@ -34,3 +34,10 @@ export const chartProductByCountry = async (params?: any) => {
     params,
   });
 };
+
+export const chartUserTask = async (params?: any) => {
+  return await request('/api/v1/dashboard/chart/task/user', {
+    method: 'GET',
+    params,
+  });
+};
