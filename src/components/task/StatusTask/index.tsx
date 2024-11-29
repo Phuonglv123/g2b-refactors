@@ -33,6 +33,8 @@ const StatusTask: React.FC<StatusTaskProps> = ({ value }) => {
         return <Tag color="orange">Pending</Tag>;
       case 'failed':
         return <Tag color="red">Failed</Tag>;
+      case 'working':
+        return <Tag color="green">Working</Tag>;
       default:
         return 'No Status';
     }

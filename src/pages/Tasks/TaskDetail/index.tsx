@@ -168,6 +168,10 @@ const PageTaskDetail: React.FC = () => {
                           value: 'win',
                         },
                         {
+                          label: <StatusTask value={'working'} />,
+                          value: 'working',
+                        },
+                        {
                           label: <StatusTask value={'pending'} />,
                           value: 'pending',
                         },

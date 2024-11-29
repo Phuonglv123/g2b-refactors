@@ -114,7 +114,10 @@ const DrawerDetailTask = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
                 label: <StatusTask value={'no_response'} />,
                 value: 'no_response',
               },
-
+              {
+                label: <StatusTask value={'working'} />,
+                value: 'working',
+              },
               {
                 label: <StatusTask value={'pending'} />,
                 value: 'pending',
