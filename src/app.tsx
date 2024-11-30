@@ -4,9 +4,11 @@ import type { Settings as LayoutSettings } from '@ant-design/pro-components';
 import { PageLoading } from '@ant-design/pro-components';
 import type { RunTimeLayoutConfig } from '@umijs/max';
 import { history } from '@umijs/max';
+import { Flex } from 'antd';
 import type { RequestOptionsInit } from 'umi-request';
 import defaultSettings from '../config/defaultSettings';
 import LogoOnly from './components/LogoOnly';
+import { NoticeIconView } from './components/RightContent';
 import { errorConfig } from './requestErrorConfig';
 import { queryCurrentUser } from './services/auth';
 import { getSrcImg } from './utils';
@@ -62,9 +64,15 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
         : logoG2b,
       title: <AvatarName />,
       render: (_, avatarChildren) => {
-        return <AvatarDropdown>{avatarChildren}</AvatarDropdown>;
+        return (
+          <Flex gap={24}>
+            <NoticeIconView />
+            <AvatarDropdown>{avatarChildren}</AvatarDropdown>
+          </Flex>
+        );
       },
     },
+
     loading: false,
 
     footerRender: () => <Footer />,

@@ -298,7 +298,7 @@ const ListProductCard = () => {
           dataSource={whitelist.length > 0 ? whitelist : products.data}
           showActions="hover"
           itemLayout="vertical"
-          grid={{ gutter: 16, column: 3 }}
+          grid={{ gutter: 16, column: 3, xs: 1, sm: 1, md: 1, lg: 3, xl: 3, xxl: 3 }}
           renderItem={(item: any, index) => (
             <List.Item>
               <Card
@@ -323,7 +323,7 @@ const ListProductCard = () => {
                             typeOfAd: item?.type,
                             code: item.product_code,
                             nameOfMedia: item.product_name,
-                            city: item.location.city?.split('-')[1],
+                            city: item?.location?.city?.split('-')[1],
                             location: item?.location?.address || '',
                             dimension: `${item.attributes.width}x${
                               item.attributes.height
@@ -532,7 +532,7 @@ const ListProductCard = () => {
                           <Typography.Text>ADDRESS:</Typography.Text>
                         </Col>
                         <Col span={18}>
-                          <Typography.Text> {item.location.address}</Typography.Text>
+                          <Typography.Text> {item?.location?.address}</Typography.Text>
                         </Col>
                       </Row>
                     </div>
@@ -719,12 +719,12 @@ const ListProductCard = () => {
                   <div>
                     <Typography.Text strong>{entity.product_name}</Typography.Text>
                     <br />
-                    <Typography.Text>{entity.product_code}</Typography.Text>
+                    <Typography.Text>{entity?.product_code}</Typography.Text>
                     <br />
-                    <Typography.Text>{entity.location.address}</Typography.Text>
+                    <Typography.Text>{entity?.location?.address}</Typography.Text>
                     <br />
                     <Typography.Text strong>
-                      {entity.currency} {entity.cost}
+                      {entity?.currency} {entity?.cost}
                     </Typography.Text>
                   </div>
                 );

@@ -139,7 +139,7 @@ const Dashboard: React.FC = () => {
       </ProCard>
       <br />
 
-      <StatisticCard.Group direction="row">
+      <StatisticCard.Group direction="row" colSpan={{ sm: 1, md: 1, xl: 4 }}>
         <StatisticCard
           statistic={{
             title: 'Total positions',
