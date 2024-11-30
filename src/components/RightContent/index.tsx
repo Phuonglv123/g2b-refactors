@@ -50,7 +50,7 @@ export const NoticeIconView = () => {
               readNotification(item._id);
             }}
           >
-            {item.title}
+            {item?.is_read ? item.title : <Badge status="warning" text={item.title} />}
           </Link>
         ),
       }))
