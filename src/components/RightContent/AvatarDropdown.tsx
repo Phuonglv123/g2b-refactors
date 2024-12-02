@@ -38,7 +38,7 @@ const useStyles = createStyles(({ token }) => {
   };
 });
 
-const ModalUpdateAvatar = ({ visible }: any) => {
+const ModalUpdateAvatar = ({ visible, onLoad }: any) => {
   return (
     <ModalForm
       open={visible}
@@ -53,6 +53,7 @@ const ModalUpdateAvatar = ({ visible }: any) => {
         await updateAvatarForUser({ image: values.avatar[0]?.originFileObj })
           .then(() => {
             message.success('Update avatar successfully');
+            onLoad();
             return true;
           })
           .catch(() => {
@@ -187,7 +188,13 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu, childre
       >
         {children}
       </HeaderDropdown>
-      <ModalUpdateAvatar visible={visible} />
+      <ModalUpdateAvatar
+        visible={visible}
+        onLoad={() => {
+          setVisible(false);
+          refresh();
+        }}
+      />
     </>
   );
 };

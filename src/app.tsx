@@ -8,7 +8,6 @@ import { Flex } from 'antd';
 import type { RequestOptionsInit } from 'umi-request';
 import defaultSettings from '../config/defaultSettings';
 import LogoOnly from './components/LogoOnly';
-import { NoticeIconView } from './components/RightContent';
 import { errorConfig } from './requestErrorConfig';
 import { queryCurrentUser } from './services/auth';
 import { getSrcImg } from './utils';
@@ -66,7 +65,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
       render: (_, avatarChildren) => {
         return (
           <Flex gap={24}>
-            <NoticeIconView />
+            {/* <NoticeIconView /> */}
             <AvatarDropdown>{avatarChildren}</AvatarDropdown>
           </Flex>
         );
