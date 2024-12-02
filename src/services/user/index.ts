@@ -55,3 +55,12 @@ export const updateAvatar = async (id: string, data: any) => {
     data: formData,
   });
 };
+
+export const updateAvatarForUser = async (data: any) => {
+  const formData = new FormData();
+  formData.append('image', data.image);
+  return await request(`/api/v1/user/me/update/avatar`, {
+    method: 'PUT',
+    data: formData,
+  });
+};
