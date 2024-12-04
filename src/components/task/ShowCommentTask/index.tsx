@@ -10,6 +10,8 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 import { Avatar, Button, Divider, Flex, Image, Space, Tag, Tooltip } from 'antd';
+import { useState } from 'react';
+import CommentEditor from '../CommentEditor';
 
 const renderWithTags = (text: string) => {
   const parts = text.split(/(\@\w+)/); // Split text into mentions and non-mentions
@@ -26,7 +28,23 @@ const renderWithTags = (text: string) => {
   });
 };
 
+const detectLinkInComment = (text: string) => {
+  const parts = text.split(/(https?:\/\/[^\s]+)/); // Split text into links and non-links
+  return parts.map((part: any, index: any) => {
+    if (part.startsWith('https://')) {
+      return (
+        <a key={index} href={part} target="_blank" rel="noreferrer">
+          {part}
+        </a>
+      );
+    }
+    return renderWithTags(part); // Return non-link parts as-is
+  });
+};
+
 const ShowCommentTask = ({ comments, refresh }: { comments: any; refresh: any }) => {
+  const [replyId, setReplyId] = useState('');
+  const [isIndex, setIsIndex] = useState<any>(null);
   const onClickReactionComment = async (id: string, type: string) => {
     try {
       await reactionComment(id, { type });
@@ -49,7 +67,7 @@ const ShowCommentTask = ({ comments, refresh }: { comments: any; refresh: any })
 
   return (
     <div>
-      {comments?.map((comment: any) => (
+      {comments?.map((comment: any, index: number) => (
         <div key={comment._id}>
           <Flex align="center" justify="space-between">
             <Flex gap={4} align="center">
@@ -62,18 +80,17 @@ const ShowCommentTask = ({ comments, refresh }: { comments: any; refresh: any })
               <strong>{formatDate(comment.createdAt)}</strong>
             </div>
           </Flex>
-          {/* <div
-            className="custom-img"
-            style={{ margin: 10 }}
-            dangerouslySetInnerHTML={{ __html: comment.content }}
-          /> */}
-          <div style={{ marginTop: 8 }}>{renderWithTags(comment.content)}</div>
+
+          <div style={{ marginTop: 8 }}>{detectLinkInComment(comment.content)}</div>
           <br />
           <Space>
             {comment.attachments?.map((attachment: any) => (
               <Image key={attachment} src={getSrcImg(attachment)} width={50} height={50} />
             ))}
           </Space>
+          {replyId && index === isIndex && (
+            <CommentEditor taskId={replyId} onLoad={() => refresh()} reply />
+          )}
           <Flex gap={6} justify="space-between">
             <Flex gap={4}>
               <Tooltip
@@ -219,9 +236,10 @@ const ShowCommentTask = ({ comments, refresh }: { comments: any; refresh: any })
             <Button
               size="small"
               type="text"
-              // onClick={() => {
-              //   setReplyId(comment._id);
-              // }}
+              onClick={() => {
+                setReplyId(comment._id);
+                setIsIndex(index);
+              }}
             >
               Reply
             </Button>
@@ -387,7 +405,7 @@ const ShowCommentTask = ({ comments, refresh }: { comments: any; refresh: any })
                   </Tooltip>
                 </Flex>
 
-                <Button
+                {/* <Button
                   size="small"
                   type="text"
                   // onClick={() => {
@@ -395,7 +413,7 @@ const ShowCommentTask = ({ comments, refresh }: { comments: any; refresh: any })
                   // }}
                 >
                   Reply
-                </Button>
+                </Button> */}
               </Flex>
             </div>
           ))}

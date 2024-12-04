@@ -1,5 +1,5 @@
 import logog2b from '@/assets/logo.png';
-import { createComment } from '@/services/comments';
+import { createComment, replyComment } from '@/services/comments';
 import { listUser } from '@/services/user';
 import { getSrcImg } from '@/utils';
 import { FileImageOutlined, SendOutlined, SmileTwoTone } from '@ant-design/icons';
@@ -11,9 +11,10 @@ import { Mention, MentionsInput } from 'react-mentions';
 type CommentEditorProps = {
   taskId: string;
   onLoad: any;
+  reply?: boolean;
 };
 
-const CommentEditor = ({ taskId, onLoad }: CommentEditorProps) => {
+const CommentEditor = ({ taskId, onLoad, reply }: CommentEditorProps) => {
   const [loading, setLoading] = useState(false);
   const [userSuggestions, setUserSuggestions] = useState([]);
   const [value, setValue] = useState('');
@@ -78,6 +79,20 @@ const CommentEditor = ({ taskId, onLoad }: CommentEditorProps) => {
     }
   };
 
+  const onSendReply = async () => {
+    try {
+      setLoading(true);
+      await replyComment(taskId, { content: value, attachments: attachments });
+      setValue('');
+      setAttachments([]);
+      onLoad();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <Row align={'middle'} gutter={24}>
@@ -89,11 +104,11 @@ const CommentEditor = ({ taskId, onLoad }: CommentEditorProps) => {
               placeholder={"What's on your mind?"}
               style={{
                 control: {
-                  fontSize: 16,
+                  fontSize: 13,
                   fontWeight: 'normal',
                   color: 'white',
                   width: '100%',
-                  padding: '6px',
+                  padding: '5px',
                 },
                 highlighter: {
                   overflow: 'hidden',
@@ -103,7 +118,7 @@ const CommentEditor = ({ taskId, onLoad }: CommentEditorProps) => {
                   color: 'white',
                   width: '100%',
                   borderRadius: '8px',
-                  padding: '6px',
+                  padding: '5px',
                 },
                 suggestions: {
                   list: {
@@ -177,14 +192,15 @@ const CommentEditor = ({ taskId, onLoad }: CommentEditorProps) => {
               }}
               showUploadList={false}
             >
-              <Button icon={<FileImageOutlined />} />
+              <Button icon={<FileImageOutlined />} size="small" />
             </Upload>
-            <Button onClick={toggleEmojiPicker} icon={<SmileTwoTone />} />
+            <Button onClick={toggleEmojiPicker} icon={<SmileTwoTone />} size="small" />
             <Button
               type="primary"
               icon={<SendOutlined />}
-              onClick={() => onSendComment()}
+              onClick={() => (reply ? onSendReply() : onSendComment())}
               loading={loading}
+              size="small"
             />
           </Space>
         </Col>

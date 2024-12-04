@@ -151,7 +151,11 @@ const TaskPage: React.FC = () => {
       <DragDropContext onDragEnd={onDragEnd}>
         <Row gutter={8}>
           <Col span={5}>
-            <ProCard title="Todo" bodyStyle={{ padding: 8, height: '75vh', overflow: 'auto' }}>
+            <ProCard
+              title={'Todo'}
+              bodyStyle={{ padding: 8, height: '75vh', overflow: 'auto' }}
+              extra={tasks.filter((task: any) => task.state === 'todo').length + ' items'}
+            >
               <Droppable droppableId="todo" key={'todo'} type="dropZone">
                 {(provided) => (
                   <Space
@@ -205,6 +209,7 @@ const TaskPage: React.FC = () => {
             <ProCard
               title="In progress"
               bodyStyle={{ padding: 8, height: '75vh', overflow: 'auto' }}
+              extra={tasks.filter((task: any) => task.state === 'in_progress').length + ' items'}
             >
               <Droppable droppableId="in_progress" key={'in_progress'} type="dropZone">
                 {(provided) => (
@@ -257,7 +262,11 @@ const TaskPage: React.FC = () => {
             </ProCard>
           </Col>
           <Col span={5}>
-            <ProCard title="Approve" bodyStyle={{ padding: 8, height: '75vh', overflow: 'auto' }}>
+            <ProCard
+              title="Approve"
+              bodyStyle={{ padding: 8, height: '75vh', overflow: 'auto' }}
+              extra={tasks.filter((task: any) => task.state === 'approve').length + ' items'}
+            >
               <Droppable droppableId="approve" key={'approve'} type="dropZone">
                 {(provided) => (
                   <Space
@@ -309,7 +318,11 @@ const TaskPage: React.FC = () => {
             </ProCard>
           </Col>
           <Col span={5}>
-            <ProCard title="Follow" bodyStyle={{ padding: 8, height: '75vh', overflow: 'auto' }}>
+            <ProCard
+              title="Follow"
+              bodyStyle={{ padding: 8, height: '75vh', overflow: 'auto' }}
+              extra={tasks.filter((task: any) => task.state === 'follow').length + ' items'}
+            >
               <Droppable droppableId="follow" key={'follow'} type="dropZone">
                 {(provided) => (
                   <Space
@@ -361,7 +374,11 @@ const TaskPage: React.FC = () => {
             </ProCard>
           </Col>
           <Col span={4}>
-            <ProCard title="Completed" bodyStyle={{ padding: 8, height: '75vh', overflow: 'auto' }}>
+            <ProCard
+              title="Completed"
+              bodyStyle={{ padding: 8, height: '75vh', overflow: 'auto' }}
+              extra={tasks.filter((task: any) => task.state === 'completed').length + ' items'}
+            >
               <Droppable droppableId="completed" key={'completed'} type="dropZone">
                 {(provided) => (
                   <Space

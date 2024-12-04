@@ -9,6 +9,7 @@ import { useModel } from '@umijs/max';
 import { Button, Divider, Flex, Select, Space, Typography } from 'antd';
 import { useState } from 'react';
 import CommentEditor from '../CommentEditor';
+import ModalCreateTask from '../ModalCreateTask';
 import PriorityTask from '../PriorityTask';
 import ShowCommentTask from '../ShowCommentTask';
 import StatusTask from '../StatusTask';
@@ -37,7 +38,12 @@ const DrawerDetailTask = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
             : task.name?.toString().toUpperCase()}
         </div>
       }
-      title={task?.name?.toString().toUpperCase()}
+      title={
+        <Flex justify="space-between">
+          <div>{task?.name?.toString().toUpperCase()}</div>
+          <ModalCreateTask onLoad={onLoad} subTask={task?._id} />
+        </Flex>
+      }
       submitter={{
         render: (props, dom) => {
           if (canApprove && task?.state === 'approve') {

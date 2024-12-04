@@ -21,6 +21,13 @@ export const createTask = async (params: any) => {
   });
 };
 
+export const createSubTask = async (taskId: string, data: any) => {
+  return await request(`/api/v1/task/create/subtask/${taskId}`, {
+    method: 'POST',
+    data: data,
+  });
+};
+
 export const updateStateTask = async (id?: string, state?: any) => {
   return await request(`/api/v1/task/update/state/${id}`, {
     method: 'PUT',
