@@ -65,13 +65,19 @@ const ShowCommentTask = ({ comments, refresh }: { comments: any; refresh: any })
     }
   };
 
+  console.log(comments);
+
   return (
     <div>
       {comments?.map((comment: any, index: number) => (
         <div key={comment._id}>
           <Flex align="center" justify="space-between">
             <Flex gap={4} align="center">
-              <Avatar icon={<UserOutlined />} size="small" />
+              <Avatar
+                src={getSrcImg(comment?.user_id?.avatar)}
+                icon={<UserOutlined />}
+                size="small"
+              />
               <div>
                 <strong>{comment?.user_id?.username}</strong>
               </div>
@@ -249,7 +255,11 @@ const ShowCommentTask = ({ comments, refresh }: { comments: any; refresh: any })
             <div key={child._id} style={{ padding: 20 }}>
               <Flex align="center" justify="space-between">
                 <Flex gap={4} align="center">
-                  <Avatar icon={<UserOutlined />} size="small" />
+                  <Avatar
+                    src={getSrcImg(child?.user_id?.avatar)}
+                    icon={<UserOutlined />}
+                    size="small"
+                  />
                   <div>
                     <strong>{child?.user_id?.username}</strong>
                   </div>
