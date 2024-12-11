@@ -159,7 +159,7 @@ const ModalCreateTask = ({ onLoad, initValue, type, subTask }: ModalCreateTaskPr
 
       <ProFormDependency name={['type']}>
         {({ type }) => {
-          if (type === 'brief' || type === 'target' || type === 'project') {
+          if (type === 'brief' || type === 'project') {
             return (
               <>
                 <ProFormSelect
@@ -356,38 +356,38 @@ const ModalCreateTask = ({ onLoad, initValue, type, subTask }: ModalCreateTaskPr
                     });
                   }}
                 />
+                <ProFormSelect
+                  options={[
+                    { value: 'LED', label: 'LED' },
+                    { value: 'BILLBOARD', label: 'BILLBOARD' },
+                    { value: 'PANO', label: 'Pano' },
+                    { value: 'BANNER', label: 'Banner' },
+                    { value: 'BANDROLL', label: 'Bandroll' },
+                    { value: 'POSM', label: 'POSM' },
+                    { value: 'TRIVISION', label: 'TRIVISION' },
+                    { value: 'LIGHT_BOX', label: 'LIGHT BOX' },
+                    { value: 'LCD_FRAME', label: 'LCD/FRAME' },
+                    { value: 'ROADSHOW', label: 'ROADSHOW' },
+                    { value: 'ACTIVATION', label: 'ACTIVATION' },
+                    { value: 'TRANSIT_AD', label: 'TRANSIT AD' },
+                    { value: 'AIRPORT', label: 'AIRPORT' },
+                    { value: 'METRO_SUBWAY', label: 'METRO/SUBWAY' },
+                    { value: 'TRAIN_STATION', label: 'TRAIN_STATION' },
+                    { value: 'STREET_FURNITURE', label: 'STREET FURNITURE' },
+                    { value: 'CINEMA', label: 'CINEMA' },
+                    { value: 'MARKET BILLBOARD', label: 'MARKET BILLBOARD' },
+                    { value: 'OTHERS', label: 'OTHERS' },
+                  ]}
+                  name="type_ad"
+                  label="Type Ad"
+                  mode="multiple"
+                />
               </>
             );
           }
         }}
       </ProFormDependency>
-      <ProFormSelect
-        options={[
-          { value: 'LED', label: 'LED' },
-          { value: 'BILLBOARD', label: 'BILLBOARD' },
-          { value: 'PANO', label: 'Pano' },
-          { value: 'BANNER', label: 'Banner' },
-          { value: 'BANDROLL', label: 'Bandroll' },
-          { value: 'POSM', label: 'POSM' },
-          { value: 'TRIVISION', label: 'TRIVISION' },
-          { value: 'LIGHT_BOX', label: 'LIGHT BOX' },
-          { value: 'LCD_FRAME', label: 'LCD/FRAME' },
-          { value: 'ROADSHOW', label: 'ROADSHOW' },
-          { value: 'ACTIVATION', label: 'ACTIVATION' },
-          { value: 'TRANSIT_AD', label: 'TRANSIT AD' },
-          { value: 'AIRPORT', label: 'AIRPORT' },
-          { value: 'METRO_SUBWAY', label: 'METRO/SUBWAY' },
-          { value: 'TRAIN_STATION', label: 'TRAIN_STATION' },
-          { value: 'STREET_FURNITURE', label: 'STREET FURNITURE' },
-          { value: 'CINEMA', label: 'CINEMA' },
-          { value: 'MARKET BILLBOARD', label: 'MARKET BILLBOARD' },
-          { value: 'OTHERS', label: 'OTHERS' },
-        ]}
-        name="type_ad"
-        label="Type Ad"
-        width="md"
-        mode="multiple"
-      />
+
       <div style={{ height: 340 }}>
         <Divider plain orientation="left">
           <strong>Description</strong>

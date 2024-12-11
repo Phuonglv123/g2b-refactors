@@ -277,8 +277,9 @@ const ListProductCard = () => {
             searchGutter: 16,
             layout: 'vertical',
             defaultCollapsed: false,
-            span: 3,
+            labelWidth: 'auto',
             searchText: 'Search',
+            //collapsed: t,
           }}
           pagination={{
             pageSize: 6,
