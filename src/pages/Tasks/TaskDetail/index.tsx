@@ -268,6 +268,39 @@ const PageTaskDetail: React.FC = () => {
                 </Space>
               </Col>
             </Row>
+            {data?.subTask?.length > 0 && (
+              <Row>
+                <Col span={24}>
+                  <Space direction="vertical" style={{ width: '100%' }}>
+                    <Divider orientation="left" variant="dashed">
+                      Sub Task
+                    </Divider>
+                    <div>
+                      {data?.subTask.map((subTask: any) => (
+                        <ProCard bordered>
+                          <Space direction="vertical" style={{ width: '100%' }}>
+                            <Flex gap={8} justify="space-between">
+                              <Typography.Text strong>Name:</Typography.Text>
+                              <Typography.Text>{subTask.name}</Typography.Text>
+                            </Flex>
+                            <Flex gap={8} justify="space-between">
+                              <Typography.Text strong>Deadline:</Typography.Text>
+                              <Typography.Text>
+                                {dayjs(subTask.deadline).format('YYYY-MM-DD')}
+                              </Typography.Text>
+                            </Flex>
+                            <Flex gap={8} justify="space-between">
+                              <Typography.Text strong>Status:</Typography.Text>
+                              <StatusTask value={subTask.status} />
+                            </Flex>
+                          </Space>
+                        </ProCard>
+                      ))}
+                    </div>
+                  </Space>
+                </Col>
+              </Row>
+            )}
             <Row>
               <Space direction="vertical" style={{ width: '100%' }}>
                 <Divider orientation="left" variant="dashed">

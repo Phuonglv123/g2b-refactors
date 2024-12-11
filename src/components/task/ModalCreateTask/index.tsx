@@ -81,7 +81,9 @@ const ModalCreateTask = ({ onLoad, initValue, type, subTask }: ModalCreateTaskPr
     <ModalForm<ITask>
       trigger={
         type !== 'update' ? (
-          <Button type="primary">{subTask ? 'Create sub task' : 'Create Task'}</Button>
+          <Button type="primary" size={subTask ? 'small' : 'middle'}>
+            {subTask ? 'Create sub task' : 'Create Task'}
+          </Button>
         ) : (
           <div>Update Task</div>
         )

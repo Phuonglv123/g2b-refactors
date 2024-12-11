@@ -1,0 +1,39 @@
+.TaskDrag {
+    width: calc(100vw/5);
+    .TaskDragCard {
+        background: #141414;
+        border: 1px solid #141414;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        padding: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, .09);
+        cursor: pointer;
+        transition: all .3s;
+        height: 78vh;
+        overflow-y: auto;
+        &:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, .09);
+        }
+    }
+
+    .TaskDragTitle {
+        font-size: 16px;
+        font-weight: bold;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .TaskDrag {
+        width: calc(100vw/1);
+
+        .TaskDragCard {
+            width: calc(100vw/1.2);
+        }
+    }
+    
+}
