@@ -3,7 +3,7 @@ import StatusTask from '@/components/task/StatusTask';
 import TypeTask from '@/components/task/TypeTask';
 import { getTask, updateStatusTask, updateTask } from '@/services/task';
 import { PageContainer, ProCard } from '@ant-design/pro-components';
-import { useParams, useRequest } from '@umijs/max';
+import { Link, useParams, useRequest } from '@umijs/max';
 import {
   Avatar,
   Button,
@@ -49,7 +49,9 @@ const PageTaskDetail: React.FC = () => {
   if (!id) {
     return null;
   }
-  const { error, loading, data, refresh } = useRequest(() => getTask(id));
+  const { error, loading, data, refresh } = useRequest(() => getTask(id), {
+    refreshDeps: [id],
+  });
   const onUpdateDeadline = async (value: any) => {
     try {
       await updateTask(data._id, { deadline: value });
@@ -281,7 +283,7 @@ const PageTaskDetail: React.FC = () => {
                           <Space direction="vertical" style={{ width: '100%' }}>
                             <Flex gap={8} justify="space-between">
                               <Typography.Text strong>Name:</Typography.Text>
-                              <Typography.Text>{subTask.name}</Typography.Text>
+                              <Link to={`/tasks/${subTask?._id}`}>{subTask.name}</Link>
                             </Flex>
                             <Flex gap={8} justify="space-between">
                               <Typography.Text strong>Deadline:</Typography.Text>

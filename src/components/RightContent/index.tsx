@@ -1,7 +1,9 @@
 import { countNotificationsIsRead, getNotifications, readNotification } from '@/services/noti';
-import { BellOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { getSrcImg } from '@/utils';
+import { BellOutlined, QuestionCircleOutlined, UserOutlined } from '@ant-design/icons';
 import { Link, useRequest } from '@umijs/max';
-import { Badge, Button, Dropdown, MenuProps } from 'antd';
+import { Avatar, Badge, Button, Divider, Dropdown, Flex, MenuProps, Space } from 'antd';
+import dayjs from 'dayjs';
 
 export type SiderTheme = 'light' | 'dark';
 
@@ -50,7 +52,21 @@ export const NoticeIconView = () => {
               readNotification(item._id);
             }}
           >
-            {item?.is_read ? item.title : <Badge status="warning" text={item.title} />}
+            <Divider dashed />
+            <div>
+              {item?.is_read ? item.title : <Badge status="warning" text={item.title} />}{' '}
+              <Flex>
+                {item.from && (
+                  <Space>
+                    <div style={{ fontWeight: 'bold' }}>From {item.from?.username}</div>
+                    <Avatar size={24} src={getSrcImg(item.from?.avatar)} icon={<UserOutlined />} />
+                  </Space>
+                )}
+              </Flex>
+            </div>
+            <div style={{ fontSize: 12 }}>
+              Date: {dayjs(item.createdAt).format('MMMM D, YYYY h:mm A')}
+            </div>
           </Link>
         ),
       }))
