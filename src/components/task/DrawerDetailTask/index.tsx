@@ -1,12 +1,12 @@
 import access from '@/access';
 import DisplayUser from '@/components/user/DisplayUser';
-import { updateStatusTask } from '@/services/task';
+import { updateApprroveTask, updateRejectTask, updateStatusTask } from '@/services/task';
 import { ITask } from '@/types/task';
 import { formatDate } from '@/utils';
 import { CommentOutlined } from '@ant-design/icons';
 import { DrawerForm } from '@ant-design/pro-components';
 import { useModel } from '@umijs/max';
-import { Button, Divider, Flex, Select, Space, Typography } from 'antd';
+import { Button, Divider, Flex, Modal, Select, Space, Typography, message } from 'antd';
 import { useState } from 'react';
 import CommentEditor from '../CommentEditor';
 import ModalCreateTask from '../ModalCreateTask';
@@ -20,6 +20,42 @@ const DrawerDetailTask = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
   const { initialState } = useModel('@@initialState');
   const { canApprove } = access(initialState);
   const [isComment, setIsComment] = useState(false);
+
+  const onApproveModal = () => {
+    Modal.confirm({
+      title: 'Approve',
+      content: 'Are you sure you want to approve this task?',
+      onOk: async () => {
+        try {
+          await updateApprroveTask(task._id);
+          message.success('Approve task successfully');
+          onLoad();
+        } catch (error) {
+          message.error('Approve task failed');
+        }
+      },
+      okText: 'Yes',
+      cancelText: 'No',
+    });
+  };
+
+  const onRejectModal = () => {
+    Modal.confirm({
+      title: 'Reject',
+      content: 'Are you sure you want to reject this task?',
+      onOk: async () => {
+        try {
+          await updateRejectTask(task._id);
+          message.success('Reject task successfully');
+          onLoad();
+        } catch (error) {
+          message.error('Reject task failed');
+        }
+      },
+      okText: 'Yes',
+      cancelText: 'No',
+    });
+  };
 
   if (!task) return null;
   return (
@@ -49,10 +85,10 @@ const DrawerDetailTask = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
           if (canApprove && task?.state === 'approve') {
             return (
               <Flex gap={24} style={{ width: '100%' }}>
-                <Button key="submit" type="primary" block>
+                <Button key="submit" type="primary" block onClick={() => onApproveModal()}>
                   Approve
                 </Button>
-                <Button key="submit" type="primary" danger block>
+                <Button key="submit" type="primary" danger block onClick={() => onRejectModal()}>
                   Reject
                 </Button>
               </Flex>
