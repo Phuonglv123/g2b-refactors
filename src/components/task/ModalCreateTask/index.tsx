@@ -445,6 +445,8 @@ const ModalCreateTask = ({ onLoad, initValue, type, subTask }: ModalCreateTaskPr
       <ProFormDateTimePicker name="actual_time" label="Actual Time" />
       <ProFormDateTimePicker name="completed_time" label="Completed Time" />
       <ProFormDatePicker name="completed_date" label="Completed Date" />
+      <ProFormDigit name="quantity" label="Quantity" />
+      <ProFormText name="unit" label="Unit" />
       <ProFormSelect
         name="assigned_to"
         label="Assigned To"

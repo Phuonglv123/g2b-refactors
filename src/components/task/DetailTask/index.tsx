@@ -18,7 +18,7 @@ import { Mention } from 'react-mentions';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import PriorityTask from '../PriorityTask';
 import StatusTask from '../StatusTask';
 
@@ -89,11 +89,11 @@ const DetailTask = ({ visible, onClose }: DetailTaskProps) => {
     }
   };
 
-  useEffect(() => {
-    if (taskId) {
-      getTaskDetail();
-    }
-  }, [taskId]);
+  // useEffect(() => {
+  //   if (taskId) {
+  //     getTaskDetail();
+  //   }
+  // }, [taskId]);
   console.log(task);
 
   const modules = {

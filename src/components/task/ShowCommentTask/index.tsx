@@ -268,11 +268,9 @@ const ShowCommentTask = ({ comments, refresh }: { comments: any; refresh: any })
                   <strong>{formatDate(child.createdAt)}</strong>
                 </div>
               </Flex>
-              <div
-                className="custom-img"
-                style={{ margin: 10 }}
-                dangerouslySetInnerHTML={{ __html: child.content }}
-              />
+              <div className="custom-img" style={{ margin: 10 }}>
+                {detectLinkInComment(child.content)}
+              </div>
               <Flex gap={6} justify="space-between">
                 <Flex gap={4}>
                   <Tooltip

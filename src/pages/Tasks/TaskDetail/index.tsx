@@ -52,6 +52,9 @@ const PageTaskDetail: React.FC = () => {
   const { error, loading, data, refresh } = useRequest(() => getTask(id), {
     refreshDeps: [id],
   });
+
+  console.log(data);
+  console.log('data', error);
   const onUpdateDeadline = async (value: any) => {
     try {
       await updateTask(data._id, { deadline: value });

@@ -33,15 +33,17 @@ export default [
     path: '/tasks',
     name: 'tasks',
     icon: 'desktop',
-    //component: './Tasks',
     access: 'canTask',
+    key: 'tasks',
     routes: [
       {
         path: '/tasks',
         component: './Tasks',
+        key: 'taskss',
       },
       {
-        path: '/tasks/:id',
+        path: '/tasks/detail/:id',
+        key: 'task-detail',
         component: './Tasks/TaskDetail',
       },
     ],

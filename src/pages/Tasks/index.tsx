@@ -1,6 +1,5 @@
 import ApproveCard from '@/components/task/ApproveCard';
 import CompletedCard from '@/components/task/CompleteCard';
-import DetailTask from '@/components/task/DetailTask';
 import FollowCard from '@/components/task/FollowCard';
 import ModalCreateTask from '@/components/task/ModalCreateTask';
 import ProcessingCard from '@/components/task/ProcessingCard';
@@ -9,28 +8,47 @@ import ToDoCard from '@/components/task/ToDoCard';
 import { getTasks, updateStateTask } from '@/services/task';
 import { listUser } from '@/services/user';
 import { PageContainer, ProForm, ProFormSelect, ProFormText } from '@ant-design/pro-components';
-import { useModel } from '@umijs/max';
+import { history, useLocation, useModel } from '@umijs/max';
 import { Flex, Space } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
-import { history } from 'umi';
 import styles from './style.less';
+
+const useQuery = () => {
+  const { search } = useLocation();
+  return new URLSearchParams(search);
+};
 
 const TaskPage: React.FC = () => {
   const [tasks, setTasks] = useState([]);
   const [visible, setVisible] = useState(false);
   const { initialState } = useModel('@@initialState');
+  const query = useQuery();
+  console.log(query.get('status'));
 
   const listingTask = async () => {
     try {
-      const response = await getTasks({});
+      const name = query.get('name');
+      const status = query.get('status');
+      console.log(status);
+      const type = query.get('type');
+      const assigned_to = query.get('assigned_to');
+      const response = await getTasks({ name, status, type, assigned_to });
       setTasks(response.data);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
     listingTask();
-  }, [visible]);
+  }, [
+    visible,
+    query.get('name'),
+    query.get('status'),
+    query.get('type'),
+    query.get('assigned_to'),
+  ]);
 
   const onDragEnd = async (result: any) => {
     const { destination, source, draggableId } = result;
@@ -50,6 +68,21 @@ const TaskPage: React.FC = () => {
     return res?.data.map((user: any) => ({ value: user._id, label: user.username }));
   };
 
+  const onFinish = async (values: any) => {
+    if (values) {
+      const { name, status, type, assigned_to } = values;
+
+      history.push({
+        pathname: '/tasks',
+        search: `?${name && `name=${name}`}${status && `status=${status}`}${
+          type && `type=${type}`
+        }${assigned_to && `assigned_to=${assigned_to}`}`,
+      });
+      const response = await getTasks(values);
+      setTasks(response.data);
+    }
+  };
+
   return (
     <PageContainer title="Manager Tasks" extra={<ModalCreateTask onLoad={() => listingTask()} />}>
       <ProForm
@@ -60,13 +93,10 @@ const TaskPage: React.FC = () => {
           assigned_to: '',
         }}
         layout="vertical"
-        onFinish={async (values) => {
-          console.log(values);
-          const response = await getTasks(values);
-          setTasks(response.data);
-        }}
+        onFinish={onFinish}
         labelCol={{ span: 12 }}
         onReset={() => {
+          history.push('/tasks');
           listingTask();
         }}
         submitter={{
@@ -434,14 +464,14 @@ const TaskPage: React.FC = () => {
           </div>
         </Flex>
       </DragDropContext>
-      <DetailTask
+      {/* <DetailTask
         visible={visible}
         onClose={() => {
           history.push('/tasks');
           getTasks({});
           setVisible(false);
         }}
-      />
+      /> */}
     </PageContainer>
   );
 };

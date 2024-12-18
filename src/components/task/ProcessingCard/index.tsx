@@ -99,7 +99,7 @@ const ProcessingCard = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
                     label: 'Detail',
                     key: 'detail',
                     onClick: () => {
-                      history.push(`/tasks/${task._id}`);
+                      history.push(`/tasks/detail/${task._id}`);
                     },
                   },
                   {
