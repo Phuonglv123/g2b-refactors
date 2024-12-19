@@ -1,0 +1,19 @@
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker-compose build
+
+deploy:
+  stage: deploy
+  image: ubuntu:latest
+  script:
+    - apt-get update
+    - apt-get install -y openssh-client
+    - ssh root@27.71.25.178 "docker-compose down &&  docker-compose up -d"
