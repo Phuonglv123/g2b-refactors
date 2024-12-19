@@ -24,6 +24,5 @@ deploy:
   before_script:
     - apk add --no-cache openssh-client
   script:
-    - echo "$REMOTE_PASSWORD" |  ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose down"
-    - echo "$REMOTE_PASSWORD" |  ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose up -d"
-root@27.71.25.178: Permission denied (publickey,password).
+    - ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose down"
+    - ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose up -d"
