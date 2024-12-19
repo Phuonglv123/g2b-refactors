@@ -6,11 +6,16 @@ build:
   stage: build
   image: alpine
   before_script:
-    - apk add --no-cache openssh-client
-    - echo "$REMOTE_PASSWORD" |  ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "echo 'Connection successful'"
+    - 'command -v ssh-agent >/dev/null || ( apk add --update openssh )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $REMOTE_HOST >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
   script:
-    - echo "$REMOTE_PASSWORD" |  ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && git pull"
-    - echo "$REMOTE_PASSWORD" |  ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose build"
+    - ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && git pull"
+    - ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose build"
 
 deploy:
   stage: deploy
