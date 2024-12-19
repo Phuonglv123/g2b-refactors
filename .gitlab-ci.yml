@@ -6,16 +6,38 @@ build:
   stage: build
   image: alpine
   before_script:
+    # Install OpenSSH client
     - apk add --no-cache openssh-client
+    # Add the private SSH key to the CI environment (replace with your secret variable)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    # Start the SSH agent and add the private key
+    - eval $(ssh-agent -s)
+    - ssh-add ~/.ssh/id_rsa
+    # Add the remote host to known hosts to avoid SSH prompts
+    - ssh-keyscan -H $REMOTE_HOST >> ~/.ssh/known_hosts
   script:
-    - echo "$REMOTE_PASSWORD" |  ssh -v -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && git pull"
-    - echo "$REMOTE_PASSWORD" |  ssh -v -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose build"
+    # Connect to remote server, navigate to the directory, and perform git pull
+    - ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && git pull"
+    # Build the Docker container
+    - ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose build"
 
 deploy:
   stage: deploy
   image: alpine
   before_script:
+    # Install OpenSSH client
     - apk add --no-cache openssh-client
+    # Add the private SSH key to the CI environment (same as build stage)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    # Start the SSH agent and add the private key
+    - eval $(ssh-agent -s)
+    - ssh-add ~/.ssh/id_rsa
+    # Add the remote host to known hosts to avoid SSH prompts
+    - ssh-keyscan -H $REMOTE_HOST >> ~/.ssh/known_hosts
   script:
-    - echo "$REMOTE_PASSWORD" |  ssh -v -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose down"
-    - echo "$REMOTE_PASSWORD" |  ssh -v -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose up -d"
+    # Connect to remote server, stop the running Docker containers
+    - ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose down"
+    # Restart the Docker containers in detached mode
+    - ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose up -d"
