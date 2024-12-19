@@ -34,6 +34,7 @@ deploy:
     - mkdir -p ~/.ssh
     # Add the private SSH key to the CI environment (same as build stage)
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+
     - chmod 600 ~/.ssh/id_rsa
     # Start the SSH agent and add the private key
     - eval $(ssh-agent -s)
