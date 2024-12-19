@@ -6,36 +6,26 @@ build:
   stage: build
   image: alpine
   before_script:
-    # Install OpenSSH client
     - apk add --no-cache openssh-client
-    # Ensure .ssh directory exists
     - mkdir -p ~/.ssh
-    # Add the private SSH key to the CI environment (replace with your secret variable)
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
-    # Add the remote host to known hosts to avoid SSH prompts
+    - chmod 700 ~/.ssh
     - ssh-keyscan -H $REMOTE_HOST >> ~/.ssh/known_hosts
   script:
-    # Connect to remote server, navigate to the directory, and perform git pull using the private key
-    - ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && git pull"
-    # Build the Docker container
-    - ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose build"
+    - ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && git pull"
+    - ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose build"
 
 deploy:
   stage: deploy
   image: alpine
   before_script:
-    # Install OpenSSH client
     - apk add --no-cache openssh-client
-    # Ensure .ssh directory exists
     - mkdir -p ~/.ssh
-    # Add the private SSH key to the CI environment (same as build stage)
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
-    # Add the remote host to known hosts to avoid SSH prompts
+    - chmod 700 ~/.ssh
     - ssh-keyscan -H $REMOTE_HOST >> ~/.ssh/known_hosts
   script:
-    # Connect to remote server, stop the running Docker containers using the private key
-    - ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose down"
-    # Restart the Docker containers in detached mode using the private key
-    - ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose up -d"
+    - ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose down"
+    - ssh -v -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose up -d"
