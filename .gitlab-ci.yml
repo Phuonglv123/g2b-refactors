@@ -8,6 +8,8 @@ build:
   before_script:
     # Install OpenSSH client
     - apk add --no-cache openssh-client
+    # Ensure .ssh directory exists
+    - mkdir -p ~/.ssh
     # Add the private SSH key to the CI environment (replace with your secret variable)
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
@@ -28,6 +30,8 @@ deploy:
   before_script:
     # Install OpenSSH client
     - apk add --no-cache openssh-client
+    # Ensure .ssh directory exists
+    - mkdir -p ~/.ssh
     # Add the private SSH key to the CI environment (same as build stage)
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
