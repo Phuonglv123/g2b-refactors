@@ -23,7 +23,15 @@ deploy:
   stage: deploy
   image: alpine
   before_script:
-    - apk add --no-cache openssh-client
+    - 'command -v ssh-agent >/dev/null || ( apk add --update openssh )'
+    - eval $(ssh-agent -s)
+    # Add the SSH private key to the agent
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    # Ensure GitLab host is in known_hosts to avoid SSH verification prompts
+    - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
   script:
-    - ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose down"
-    - ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose up -d"
+    - ssh -v -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose down"
+    - ssh -v -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose up -d"
