@@ -6,21 +6,13 @@ build:
   stage: build
   image: alpine
   before_script:
-    # Install necessary tools (openssh-client) and start ssh-agent
     - 'command -v ssh-agent >/dev/null || ( apk add --update openssh )'
     - eval $(ssh-agent -s)
-
-    # Add the SSH private key to the ssh-agent
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-
-    # List currently loaded SSH keys for debugging
     - ssh-add -l # This will list the SSH keys loaded in the agent
-
-    # Ensure SSH folder exists with correct permissions
+    - ls -al ~/.ssh # Check the permissions of SSH files
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
-
-    # Add GitLab to known_hosts to avoid interactive SSH prompts
     - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
 
