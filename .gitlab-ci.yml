@@ -6,21 +6,29 @@ build:
   stage: build
   image: alpine
   before_script:
+    # Install necessary tools and start the ssh-agent
     - 'command -v ssh-agent >/dev/null || ( apk add --update openssh )'
     - eval $(ssh-agent -s)
+
+    # Add the SSH private key to the ssh-agent
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+
+    # List the loaded SSH keys to ensure the private key is added
     - ssh-add -l # This will list the SSH keys loaded in the agent
-    - ls -al ~/.ssh # Check the permissions of SSH files
+
+    # Ensure the SSH folder exists with correct permissions
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
+
+    # Add GitLab to known_hosts to avoid SSH prompting for confirmation
     - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
 
-  script:
-    # Test SSH connection to GitLab to ensure the key works
-    - ssh -v -T git@gitlab.com
+    # Test SSH connection to GitLab to verify the key is working
+    - ssh -vT git@gitlab.com # This will provide verbose output for SSH connection debugging
 
-    # Pull the latest code from the repository
+  script:
+    # Pull the latest code from the repository using SSH
     - ssh -v -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && git pull"
 
     # Build the Docker containers using docker-compose
