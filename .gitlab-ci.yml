@@ -7,10 +7,9 @@ build:
   image: alpine
   before_script:
     - apk add --no-cache openssh-client
-    - echo "$REMOTE_PASSWORD" |  ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "echo 'Connection successful'"
   script:
-    - echo "$REMOTE_PASSWORD" |  ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && git pull"
-    - echo "$REMOTE_PASSWORD" |  ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose build"
+    - echo "$REMOTE_PASSWORD" |  ssh -v -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && git pull"
+    - echo "$REMOTE_PASSWORD" |  ssh -v -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose build"
 
 deploy:
   stage: deploy
@@ -18,5 +17,5 @@ deploy:
   before_script:
     - apk add --no-cache openssh-client
   script:
-    - echo "$REMOTE_PASSWORD" |  ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose down"
-    - echo "$REMOTE_PASSWORD" |  ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose up -d"
+    - echo "$REMOTE_PASSWORD" |  ssh -v -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose down"
+    - echo "$REMOTE_PASSWORD" |  ssh -v -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose up -d"
