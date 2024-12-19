@@ -2,32 +2,21 @@ stages:
   - build
   - deploy
 
-variables:
-  DOCKER_HOST: tcp://docker:2375
-  DOCKER_TLS_CERTDIR: ''
-
-services:
-  - docker:dind
-
-before_script:
-  - apk add --no-cache openssh
-  - mkdir -p ~/.ssh
-  # Add the private key
-  - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-  - chmod 600 ~/.ssh/id_rsa
-  # Add the server to known hosts
-  - ssh-keyscan -H root@27.71.25.178 >> ~/.ssh/known_hosts
-
 build:
   stage: build
-  image: docker:latest
+  image: alpine
+  before_script:
+    - apk add --no-cache openssh-client
+    - echo "$REMOTE_PASSWORD" | sshpass ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "echo 'Connection successful'"
   script:
-    - cd g2b-admin && git pull
-    - cd g2b-admin && docker-compose build
+    - echo "$REMOTE_PASSWORD" | sshpass ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && git pull"
+    - echo "$REMOTE_PASSWORD" | sshpass ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose build"
 
 deploy:
   stage: deploy
-  image: docker:latest
+  image: alpine
+  before_script:
+    - apk add --no-cache openssh-client sshpass
   script:
-    - cd g2b-admin && docker-compose down
-    - cd g2b-admin && docker-compose up -d
+    - echo "$REMOTE_PASSWORD" | sshpass ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose down"
+    - echo "$REMOTE_PASSWORD" | sshpass ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose up -d"
