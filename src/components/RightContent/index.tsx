@@ -47,7 +47,7 @@ export const NoticeIconView = () => {
         key: item._id, // Use `value` as the unique key
         label: (
           <Link
-            to={`/tasks/${item.task}`}
+            to={`/tasks/detail/${item.task}`}
             onClick={() => {
               readNotification(item._id);
             }}

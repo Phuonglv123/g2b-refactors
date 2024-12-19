@@ -1,10 +1,10 @@
 import { deleteTask, updateStateTask } from '@/services/task';
 import { ITask } from '@/types/task';
 import { getSrcImg } from '@/utils';
-import { CommentOutlined, DownOutlined, UserOutlined } from '@ant-design/icons';
+import { CommentOutlined, DownOutlined, ShareAltOutlined, UserOutlined } from '@ant-design/icons';
 import { ProCard } from '@ant-design/pro-components';
 import { history, useModel } from '@umijs/max';
-import { Avatar, Col, Dropdown, Flex, Row, Space, Tooltip, message } from 'antd';
+import { Avatar, Button, Col, Dropdown, Flex, Row, Space, Tooltip, message } from 'antd';
 import DrawerDetailTask from '../DrawerDetailTask';
 import ModalCreateTask from '../ModalCreateTask';
 import PriorityTask from '../PriorityTask';
@@ -62,9 +62,31 @@ const ToDoCard = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
       <div>
         <br />
         <Flex justify="space-between">
-          <div style={{ display: 'flex', gap: 4 }}>
-            {task.comments?.length} <CommentOutlined />
-          </div>
+          <Space>
+            <div style={{ display: 'flex', gap: 4 }}>
+              {task.comments?.length} <CommentOutlined />
+            </div>
+            <div>
+              <Tooltip title="Share">
+                <Button
+                  size="small"
+                  type="text"
+                  icon={<ShareAltOutlined />}
+                  onClick={() => {
+                    try {
+                      navigator.clipboard.writeText(
+                        `${window.location.origin}/tasks/detail/${task._id}`,
+                      );
+                      message.success('Copied link to clipboard');
+                    } catch (error) {
+                      message.error('Copy link failed');
+                    }
+                  }}
+                />
+              </Tooltip>
+            </div>
+          </Space>
+
           <div>
             <Dropdown
               menu={{

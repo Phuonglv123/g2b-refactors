@@ -1,7 +1,13 @@
 import { reminderTask, updateStateTask } from '@/services/task';
 import { ITask } from '@/types/task';
 import { getSrcImg } from '@/utils';
-import { BellOutlined, CommentOutlined, DownOutlined, UserOutlined } from '@ant-design/icons';
+import {
+  BellOutlined,
+  CommentOutlined,
+  DownOutlined,
+  ShareAltOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
 import { ProCard } from '@ant-design/pro-components';
 import { history, useModel } from '@umijs/max';
 import {
@@ -129,9 +135,31 @@ const FollowCard = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
       <div>
         <br />
         <Flex justify="space-between">
-          <div style={{ display: 'flex', gap: 4 }}>
-            {task.comments?.length} <CommentOutlined />
-          </div>
+          <Space>
+            <div style={{ display: 'flex', gap: 4 }}>
+              {task.comments?.length} <CommentOutlined />
+            </div>
+
+            <div>
+              <Tooltip title="Share">
+                <Button
+                  size="small"
+                  type="text"
+                  icon={<ShareAltOutlined />}
+                  onClick={() => {
+                    try {
+                      navigator.clipboard.writeText(
+                        `${window.location.origin}/tasks/detail/${task._id}`,
+                      );
+                      message.success('Copied link to clipboard');
+                    } catch (error) {
+                      message.error('Copy link failed');
+                    }
+                  }}
+                />
+              </Tooltip>
+            </div>
+          </Space>
 
           <div>
             <Dropdown

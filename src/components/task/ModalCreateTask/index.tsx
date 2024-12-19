@@ -413,6 +413,26 @@ const ModalCreateTask = ({ onLoad, initValue, type, subTask }: ModalCreateTaskPr
       <Divider plain orientation="left">
         <strong>More Options</strong>
       </Divider>
+      <ProFormSelect
+        label="Approved By"
+        name="approved_by"
+        mode="multiple"
+        rules={[
+          {
+            required: true,
+            message: 'Please select the approved by',
+          },
+        ]}
+        request={async ({ keyWords }) => {
+          return await listUser({ username: keyWords, size: 100, role: 'approve' }).then(
+            (response) => {
+              return response.data.map((user: any) => {
+                return { label: user.username, value: user._id };
+              });
+            },
+          );
+        }}
+      />
       <ProFormDateTimePicker
         name="deadline"
         label="Deadline"
