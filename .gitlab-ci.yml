@@ -6,24 +6,44 @@ build:
   stage: build
   image: alpine
   before_script:
+    # Install necessary tools (openssh-client) and start ssh-agent
     - 'command -v ssh-agent >/dev/null || ( apk add --update openssh )'
     - eval $(ssh-agent -s)
+
+    # Add the SSH private key to the ssh-agent
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-    - ssh-add -l
+
+    # List currently loaded SSH keys for debugging
+    - ssh-add -l # This will list the SSH keys loaded in the agent
+
+    # Ensure SSH folder exists with correct permissions
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
-    - ssh-keyscan $REMOTE_HOST >> ~/.ssh/known_hosts
+
+    # Add GitLab to known_hosts to avoid interactive SSH prompts
+    - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
+
   script:
-    - ssh -v -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "echo connected"
+    # Test SSH connection to GitLab to ensure the key works
+    - ssh -v -T git@gitlab.com
+
+    # Pull the latest code from the repository
+    - ssh -v -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && git pull"
+
+    # Build the Docker containers using docker-compose
     - ssh -v -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose build"
 
 deploy:
   stage: deploy
   image: alpine
-
   before_script:
+    # Install necessary tools (openssh-client)
     - apk add --no-cache openssh-client
+
   script:
+    # Ensure the containers are stopped and removed before deployment
     - ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose down"
+
+    # Start the containers in detached mode
     - ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose up -d"
