@@ -15,7 +15,7 @@ build:
     - ssh-keyscan $REMOTE_HOST >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
-    - ssh -v -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && git pull"
+    - ssh -v -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "echo connected"
     - ssh -v -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "cd g2b-admin && docker-compose build"
 
 deploy:
