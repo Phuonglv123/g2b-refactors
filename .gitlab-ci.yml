@@ -12,6 +12,6 @@ build:
 
 deploy:
   stage: deploy
-  image: ubuntu:latest
+  image: docker:latest
   script:
     - docker-compose down &&  docker-compose up -d
