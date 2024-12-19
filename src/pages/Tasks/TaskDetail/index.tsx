@@ -3,7 +3,7 @@ import StatusTask from '@/components/task/StatusTask';
 import TypeTask from '@/components/task/TypeTask';
 import { getTask, updateStatusTask, updateTask } from '@/services/task';
 import { PageContainer, ProCard } from '@ant-design/pro-components';
-import { Link, useParams, useRequest } from '@umijs/max';
+import { Link, history, useParams, useRequest } from '@umijs/max';
 import {
   Avatar,
   Button,
@@ -86,7 +86,15 @@ const PageTaskDetail: React.FC = () => {
   };
 
   return (
-    <PageContainer loading={loading}>
+    <PageContainer
+      loading={loading}
+      onBack={() => {
+        history.back();
+      }}
+      header={{
+        title: 'Task Detail',
+      }}
+    >
       <ProCard
         title={
           <Flex gap={24} align="center">

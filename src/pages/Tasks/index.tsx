@@ -24,7 +24,6 @@ const TaskPage: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const { initialState } = useModel('@@initialState');
   const query = useQuery();
-  console.log(query.get('status'));
 
   const listingTask = async () => {
     try {
@@ -87,10 +86,10 @@ const TaskPage: React.FC = () => {
     <PageContainer title="Manager Tasks" extra={<ModalCreateTask onLoad={() => listingTask()} />}>
       <ProForm
         initialValues={{
-          name: '',
-          status: '',
-          type: '',
-          assigned_to: '',
+          name: query.get('name') || '',
+          status: query.get('status') || '',
+          type: query.get('type') || '',
+          assigned_to: query.get('assigned_to') || '',
         }}
         layout="vertical"
         onFinish={onFinish}
