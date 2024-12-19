@@ -16,18 +16,18 @@ before_script:
   - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
   - chmod 600 ~/.ssh/id_rsa
   # Add the server to known hosts
-  - ssh-keyscan -H 27.71.25.178 >> ~/.ssh/known_hosts
+  - ssh-keyscan -H root@27.71.25.178 >> ~/.ssh/known_hosts
 
 build:
   stage: build
   image: docker:latest
   script:
-    - ssh root@27.71.25.178 "cd g2b-admin && git pull"
-    - ssh root@27.71.25.178 "cd g2b-admin && docker-compose build"
+    - cd g2b-admin && git pull
+    - cd g2b-admin && docker-compose build
 
 deploy:
   stage: deploy
   image: docker:latest
   script:
-    - ssh root@27.71.25.178 "cd g2b-admin && docker-compose down"
-    - ssh root@27.71.25.178 "cd g2b-admin && docker-compose up -d"
+    - cd g2b-admin && docker-compose down
+    - cd g2b-admin && docker-compose up -d
