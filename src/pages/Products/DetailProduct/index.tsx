@@ -2,7 +2,7 @@ import { getProduct, updateOrderImagesProduct } from '@/services/products';
 import { IProduct } from '@/types/product';
 import { formatNumberVietnamese, getSrcImg } from '@/utils';
 import { PageContainer, ProDescriptions } from '@ant-design/pro-components';
-import { useParams } from '@umijs/max';
+import { history, useParams } from '@umijs/max';
 import { Empty, Image, Space, Tag } from 'antd';
 import { arrayMoveImmutable } from 'array-move';
 import dayjs from 'dayjs';
@@ -94,7 +94,7 @@ const DetailProduct: React.FC = () => {
     onRequest();
   }, []);
   return (
-    <PageContainer>
+    <PageContainer onBack={() => history.back()}>
       <ProDescriptions<IProduct>
         layout="vertical"
         bordered

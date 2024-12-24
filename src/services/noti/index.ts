@@ -6,9 +6,10 @@ export const countNotificationsIsRead = async () => {
   });
 };
 
-export const getNotifications = async () => {
+export const getNotifications = async (params: any) => {
   return await request('/api/v1/notification/get', {
     method: 'GET',
+    params,
   });
 };
 

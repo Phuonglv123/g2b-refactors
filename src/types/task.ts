@@ -40,6 +40,7 @@ export interface ITask {
   updatedAt: string;
   approved_by: any;
   approved_status: string;
+  parentTask: ITask;
 }
 
 export enum TaskState {

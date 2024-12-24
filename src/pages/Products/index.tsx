@@ -8,10 +8,15 @@ import { listUser } from '@/services/user';
 import { formatCurrency, formatNumberVietnamese } from '@/utils';
 import { CheckOutlined, CloseOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { ActionType, PageContainer, ProTable } from '@ant-design/pro-components';
-import { Link, history } from '@umijs/max';
+import { Link, history, useLocation } from '@umijs/max';
 import { Button, Space, Switch, Tag, message } from 'antd';
 import dayjs from 'dayjs';
 import { useCallback, useEffect, useRef, useState } from 'react';
+
+const useQuery = () => {
+  const { search } = useLocation();
+  return new URLSearchParams(search);
+};
 
 const Products: React.FC = () => {
   const actionRef = useRef<ActionType>();
@@ -20,6 +25,7 @@ const Products: React.FC = () => {
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const [city, setCity] = useState<any>(null);
   const [district, setDistrict] = useState<any>(null);
+  const query = useQuery();
 
   const [providerOptions, setProviderOptions] = useState<{ [key: string]: { text: string } }>({});
   const [userOption, setUserOption] = useState<{ [key: string]: { text: string } }>({});
@@ -67,32 +73,45 @@ const Products: React.FC = () => {
     const { product_code, product_name, country, city, district, ward } = params;
     const { status, type, areas, provider, createdBy } = sort;
     const payload: any = {
-      size: params.pageSize,
-      page: params.current,
-      product_code,
-      product_name,
+      size: params.pageSize || query.get('pageSize') || 10,
+      page: params.current || query.get('current') || 1,
+      product_code: product_code ? product_code : query.get('product_code'),
+      product_name: product_name ? product_name : query.get('product_name'),
       country: country === 'vietnam' ? 'Việt nam' : country,
-      city,
-      district,
-      ward,
+      city: city ? city : query.get('city'),
+      district: district ? district : query.get('district'),
+      ward: ward ? ward : query.get('ward'),
     };
-    if (status) {
-      payload.status = status[0];
+    if (status || query.get('status')) {
+      payload.status = status[0] || query.get('status');
     }
-    if (type) {
-      payload.type = type.join(',');
+    if (type || query.get('type')) {
+      payload.type = type.join(',') || query.get('type');
     }
-    if (areas) {
-      payload.areas = areas.join(',');
-    }
-
-    if (provider) {
-      payload.provider = provider.join(',');
+    if (areas || query.get('areas')) {
+      payload.areas = areas.join(',') || query.get('areas');
     }
 
-    if (createdBy) {
-      payload.user_id = createdBy.join(',');
+    if (provider || query.get('provider')) {
+      payload.provider = provider.join(',') || query.get('provider');
     }
+
+    if (createdBy || query.get('createdBy')) {
+      payload.user_id = createdBy.join(',') || query.get('createdBy');
+    }
+
+    history.push({
+      pathname: '/products',
+      search: `?${product_code ? `product_code=${product_code}&` : ''}${
+        product_name ? `product_name=${product_name}&` : ''
+      }${country ? `country=${country}&` : ''}${city ? `city=${city}&` : ''}${
+        district ? `district=${district}&` : ''
+      }${ward ? `ward=${ward}&` : ''}${status ? `status=${status}&` : ''}${
+        type ? `type=${type}&` : ''
+      }${areas ? `areas=${areas}&` : ''}${provider ? `provider=${provider}&` : ''}${
+        createdBy ? `createdBy=${createdBy}&` : ''
+      }`,
+    });
 
     const data = await listProducts(payload);
     return {
@@ -243,11 +262,13 @@ const Products: React.FC = () => {
             render: (_, record: any) => (
               <Link to={`/products/${record._id}`}>{record.product_code}</Link>
             ),
+            initialValue: query.get('product_code'),
           },
           {
             title: 'Product Name',
             dataIndex: 'product_name',
             key: 'product_name',
+            initialValue: query.get('product_name'),
           },
           // {
           //   title: 'Country',
@@ -312,6 +333,7 @@ const Products: React.FC = () => {
             fieldProps: {
               showSearch: true,
             },
+            initialValue: query.get('district'),
           },
           {
             title: 'Product Type',
@@ -340,6 +362,7 @@ const Products: React.FC = () => {
               'MARKET BILLBOARD': { text: 'MARKET BILLBOARD' },
               OTHERS: { text: 'OTHERS' },
             },
+            initialValue: query.get('type'),
           },
           {
             title: 'Areas',
@@ -373,6 +396,7 @@ const Products: React.FC = () => {
                 <Tag color="success">{area.charAt(0).toUpperCase() + area.slice(1)}</Tag>
               ));
             },
+            initialValue: query.get('areas'),
           },
           {
             title: 'Media Cost',
@@ -395,6 +419,7 @@ const Products: React.FC = () => {
             filters: true,
             valueType: 'checkbox',
             valueEnum: providerOptions,
+            initialValue: query.get('provider'),
           },
           {
             title: 'Created At',
@@ -416,6 +441,7 @@ const Products: React.FC = () => {
               0: { text: 'InActive', status: 'Default' },
               1: { text: 'Active', status: 'Success' },
             },
+            initialValue: query.get('status'),
             render: (_, record: any) => (
               <Switch
                 checked={record.status === 1}

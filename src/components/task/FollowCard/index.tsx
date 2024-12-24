@@ -9,7 +9,7 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 import { ProCard } from '@ant-design/pro-components';
-import { history, useModel } from '@umijs/max';
+import { Link, history, useModel } from '@umijs/max';
 import {
   Avatar,
   Button,
@@ -86,7 +86,21 @@ const FollowCard = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
         <Col span={21}>
           <Flex align="flex-start" justify="start">
             <TypeTask value={task.type} />
-            <DrawerDetailTask task={task} onLoad={() => onLoad()} />
+            <div>
+              {task?.parentTask && (
+                <Link
+                  style={{
+                    fontSize: 13,
+                    fontWeight: 600,
+                    color: '#febd21',
+                  }}
+                  to={`/tasks/detail/${task?.parentTask?._id}`}
+                >
+                  {task?.parentTask?.name + ' / '}
+                </Link>
+              )}
+              <DrawerDetailTask task={task} onLoad={() => onLoad()} />
+            </div>
           </Flex>
         </Col>
         <Col span={3}>

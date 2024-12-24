@@ -236,6 +236,10 @@ const DrawCreateBusiness = ({ type, data, onLoad }: DrawCreateBusinessProps) => 
             value: 'Cold call',
             label: 'Cold call',
           },
+          {
+            value: 'Customer Company',
+            label: 'Customer Company',
+          },
         ]}
       />
       <ProFormText label="Note" name={'note'} />

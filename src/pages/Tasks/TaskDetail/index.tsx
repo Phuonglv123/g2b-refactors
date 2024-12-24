@@ -288,13 +288,22 @@ const PageTaskDetail: React.FC = () => {
                     <Divider orientation="left" variant="dashed">
                       Sub Task
                     </Divider>
-                    <div>
+                    <Space direction="vertical" style={{ width: '100%' }}>
                       {data?.subTask.map((subTask: any) => (
                         <ProCard bordered>
                           <Space direction="vertical" style={{ width: '100%' }}>
                             <Flex gap={8} justify="space-between">
                               <Typography.Text strong>Name:</Typography.Text>
-                              <Link to={`/tasks/${subTask?._id}`}>{subTask.name}</Link>
+                              <Link
+                                style={{
+                                  fontSize: 16,
+                                  fontWeight: 600,
+                                  color: '#febd21',
+                                }}
+                                to={`/tasks/detail/${subTask?._id}`}
+                              >
+                                {subTask.name}
+                              </Link>
                             </Flex>
                             <Flex gap={8} justify="space-between">
                               <Typography.Text strong>Deadline:</Typography.Text>
@@ -309,7 +318,7 @@ const PageTaskDetail: React.FC = () => {
                           </Space>
                         </ProCard>
                       ))}
-                    </div>
+                    </Space>
                   </Space>
                 </Col>
               </Row>

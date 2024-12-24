@@ -28,6 +28,16 @@ const renderWithTags = (text: string) => {
   });
 };
 
+const detectEnterInComment = (text: string) => {
+  const parts = text.split(/(\r)/); // Split text into enters and non-enters
+  return parts.map((part: any, index: any) => {
+    if (part.startsWith('\r')) {
+      return <br key={index} />;
+    }
+    return renderWithTags(part); // Return non-enter parts as-is
+  });
+};
+
 const detectLinkInComment = (text: string) => {
   const parts = text.split(/(https?:\/\/[^\s]+)/); // Split text into links and non-links
   return parts.map((part: any, index: any) => {
@@ -38,7 +48,7 @@ const detectLinkInComment = (text: string) => {
         </a>
       );
     }
-    return renderWithTags(part); // Return non-link parts as-is
+    return detectEnterInComment(part); // Return non-link parts as-is
   });
 };
 

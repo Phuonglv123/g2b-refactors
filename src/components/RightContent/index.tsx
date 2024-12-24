@@ -1,9 +1,10 @@
 import { countNotificationsIsRead, getNotifications, readNotification } from '@/services/noti';
 import { getSrcImg } from '@/utils';
-import { BellOutlined, QuestionCircleOutlined, UserOutlined } from '@ant-design/icons';
+import { BellOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { Link, useRequest } from '@umijs/max';
-import { Avatar, Badge, Button, Divider, Dropdown, Flex, MenuProps, Space } from 'antd';
+import { Avatar, Badge, Button, List, Popover } from 'antd';
 import dayjs from 'dayjs';
+import React from 'react';
 
 export type SiderTheme = 'light' | 'dark';
 
@@ -34,51 +35,125 @@ export const Question = () => {
 };
 
 export const NoticeIconView = () => {
+  const [open, setOpen] = React.useState(false);
+  // const [initLoading, setInitLoading] = React.useState(true);
+  // const [loading, setLoading] = React.useState(false);
+  // const [noti, setNoti] = React.useState<any[]>([]);
+  // const [list, setList] = React.useState<any[]>([]);
+  const [page, setPage] = React.useState(1);
+  const [size, setSize] = React.useState(10);
   const { data } = useRequest(() => countNotificationsIsRead(), {
     pollingInterval: 2000, // Polling every 2 seconds
   });
 
-  const listNotifications = useRequest(() => getNotifications(), {
+  const listNotifications = useRequest(() => getNotifications({ page: page, size: size }), {
     pollingInterval: 2000, // Polling
   });
 
-  const items: MenuProps['items'] = listNotifications.data
-    ? listNotifications.data.map((item: any) => ({
-        key: item._id, // Use `value` as the unique key
-        label: (
-          <Link
-            to={`/tasks/detail/${item.task}`}
-            onClick={() => {
-              readNotification(item._id);
-            }}
-          >
-            <Divider dashed />
-            <div>
-              {item?.is_read ? item.title : <Badge status="warning" text={item.title} />}{' '}
-              <Flex>
-                {item.from && (
-                  <Space>
-                    <div style={{ fontWeight: 'bold' }}>From {item.from?.username}</div>
-                    <Avatar size={24} src={getSrcImg(item.from?.avatar)} icon={<UserOutlined />} />
-                  </Space>
-                )}
-              </Flex>
-            </div>
-            <div style={{ fontSize: 12 }}>
-              Date: {dayjs(item.createdAt).format('MMMM D, YYYY h:mm A')}
-            </div>
-          </Link>
-        ),
-      }))
-    : [];
-  console.log(items);
+  // const items: MenuProps['items'] = listNotifications.data
+  //   ? listNotifications.data.map((item: any) => ({
+  //       key: item._id, // Use `value` as the unique key
+  //       label: (
+  //         <Link
+  //           to={`/tasks/detail/${item.task}`}
+  //           onClick={() => {
+  //             readNotification(item._id);
+  //           }}
+  //         >
+  //           <Divider dashed />
+  //           <div>
+  //             {item?.is_read ? item.title : <Badge status="warning" text={item.title} />}{' '}
+  //             <Flex>
+  //               {item.from && (
+  //                 <Space>
+  //                   <div style={{ fontWeight: 'bold' }}>From {item.from?.username}</div>
+  //                   <Avatar size={24} src={getSrcImg(item.from?.avatar)} icon={<UserOutlined />} />
+  //                 </Space>
+  //               )}
+  //             </Flex>
+  //           </div>
+  //           <div style={{ fontSize: 12 }}>
+  //             Date: {dayjs(item.createdAt).format('MMMM D, YYYY h:mm A')}
+  //           </div>
+  //         </Link>
+  //       ),
+  //     }))
+  //   : [];
+  // console.log(items);
+
+  const loadMore = !listNotifications.loading ? (
+    <div
+      style={{
+        textAlign: 'center',
+        marginTop: 12,
+        height: 32,
+        lineHeight: '32px',
+      }}
+    >
+      <Button
+        type="link"
+        onClick={() => {
+          if (listNotifications.data.total > page * size) {
+            setSize(size + 10);
+            listNotifications.refresh();
+          }
+        }}
+        disabled={listNotifications.data.total <= page * size}
+      >
+        Loading more
+      </Button>
+    </div>
+  ) : null;
   return (
-    <Dropdown menu={{ items }} trigger={['click']}>
-      <a onClick={(e) => e.preventDefault()}>
-        <Badge count={data} size="small" offset={[0, 10]}>
-          <Button icon={<BellOutlined style={{ fontSize: 24 }} />} type="text" />
-        </Badge>
-      </a>
-    </Dropdown>
+    <Popover
+      content={
+        <List
+          style={{ width: 500 }}
+          className="demo-loadmore-list"
+          loading={listNotifications.loading}
+          itemLayout="horizontal"
+          loadMore={loadMore}
+          dataSource={listNotifications?.data}
+          renderItem={(item: any, index) => (
+            <List.Item>
+              <List.Item.Meta
+                avatar={<Avatar src={getSrcImg(item.from?.avatar)} />}
+                title={
+                  <Link
+                    to={`/tasks/detail/${item.task}`}
+                    onClick={() => {
+                      readNotification(item._id);
+                    }}
+                  >
+                    {item?.is_read ? (
+                      item.title + ' from ' + item?.from?.username
+                    ) : (
+                      <Badge
+                        status="warning"
+                        text={item.title + ' from ' + item?.from && item?.from?.username}
+                      />
+                    )}
+                  </Link>
+                }
+                description={`Date: ${dayjs(item.createdAt).format('MMMM D, YYYY h:mm A')}`}
+              />
+            </List.Item>
+          )}
+        />
+      }
+      title="Notification"
+      trigger="click"
+      open={open}
+      onOpenChange={() => setOpen(!open)}
+    >
+      <Badge count={data} size="small" offset={[0, 10]}>
+        <Button icon={<BellOutlined style={{ fontSize: 24 }} />} type="text" />
+      </Badge>{' '}
+    </Popover>
+    // <Dropdown menu={{ items }} trigger={['click']}>
+    //   <a onClick={(e) => e.preventDefault()}>
+
+    //   </a>
+    // </Dropdown>
   );
 };

@@ -9,7 +9,7 @@ import { getTasks, updateStateTask } from '@/services/task';
 import { listUser } from '@/services/user';
 import { PageContainer, ProForm, ProFormSelect, ProFormText } from '@ant-design/pro-components';
 import { history, useLocation, useModel } from '@umijs/max';
-import { Flex, Space } from 'antd';
+import { Flex, Skeleton, Space } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import styles from './style.less';
@@ -24,9 +24,11 @@ const TaskPage: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const { initialState } = useModel('@@initialState');
   const query = useQuery();
+  const [loading, setLoading] = useState(false);
 
   const listingTask = async () => {
     try {
+      setLoading(true);
       const name = query.get('name');
       const status = query.get('status');
       console.log(status);
@@ -36,6 +38,8 @@ const TaskPage: React.FC = () => {
       setTasks(response.data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -91,6 +95,7 @@ const TaskPage: React.FC = () => {
           type: query.get('type') || '',
           assigned_to: query.get('assigned_to') || '',
         }}
+        loading={loading}
         layout="vertical"
         onFinish={onFinish}
         labelCol={{ span: 12 }}
@@ -188,53 +193,57 @@ const TaskPage: React.FC = () => {
                 <div>Todo</div>
                 <div>{tasks.filter((task: any) => task.state === 'todo').length + ' items'}</div>
               </div>
-              <Droppable droppableId="todo" key={'todo'} type="dropZone">
-                {(provided) => (
-                  <Space
-                    direction="vertical"
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                    style={{
-                      minHeight: '100%',
-                      background: '#37373799',
-                      padding: '8px',
-                      width: '100%',
-                    }}
-                  >
-                    {tasks
-                      .filter((task: any) => task.state === 'todo')
-                      .map((task: any, index: number) => (
-                        <Draggable
-                          key={task._id}
-                          draggableId={task._id}
-                          index={index}
-                          isDragDisabled={
-                            !task.assigned_to
-                              ?.map((user: any) => user._id)
-                              .includes(initialState?.currentUser?._id)
-                          }
-                        >
-                          {(provided) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                            >
-                              <ToDoCard
-                                task={task}
-                                key={task?._id}
-                                onLoad={() => {
-                                  listingTask();
-                                }}
-                              />
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                    {provided.placeholder}
-                  </Space>
-                )}
-              </Droppable>
+              {loading ? (
+                <Skeleton active />
+              ) : (
+                <Droppable droppableId="todo" key={'todo'} type="dropZone">
+                  {(provided) => (
+                    <Space
+                      direction="vertical"
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                      style={{
+                        minHeight: '100%',
+                        background: '#37373799',
+                        padding: '8px',
+                        width: '100%',
+                      }}
+                    >
+                      {tasks
+                        .filter((task: any) => task.state === 'todo')
+                        .map((task: any, index: number) => (
+                          <Draggable
+                            key={task._id}
+                            draggableId={task._id}
+                            index={index}
+                            isDragDisabled={
+                              !task.assigned_to
+                                ?.map((user: any) => user._id)
+                                .includes(initialState?.currentUser?._id)
+                            }
+                          >
+                            {(provided) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                              >
+                                <ToDoCard
+                                  task={task}
+                                  key={task?._id}
+                                  onLoad={() => {
+                                    listingTask();
+                                  }}
+                                />
+                              </div>
+                            )}
+                          </Draggable>
+                        ))}
+                      {provided.placeholder}
+                    </Space>
+                  )}
+                </Droppable>
+              )}
             </div>
           </div>
           <div className={styles.TaskDrag}>
@@ -245,54 +254,58 @@ const TaskPage: React.FC = () => {
                   {tasks.filter((task: any) => task.state === 'in_progress').length + ' items'}
                 </div>
               </div>
-              <Droppable droppableId="in_progress" key={'in_progress'} type="dropZone">
-                {(provided) => (
-                  <Space
-                    direction="vertical"
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                    style={{
-                      minHeight: '100%',
-                      background: '#37373799',
-                      padding: '8px',
-                      width: '100%',
-                    }}
-                  >
-                    {tasks
-                      .filter((task: any) => task.state === 'in_progress')
-                      .sort((a: any, b: any) => a.updatedAt - b.updatedAt)
-                      .map((task: any, index: number) => (
-                        <Draggable
-                          key={task._id}
-                          draggableId={task._id}
-                          index={index}
-                          isDragDisabled={
-                            !task.assigned_to
-                              ?.map((user: any) => user._id)
-                              .includes(initialState?.currentUser?._id)
-                          }
-                        >
-                          {(provided) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                            >
-                              <ProcessingCard
-                                task={task}
-                                key={task?._id}
-                                onLoad={() => {
-                                  listingTask();
-                                }}
-                              />
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                    {provided.placeholder}
-                  </Space>
-                )}
-              </Droppable>
+              {loading ? (
+                <Skeleton active />
+              ) : (
+                <Droppable droppableId="in_progress" key={'in_progress'} type="dropZone">
+                  {(provided) => (
+                    <Space
+                      direction="vertical"
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                      style={{
+                        minHeight: '100%',
+                        background: '#37373799',
+                        padding: '8px',
+                        width: '100%',
+                      }}
+                    >
+                      {tasks
+                        .filter((task: any) => task.state === 'in_progress')
+                        .sort((a: any, b: any) => a.updatedAt - b.updatedAt)
+                        .map((task: any, index: number) => (
+                          <Draggable
+                            key={task._id}
+                            draggableId={task._id}
+                            index={index}
+                            isDragDisabled={
+                              !task.assigned_to
+                                ?.map((user: any) => user._id)
+                                .includes(initialState?.currentUser?._id)
+                            }
+                          >
+                            {(provided) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                              >
+                                <ProcessingCard
+                                  task={task}
+                                  key={task?._id}
+                                  onLoad={() => {
+                                    listingTask();
+                                  }}
+                                />
+                              </div>
+                            )}
+                          </Draggable>
+                        ))}
+                      {provided.placeholder}
+                    </Space>
+                  )}
+                </Droppable>
+              )}
             </div>
           </div>
           <div className={styles.TaskDrag}>
@@ -301,54 +314,58 @@ const TaskPage: React.FC = () => {
                 <div>Approve</div>
                 <div>{tasks.filter((task: any) => task.state === 'approve').length + ' items'}</div>
               </div>
-              <Droppable droppableId="approve" key={'approve'} type="dropZone">
-                {(provided) => (
-                  <Space
-                    direction="vertical"
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                    style={{
-                      minHeight: '100%',
-                      background: '#37373799',
-                      padding: '8px',
-                      width: '100%',
-                    }}
-                  >
-                    {tasks
-                      .filter((task: any) => task.state === 'approve')
-                      .sort((a: any, b: any) => a.updatedAt - b.updatedAt)
-                      .map((task: any, index: number) => (
-                        <Draggable
-                          key={task._id}
-                          draggableId={task._id}
-                          index={index}
-                          isDragDisabled={
-                            !task.assigned_to
-                              ?.map((user: any) => user._id)
-                              .includes(initialState?.currentUser?._id)
-                          }
-                        >
-                          {(provided) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                            >
-                              <ApproveCard
-                                task={task}
-                                key={task?._id}
-                                onLoad={() => {
-                                  listingTask();
-                                }}
-                              />
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                    {provided.placeholder}
-                  </Space>
-                )}
-              </Droppable>
+              {loading ? (
+                <Skeleton active />
+              ) : (
+                <Droppable droppableId="approve" key={'approve'} type="dropZone">
+                  {(provided) => (
+                    <Space
+                      direction="vertical"
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                      style={{
+                        minHeight: '100%',
+                        background: '#37373799',
+                        padding: '8px',
+                        width: '100%',
+                      }}
+                    >
+                      {tasks
+                        .filter((task: any) => task.state === 'approve')
+                        .sort((a: any, b: any) => a.updatedAt - b.updatedAt)
+                        .map((task: any, index: number) => (
+                          <Draggable
+                            key={task._id}
+                            draggableId={task._id}
+                            index={index}
+                            isDragDisabled={
+                              !task.assigned_to
+                                ?.map((user: any) => user._id)
+                                .includes(initialState?.currentUser?._id)
+                            }
+                          >
+                            {(provided) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                              >
+                                <ApproveCard
+                                  task={task}
+                                  key={task?._id}
+                                  onLoad={() => {
+                                    listingTask();
+                                  }}
+                                />
+                              </div>
+                            )}
+                          </Draggable>
+                        ))}
+                      {provided.placeholder}
+                    </Space>
+                  )}
+                </Droppable>
+              )}
             </div>
           </div>
           <div className={styles.TaskDrag}>
@@ -357,54 +374,58 @@ const TaskPage: React.FC = () => {
                 <div>Follow</div>
                 <div>{tasks.filter((task: any) => task.state === 'follow').length + ' items'}</div>
               </div>
-              <Droppable droppableId="follow" key={'follow'} type="dropZone">
-                {(provided) => (
-                  <Space
-                    direction="vertical"
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                    style={{
-                      minHeight: '100%',
-                      background: '#37373799',
-                      padding: '8px',
-                      width: '100%',
-                    }}
-                  >
-                    {tasks
-                      .filter((task: any) => task.state === 'follow')
-                      .sort((a: any, b: any) => a.updatedAt - b.updatedAt)
-                      .map((task: any, index: number) => (
-                        <Draggable
-                          key={task._id}
-                          draggableId={task._id}
-                          index={index}
-                          isDragDisabled={
-                            !task.assigned_to
-                              ?.map((user: any) => user._id)
-                              .includes(initialState?.currentUser?._id)
-                          }
-                        >
-                          {(provided) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                            >
-                              <FollowCard
-                                task={task}
-                                key={task?._id}
-                                onLoad={() => {
-                                  listingTask();
-                                }}
-                              />
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                    {provided.placeholder}
-                  </Space>
-                )}
-              </Droppable>
+              {loading ? (
+                <Skeleton active />
+              ) : (
+                <Droppable droppableId="follow" key={'follow'} type="dropZone">
+                  {(provided) => (
+                    <Space
+                      direction="vertical"
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                      style={{
+                        minHeight: '100%',
+                        background: '#37373799',
+                        padding: '8px',
+                        width: '100%',
+                      }}
+                    >
+                      {tasks
+                        .filter((task: any) => task.state === 'follow')
+                        .sort((a: any, b: any) => a.updatedAt - b.updatedAt)
+                        .map((task: any, index: number) => (
+                          <Draggable
+                            key={task._id}
+                            draggableId={task._id}
+                            index={index}
+                            isDragDisabled={
+                              !task.assigned_to
+                                ?.map((user: any) => user._id)
+                                .includes(initialState?.currentUser?._id)
+                            }
+                          >
+                            {(provided) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                              >
+                                <FollowCard
+                                  task={task}
+                                  key={task?._id}
+                                  onLoad={() => {
+                                    listingTask();
+                                  }}
+                                />
+                              </div>
+                            )}
+                          </Draggable>
+                        ))}
+                      {provided.placeholder}
+                    </Space>
+                  )}
+                </Droppable>
+              )}
             </div>
           </div>
           <div className={styles.TaskDrag}>
@@ -415,62 +436,58 @@ const TaskPage: React.FC = () => {
                   {tasks.filter((task: any) => task.state === 'completed').length + ' items'}
                 </div>
               </div>
-              <Droppable droppableId="completed" key={'completed'} type="dropZone">
-                {(provided) => (
-                  <Space
-                    direction="vertical"
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                    style={{
-                      minHeight: '100%',
-                      background: '#37373799',
-                      padding: '8px',
-                      width: '100%',
-                    }}
-                  >
-                    {tasks
-                      .filter((task: any) => task.state === 'completed')
-                      .sort((a: any, b: any) => a.updatedAt - b.updatedAt)
-                      .map((task: any, index: number) => (
-                        <Draggable
-                          key={task._id}
-                          draggableId={task._id}
-                          index={index}
-                          isDragDisabled={true}
-                        >
-                          {(provided) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                            >
-                              <CompletedCard
-                                task={task}
-                                key={task?._id}
-                                onLoad={() => {
-                                  listingTask();
-                                }}
-                              />
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                    {provided.placeholder}
-                  </Space>
-                )}
-              </Droppable>
+              {loading ? (
+                <Skeleton active />
+              ) : (
+                <Droppable droppableId="completed" key={'completed'} type="dropZone">
+                  {(provided) => (
+                    <Space
+                      direction="vertical"
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                      style={{
+                        minHeight: '100%',
+                        background: '#37373799',
+                        padding: '8px',
+                        width: '100%',
+                      }}
+                    >
+                      {tasks
+                        .filter((task: any) => task.state === 'completed')
+                        .sort((a: any, b: any) => a.updatedAt - b.updatedAt)
+                        .map((task: any, index: number) => (
+                          <Draggable
+                            key={task._id}
+                            draggableId={task._id}
+                            index={index}
+                            isDragDisabled={true}
+                          >
+                            {(provided) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                              >
+                                <CompletedCard
+                                  task={task}
+                                  key={task?._id}
+                                  onLoad={() => {
+                                    listingTask();
+                                  }}
+                                />
+                              </div>
+                            )}
+                          </Draggable>
+                        ))}
+                      {provided.placeholder}
+                    </Space>
+                  )}
+                </Droppable>
+              )}
             </div>
           </div>
         </Flex>
       </DragDropContext>
-      {/* <DetailTask
-        visible={visible}
-        onClose={() => {
-          history.push('/tasks');
-          getTasks({});
-          setVisible(false);
-        }}
-      /> */}
     </PageContainer>
   );
 };
