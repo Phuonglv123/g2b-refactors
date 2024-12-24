@@ -128,10 +128,7 @@ export const NoticeIconView = () => {
                     {item?.is_read ? (
                       item.title + ' from ' + item?.from?.username
                     ) : (
-                      <Badge
-                        status="warning"
-                        text={item.title + ' from ' + item?.from && item?.from?.username}
-                      />
+                      <Badge status="warning" text={item.title + ' from ' + item?.from?.username} />
                     )}
                   </Link>
                 }
