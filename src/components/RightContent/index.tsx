@@ -93,12 +93,10 @@ export const NoticeIconView = () => {
       <Button
         type="link"
         onClick={() => {
-          if (listNotifications.data.total > page * size) {
-            setSize(size + 10);
-            listNotifications.refresh();
-          }
+          setSize(size + 10);
+          listNotifications.refresh();
         }}
-        disabled={listNotifications.data.total <= page * size}
+        //disabled={listNotifications.data.total <= page * size}
       >
         Loading more
       </Button>
@@ -108,7 +106,7 @@ export const NoticeIconView = () => {
     <Popover
       content={
         <List
-          style={{ width: 500 }}
+          style={{ width: 500, height: 600, overflow: 'auto' }}
           className="demo-loadmore-list"
           loading={listNotifications.loading}
           itemLayout="horizontal"
