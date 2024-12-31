@@ -248,7 +248,7 @@ const DetailProductCard = () => {
                           {
                             base: {
                               code: product.product_code,
-                              gps: '',
+                              gps: product.location?.gps,
                               address: product?.location?.address || '',
                               description: product?.description,
                               name: product.product_name,
@@ -317,7 +317,7 @@ const DetailProductCard = () => {
                               videoDuration: `${product.attributes.video_duration} s`,
                               productionCost: product?.production_cost || 0,
                               traffic: `${formatNumberVietnamese(product.traffic)} vehicles/day`,
-                              areas: product.areas || [''],
+                              areas: product.areas.join(',') || '',
                             },
                           },
                         ]}
