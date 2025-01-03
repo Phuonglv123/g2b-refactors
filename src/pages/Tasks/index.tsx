@@ -219,8 +219,7 @@ const TaskPage: React.FC = () => {
                             isDragDisabled={
                               !task.assigned_to
                                 ?.map((user: any) => user._id)
-                                .includes(initialState?.currentUser?._id) ||
-                              !initialState?.currentUser?.role.find((role: any) => role === 'admin')
+                                .includes(initialState?.currentUser?._id)
                             }
                           >
                             {(provided) => (
@@ -282,8 +281,7 @@ const TaskPage: React.FC = () => {
                             isDragDisabled={
                               !task.assigned_to
                                 ?.map((user: any) => user._id)
-                                .includes(initialState?.currentUser?._id) ||
-                              !initialState?.currentUser?.role.find((role: any) => role === 'admin')
+                                .includes(initialState?.currentUser?._id)
                             }
                           >
                             {(provided) => (
@@ -343,8 +341,7 @@ const TaskPage: React.FC = () => {
                             isDragDisabled={
                               !task.assigned_to
                                 ?.map((user: any) => user._id)
-                                .includes(initialState?.currentUser?._id) ||
-                              !initialState?.currentUser?.role.find((role: any) => role === 'admin')
+                                .includes(initialState?.currentUser?._id)
                             }
                           >
                             {(provided) => (
@@ -404,8 +401,7 @@ const TaskPage: React.FC = () => {
                             isDragDisabled={
                               !task.assigned_to
                                 ?.map((user: any) => user._id)
-                                .includes(initialState?.currentUser?._id) ||
-                              !initialState?.currentUser?.role.find((role: any) => role === 'admin')
+                                .includes(initialState?.currentUser?._id)
                             }
                           >
                             {(provided) => (

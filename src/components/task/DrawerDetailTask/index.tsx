@@ -1,6 +1,11 @@
 import access from '@/access';
 import DisplayUser from '@/components/user/DisplayUser';
-import { updateApprroveTask, updateRejectTask, updateStatusTask } from '@/services/task';
+import {
+  updateApprroveTask,
+  updateRejectTask,
+  updateStateTask,
+  updateStatusTask,
+} from '@/services/task';
 import { ITask } from '@/types/task';
 import { formatDate } from '@/utils';
 import { CommentOutlined } from '@ant-design/icons';
@@ -177,6 +182,44 @@ const DrawerDetailTask = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
                 label: <StatusTask value={'rejected'} />,
                 value: 'rejected',
                 disabled: true,
+              },
+            ]}
+          />
+        </Flex>
+        <Flex justify="space-between">
+          <div>State: </div>
+          <Select
+            value={task?.status}
+            style={{ width: 150 }}
+            size="middle"
+            onChange={async (value) => {
+              try {
+                await updateStateTask(task?._id, value).then(() => {
+                  message.success('Update state successfully');
+                  onLoad();
+                });
+              } catch (error) {}
+            }}
+            options={[
+              {
+                label: 'To do',
+                value: 'todo',
+              },
+              {
+                label: 'In progress',
+                value: 'inprogress',
+              },
+              {
+                label: 'Approved',
+                value: 'approved',
+              },
+              {
+                label: 'Follow',
+                value: 'follow',
+              },
+              {
+                label: 'Completed',
+                value: 'completed',
               },
             ]}
           />

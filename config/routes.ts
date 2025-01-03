@@ -85,7 +85,7 @@ export default [
     path: '/provider',
     name: 'vendor',
     icon: 'global',
-    access: 'canEditor',
+    access: 'canAdmin',
     component: './Provider',
   },
   {
@@ -102,7 +102,7 @@ export default [
     icon: 'AccountBookOutlined',
     key: 'business',
     component: './Business',
-    access: 'canEditor',
+    access: 'canAdmin',
   },
 
   {
