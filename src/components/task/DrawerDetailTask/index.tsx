@@ -186,44 +186,46 @@ const DrawerDetailTask = ({ task, onLoad }: { task: ITask; onLoad?: any }) => {
             ]}
           />
         </Flex>
-        <Flex justify="space-between">
-          <div>State: </div>
-          <Select
-            value={task?.status}
-            style={{ width: 150 }}
-            size="middle"
-            onChange={async (value) => {
-              try {
-                await updateStateTask(task?._id, value).then(() => {
-                  message.success('Update state successfully');
-                  onLoad();
-                });
-              } catch (error) {}
-            }}
-            options={[
-              {
-                label: 'To do',
-                value: 'todo',
-              },
-              {
-                label: 'In progress',
-                value: 'inprogress',
-              },
-              {
-                label: 'Approved',
-                value: 'approved',
-              },
-              {
-                label: 'Follow',
-                value: 'follow',
-              },
-              {
-                label: 'Completed',
-                value: 'completed',
-              },
-            ]}
-          />
-        </Flex>
+        {initialState?.currentUser?.role === 'admin' && (
+          <Flex justify="space-between">
+            <div>State: </div>
+            <Select
+              value={task?.state}
+              style={{ width: 150 }}
+              size="middle"
+              onChange={async (value) => {
+                try {
+                  await updateStateTask(task?._id, value).then(() => {
+                    message.success('Update state successfully');
+                    onLoad();
+                  });
+                } catch (error) {}
+              }}
+              options={[
+                {
+                  label: 'To do',
+                  value: 'todo',
+                },
+                {
+                  label: 'In progress',
+                  value: 'inprogress',
+                },
+                {
+                  label: 'Approved',
+                  value: 'approved',
+                },
+                {
+                  label: 'Follow',
+                  value: 'follow',
+                },
+                {
+                  label: 'Completed',
+                  value: 'completed',
+                },
+              ]}
+            />
+          </Flex>
+        )}
       </Space>
 
       <Divider orientation="left">Time</Divider>
