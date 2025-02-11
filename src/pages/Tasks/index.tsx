@@ -217,6 +217,7 @@ const TaskPage: React.FC = () => {
                             draggableId={task._id}
                             index={index}
                             isDragDisabled={
+                              !initialState?.currentUser?.role.find((i: any) => i === 'admin') &&
                               !task.assigned_to
                                 ?.map((user: any) => user._id)
                                 .includes(initialState?.currentUser?._id)
@@ -279,6 +280,7 @@ const TaskPage: React.FC = () => {
                             draggableId={task._id}
                             index={index}
                             isDragDisabled={
+                              !initialState?.currentUser?.role.find((i: any) => i === 'admin') &&
                               !task.assigned_to
                                 ?.map((user: any) => user._id)
                                 .includes(initialState?.currentUser?._id)
@@ -339,6 +341,7 @@ const TaskPage: React.FC = () => {
                             draggableId={task._id}
                             index={index}
                             isDragDisabled={
+                              !initialState?.currentUser?.role.find((i: any) => i === 'admin') &&
                               !task.assigned_to
                                 ?.map((user: any) => user._id)
                                 .includes(initialState?.currentUser?._id)
@@ -399,6 +402,7 @@ const TaskPage: React.FC = () => {
                             draggableId={task._id}
                             index={index}
                             isDragDisabled={
+                              !initialState?.currentUser?.role.find((i: any) => i === 'admin') &&
                               !task.assigned_to
                                 ?.map((user: any) => user._id)
                                 .includes(initialState?.currentUser?._id)
