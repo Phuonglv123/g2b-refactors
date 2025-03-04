@@ -122,6 +122,8 @@ const ModalAddUser = ({ onLoad, type, initValue }: ModalAddUserProps) => {
           maxCount: 1,
         }}
       />
+            <ProFormText name="fullname" label="Fullname"  />
+
       <ProFormText name="email" label="Email" disabled={type === 'edit'} />
       <ProFormText name="username" label="Username" disabled={type === 'edit'} />
       <ProFormText.Password name="password" label="Password" hidden={type === 'edit'} />

@@ -51,6 +51,11 @@ const Customer: React.FC = () => {
       ),
     },
     {
+      title: 'Tên',
+      dataIndex: 'fullname',
+      key: 'fullname',
+    },
+    {
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
