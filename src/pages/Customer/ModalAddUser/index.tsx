@@ -50,6 +50,7 @@ const ModalAddUser = ({ onLoad, type, initValue }: ModalAddUserProps) => {
     try {
       const payload = {
         role: values.role,
+        fullname: values.fullname,
       };
       console.log(values.avatar[0]?.originFileObj);
       if (values.avatar[0]?.originFileObj) {
