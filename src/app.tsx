@@ -4,7 +4,7 @@ import type { Settings as LayoutSettings } from '@ant-design/pro-components';
 import { PageLoading } from '@ant-design/pro-components';
 import type { RunTimeLayoutConfig } from '@umijs/max';
 import { history } from '@umijs/max';
-import { Flex } from 'antd';
+import { Flex, Switch } from 'antd';
 import type { RequestOptionsInit } from 'umi-request';
 import defaultSettings from '../config/defaultSettings';
 import LogoOnly from './components/LogoOnly';
@@ -12,8 +12,9 @@ import { NoticeIconView } from './components/RightContent';
 import { errorConfig } from './requestErrorConfig';
 import { queryCurrentUser } from './services/auth';
 import { getSrcImg } from './utils';
+import { MoonOutlined, SunOutlined } from '@ant-design/icons';
 
-const isDev = process.env.NODE_ENV === 'development';
+//const isDev = process.env.NODE_ENV === 'development';
 const loginPath = ['/', '/login'];
 
 /**
@@ -41,7 +42,10 @@ export async function getInitialState(): Promise<{
     return {
       fetchUserInfo,
       currentUser,
-      settings: defaultSettings as Partial<LayoutSettings>,
+      settings: {
+        ...defaultSettings as Partial<LayoutSettings>,
+        navTheme: localStorage.getItem('theme') === 'true' ? 'realDark' : 'light',
+      },
     };
   }
   localStorage.setItem('umi_locale', 'en-US');
@@ -54,7 +58,7 @@ export async function getInitialState(): Promise<{
 }
 
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
-export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
+export const layout: RunTimeLayoutConfig = ({ initialState }) => {
   return {
     actionsRender: () => [],
     logo: <LogoOnly />,
@@ -66,6 +70,15 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
       render: (_, avatarChildren) => {
         return (
           <Flex gap={24}>
+            <Switch
+              checkedChildren={<MoonOutlined />}
+              unCheckedChildren={<SunOutlined />}
+              defaultChecked={localStorage.getItem('theme') === 'true' ? true : false}
+              onChange={(checked: any) => {
+                localStorage.setItem('theme', checked );
+                window.location.reload();
+              }}
+            />
             <NoticeIconView />
             <AvatarDropdown>{avatarChildren}</AvatarDropdown>
           </Flex>
@@ -77,7 +90,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
 
     footerRender: () => <Footer />,
     onPageChange: () => {
-      const { location } = history;
+      //const { location } = history;
       // if (!initialState?.currentUser && location.pathname !== loginPath) {
       //   history.push(loginPath);
       // }
