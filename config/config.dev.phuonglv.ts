@@ -24,8 +24,8 @@ export default defineConfig({
 
   initialState: {},
   define: {
-    BASE_URL: 'http://localhost:5000',
-    IMAGE_URL: 'http://localhost:5000',
+    BASE_URL: 'http://localhost:5001',
+    IMAGE_URL: 'http://localhost:5001',
   },
 
   title: 'Ant Design Pro',

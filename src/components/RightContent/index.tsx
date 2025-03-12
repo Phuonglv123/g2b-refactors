@@ -40,7 +40,7 @@ export const NoticeIconView = () => {
   // const [loading, setLoading] = React.useState(false);
   // const [noti, setNoti] = React.useState<any[]>([]);
   // const [list, setList] = React.useState<any[]>([]);
-  const [page, setPage] = React.useState(1);
+  const [page] = React.useState(1);
   const [size, setSize] = React.useState(10);
   const { data } = useRequest(() => countNotificationsIsRead(), {
     pollingInterval: 2000, // Polling every 2 seconds
@@ -112,7 +112,7 @@ export const NoticeIconView = () => {
           itemLayout="horizontal"
           loadMore={loadMore}
           dataSource={listNotifications?.data}
-          renderItem={(item: any, index) => (
+          renderItem={(item: any) => (
             <List.Item>
               <List.Item.Meta
                 avatar={<Avatar src={getSrcImg(item.from?.avatar)} />}

@@ -23,14 +23,16 @@ type ModalCreateTaskProps = {
   initValue?: any;
   type?: 'create' | 'update';
   subTask?: any;
+  opportunityId?: string;
 };
 
-const ModalCreateTask = ({ onLoad, initValue, type, subTask }: ModalCreateTaskProps) => {
+const ModalCreateTask = ({ onLoad, initValue, type, subTask, opportunityId }: ModalCreateTaskProps) => {
   const onFinish = async (values: any) => {
     try {
       const payload = {
         ...values,
         code: values.code || dayjs().unix(),
+        opportunityId: opportunityId,
       };
       if (subTask) {
         const response = await createSubTask(subTask, payload);
@@ -66,14 +68,13 @@ const ModalCreateTask = ({ onLoad, initValue, type, subTask }: ModalCreateTaskPr
       console.log(response);
       if (response.errorCode === 0) {
         message.success('Update task successfully');
-        onLoad();
-        return true;
       }
     } catch (error) {
+      message.error('Update task failed');
     } finally {
       onLoad();
-      return true;
     }
+    return true;
   };
 
   console.log(subTask);

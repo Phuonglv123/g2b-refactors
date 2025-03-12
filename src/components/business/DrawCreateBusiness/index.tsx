@@ -8,14 +8,15 @@ type DrawCreateBusinessProps = {
   type: 'create' | 'update';
   data?: IBusiness;
   onLoad?: any;
+  opportunityId?: string;
 };
 
-const DrawCreateBusiness = ({ type, data, onLoad }: DrawCreateBusinessProps) => {
+const DrawCreateBusiness = ({ type, data, onLoad, opportunityId }: DrawCreateBusinessProps) => {
   const [form] = ProForm.useForm();
 
   const onFinish = async (values: IBusiness) => {
     try {
-      const payload: any = { ...values, code: values.code || dayjs().unix() };
+      const payload: any = { ...values, code: values.code || dayjs().unix(), opportunityId };
       await createBusiness(payload);
       message.success('Create business successfully');
       onLoad();

@@ -23,6 +23,50 @@ export default [
     component: './Welcome',
   },
   {
+    path: '/crm',
+    name: 'CRM',
+    icon: 'smile',
+    access: 'canAdmin',
+    routes: [
+      {
+        path: '/crm',
+        component: './Crm',
+      },
+      {
+        path: '/crm/opportunity',
+        component: './Crm',
+      },
+      {
+        path: '/crm/opportunity/create',
+        component: './Crm/Opportunity/Create',
+      },
+      {
+        path: '/crm/opportunity/:id/edit',
+        component: './Crm/Opportunity/Create',
+      },
+      {
+        path: "/crm/opportunity/:id",
+        component: './Crm/Opportunity/Detail',
+      },
+      {
+        path: '/crm/potential',
+        component: './Crm',
+      },
+      {
+        path: '/crm/potential/:id',
+        component: './Crm/Potential/Detail',
+      },
+      {
+        path: "/crm/activity",
+        component: './Crm',
+      },
+      {
+        path: "/crm/desktop",
+        component: './Crm',
+      }
+    ],
+  },
+  {
     path: '/dashboard',
     name: 'dashboard',
     icon: 'dashboard',

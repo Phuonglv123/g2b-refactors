@@ -1,7 +1,6 @@
-import { IBusiness } from '@/types/business';
 import { request } from '@umijs/max';
 
-export const createBusiness = async (params: IBusiness) => {
+export const createBusiness = async (params: any) => {
   return await request('/api/v1/business/create', {
     method: 'POST',
     data: params,
