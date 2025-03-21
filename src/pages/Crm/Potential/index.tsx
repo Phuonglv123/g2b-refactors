@@ -76,7 +76,7 @@ const Potential = () => {
       fixed: "right",
       render: (_, record: any) => (
         <Space>
-          <Button type="primary" onClick={()=>history.push(`/crm/opportunity/${record?._id}`)} >Detail</Button>
+          <Button type="primary" onClick={()=>history.push(`/crm/potential/${record?._id}`)} >Detail</Button>
           <Button type="primary" danger onClick={()=>onDelete(record?._id)}>Delete</Button>
         </Space>
       )
