@@ -10,7 +10,7 @@ import {
 } from '@/services/products';
 import { IProduct } from '@/types/product';
 import { formatCurrency, formatNumberVietnamese, getSrcImg } from '@/utils';
-import { GlobalOutlined, StarFilled, StarOutlined } from '@ant-design/icons';
+import { GlobalOutlined, SelectOutlined, StarFilled, StarOutlined } from '@ant-design/icons';
 import { ProCard, ProList } from '@ant-design/pro-components';
 import { Link, history, useLocation, useModel } from '@umijs/max';
 import { Alert, Button, Card, Checkbox, Col, List, Row, Space, Typography, message } from 'antd';
@@ -251,22 +251,27 @@ const ListProductCard = () => {
       </div>
       <ProCard
         extra={
-          whitelist.length > 0 ? (
-            <Button
-              type="primary"
-              onClick={() => {
-                setWhitelist([]);
-                getListProductCard({});
-              }}
-              icon={<StarOutlined />}
-            >
-              Clear quick list
-            </Button>
-          ) : (
-            <Button onClick={() => searchWhitelist()} icon={<StarOutlined />}>
-              Find quick list
-            </Button>
-          )
+          <Space>
+            {whitelist.length > 0 && <Button icon={<SelectOutlined/>} onClick={()=>{
+              setMultipleSelection(whitelist)
+            }}>Sellect all quicklist</Button>}
+            {whitelist.length > 0 ? (
+              <Button
+                type="primary"
+                onClick={() => {
+                  setWhitelist([]);
+                  getListProductCard({});
+                }}
+                icon={<StarOutlined />}
+              >
+                Clear quick list
+              </Button>
+            ) : (
+              <Button onClick={() => searchWhitelist()} icon={<StarOutlined />}>
+                Find quick list
+              </Button>
+            )}
+          </Space>
         }
       >
         <ProList
@@ -315,7 +320,7 @@ const ListProductCard = () => {
                 bodyStyle={{ padding: '8px 4px', height: 200 }}
                 bordered
                 actions={[
-                  <div>
+                  <div key="export">
                     <Space>
                       <QuotationExport
                         data={[
